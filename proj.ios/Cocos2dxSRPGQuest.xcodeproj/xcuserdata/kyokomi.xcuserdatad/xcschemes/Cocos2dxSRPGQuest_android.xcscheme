@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "0500"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "# &#12525;&#12464;&#20986;&#21147;&#29992;&#12398;&#12467;&#12531;&#12477;&#12540;&#12523;&#12434;&#20316;&#25104;&#10;source ~/.bash_profile&#10;LOG=&quot;/tmp/${PRODUCT_NAME}.log&quot;&#10;touch $LOG&#10;/usr/bin/open -a /Applications/Utilities/Console.app $LOG&#10;&#10;# &#12499;&#12523;&#12489;&#10;echo &quot;build_native.sh start&quot; &gt;&gt; $LOG&#10;cd $SRCROOT/../proj.android&#10;./build_native.sh &gt; $LOG&#10;&#10;# &#12452;&#12531;&#12473;&#12488;&#12540;&#12523;&#10;echo &quot;debug install&quot; &gt;&gt; $LOG&#10;ant debug install -Dsdk.dir=/Applications/android-sdk-macosx &gt;&gt; $LOG&#10;&#10;# &#36215;&#21205;&#10;echo &quot;lanch ${PRODUCT_NAME}&quot; &gt;&gt; $LOG&#10;adb shell am start -a android.intent.action.MAIN -n &quot;com.kyokomi.cocos2dx.srpgquest/.Cocos2dxSRPGQuest&quot;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+                     BuildableName = "Cocos2dxSRPGQuest.app"
+                     BlueprintName = "Cocos2dxSRPGQuest"
+                     ReferencedContainer = "container:Cocos2dxSRPGQuest.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+               BuildableName = "Cocos2dxSRPGQuest.app"
+               BlueprintName = "Cocos2dxSRPGQuest"
+               ReferencedContainer = "container:Cocos2dxSRPGQuest.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      buildConfiguration = "Debug">
+      <Testables>
+      </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Cocos2dxSRPGQuest.app"
+            BlueprintName = "Cocos2dxSRPGQuest"
+            ReferencedContainer = "container:Cocos2dxSRPGQuest.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+   </TestAction>
+   <LaunchAction
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Debug"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Cocos2dxSRPGQuest.app"
+            BlueprintName = "Cocos2dxSRPGQuest"
+            ReferencedContainer = "container:Cocos2dxSRPGQuest.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <AdditionalOptions>
+      </AdditionalOptions>
+   </LaunchAction>
+   <ProfileAction
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Release"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
+            BuildableName = "Cocos2dxSRPGQuest.app"
+            BlueprintName = "Cocos2dxSRPGQuest"
+            ReferencedContainer = "container:Cocos2dxSRPGQuest.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

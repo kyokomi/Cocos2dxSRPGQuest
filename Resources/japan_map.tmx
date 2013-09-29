@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="japan_map" tilewidth="32" tileheight="32">
+  <image source="japan_map001.png" width="352" height="160"/>
+ </tileset>
+ <layer name="地面レイヤー" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJwTYmBgEBrFo3gUj+JRPIpJxAAnqBwh
+  </data>
+ </layer>
+ <layer name="障害物レイヤー" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJytjsEKgzAQBfdqUWsPakt70Coqgofa//+3voDSEGKS3TgwbAhhMyURVbAMnIoBTnCEBbzRnwa2jKn4wC9c4RO+tH2hXXqfC0mfC19PvxmKr0ffd43o43b5+hJ42d7oZ25fLGaX2ZPCzGEu6KvhA96N2Qn6FO+Df2z3IX2cfdK+ObJvtijtWw72LcI+Dra+GM7q2mnonK6dH4KiE8c=
+  </data>
+ </layer>
+</map>

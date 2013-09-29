@@ -1,0 +1,8 @@
+.cproject
+obj
+assets
+bin
+gen
+*.so
+*.o
+*o.d
