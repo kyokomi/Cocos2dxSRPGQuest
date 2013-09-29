@@ -65,7 +65,7 @@ void GameScene::onEnterTransitionDidFinish()
     
 }
 
-bool GameScene::ccTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     // 基点となるタップ位置を記録しておく
     m_pStartPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
@@ -74,7 +74,7 @@ bool GameScene::ccTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
     return true;
 }
 
-void GameScene::ccTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
+void GameScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     Point touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
     // タップを移動させた位置を記憶する
@@ -82,13 +82,13 @@ void GameScene::ccTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 
 
-void GameScene::ccTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+void GameScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     // タップ終了時にupdateメソッドの毎フレーム実行をキャンセル
     this->unscheduleUpdate();
 }
 
-void GameScene::ccTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
+void GameScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     this->unscheduleUpdate();
 }

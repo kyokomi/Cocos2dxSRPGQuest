@@ -37,10 +37,10 @@ public:
     
     CREATE_FUNC(GameScene);
     
-    virtual bool ccTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-    virtual void ccTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
-    virtual void ccTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
-    virtual void ccTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event);
     
     virtual void update(float delta);
     

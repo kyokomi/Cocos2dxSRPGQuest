@@ -1,5 +1,4 @@
 APPNAME="Cocos2dxSRPGQuest"
-NDK_ROOT="/Applications/android-ndk-r9"
 
 # options
 

@@ -14,8 +14,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
     // create the application instance
     AppDelegate app;
-    EGLView* eglView = EGLView::getInstance();
-    eglView->setViewName("Cocos2dxSRPGQuest");
-    eglView->setFrameSize(480, 320);
+    EGLView eglView;
+    eglView.init("TestCPP",900,640);
     return Application::getInstance()->run();
 }
