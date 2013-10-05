@@ -7,7 +7,7 @@
 //
 
 #include "MapScene.h"
-#include "GameScene.h"
+#include "SRPGScene.h"
 #include "TitleSceneLoader.h"
 
 MapScene::MapScene()
@@ -63,7 +63,7 @@ void MapScene::tappedMenuItem1(Object * pTarget)
 void MapScene::tappedMenuItem2(Object * pTarget)
 {
     CCLOG("tappedMenuItem2");
-    Scene* scene = GameScene::scene();
+    Scene* scene = SRPGScene::scene();
     TransitionProgressInOut* trans = TransitionProgressInOut::create(1, scene);
     Director::getInstance()->replaceScene(trans);
 }

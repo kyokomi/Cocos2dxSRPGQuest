@@ -3,7 +3,6 @@
 #include "cocos-ext.h"
 
 #include "TitleSceneLoader.h"
-#include "GameScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
