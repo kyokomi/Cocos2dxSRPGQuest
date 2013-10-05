@@ -91,7 +91,7 @@ void SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX
     Size winSize = Director::getInstance()->getWinSize();
     
     // Spriteを配置
-    ActorSprite::ActorSprite* pActorSprite = ActorSprite::createWithActorDto(pActorDto);
+    ActorSprite* pActorSprite = ActorSprite::createWithActorDto(pActorDto);
     pActorSprite->setPosition(indexToPoint(pMapPointX, pMapPointY));
     this->addChild(pActorSprite, SRPGMapLayer::zActorBaseIndex, (SRPGMapLayer::kActorBaseTag + pSeqNo));
 

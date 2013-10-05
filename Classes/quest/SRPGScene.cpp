@@ -44,7 +44,7 @@ bool SRPGScene::init()
     this->setTouchEnabled(true);
     this->setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
     
-    SRPGMapLayer::SRPGMapLayer* srpgMapLayer = SRPGMapLayer::create();
+    SRPGMapLayer* srpgMapLayer = SRPGMapLayer::create();
     this->addChild(srpgMapLayer);
     
 //    Size winSize = Director::getInstance()->getWinSize();

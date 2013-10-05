@@ -13,7 +13,6 @@
 		1AF4C2F617865DCB00122817 /* libcocos2dx iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF4C2DD17865D9500122817 /* libcocos2dx iOS.a */; };
 		1AF4C2F717865DCB00122817 /* libcocos2dx-extensions iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF4C2DF17865D9500122817 /* libcocos2dx-extensions iOS.a */; };
 		1AF4C2F817865DCB00122817 /* libCocosDenshion iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF4C2E517865D9500122817 /* libCocosDenshion iOS.a */; };
-		1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
@@ -29,7 +28,6 @@
 		503AE11617EB9C0700D1A890 /* libcocos2dx-extensions Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF4C2D117865D9500122817 /* libcocos2dx-extensions Mac.a */; };
 		503AE11717EB9C0700D1A890 /* libCocosDenshion Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AF4C2D717865D9500122817 /* libCocosDenshion Mac.a */; };
 		503AE11B17EB9C5A00D1A890 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 503AE11A17EB9C5A00D1A890 /* IOKit.framework */; };
-		5087E75717EB910900C73F5D /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */; };
 		5087E76317EB910900C73F5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		5087E76517EB910900C73F5D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		5087E76717EB910900C73F5D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -58,20 +56,6 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
-		CE12F0591800542D00CBBE13 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0481800542D00CBBE13 /* ActorSprite.cpp */; };
-		CE12F05A1800542D00CBBE13 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0481800542D00CBBE13 /* ActorSprite.cpp */; };
-		CE12F05B1800542D00CBBE13 /* SRPGMapLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F04A1800542D00CBBE13 /* SRPGMapLayer.cpp */; };
-		CE12F05C1800542D00CBBE13 /* SRPGMapLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F04A1800542D00CBBE13 /* SRPGMapLayer.cpp */; };
-		CE12F05D1800542D00CBBE13 /* SRPGScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F04D1800542D00CBBE13 /* SRPGScene.cpp */; };
-		CE12F05E1800542D00CBBE13 /* SRPGScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F04D1800542D00CBBE13 /* SRPGScene.cpp */; };
-		CE12F05F1800542D00CBBE13 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0501800542D00CBBE13 /* TitleScene.cpp */; };
-		CE12F0601800542D00CBBE13 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0501800542D00CBBE13 /* TitleScene.cpp */; };
-		CE12F0611800542D00CBBE13 /* TitleSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0521800542D00CBBE13 /* TitleSceneLoader.cpp */; };
-		CE12F0621800542D00CBBE13 /* TitleSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0521800542D00CBBE13 /* TitleSceneLoader.cpp */; };
-		CE12F0631800542D00CBBE13 /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0551800542D00CBBE13 /* MapScene.cpp */; };
-		CE12F0641800542D00CBBE13 /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0551800542D00CBBE13 /* MapScene.cpp */; };
-		CE12F0651800542D00CBBE13 /* MapSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0571800542D00CBBE13 /* MapSceneLoader.cpp */; };
-		CE12F0661800542D00CBBE13 /* MapSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE12F0571800542D00CBBE13 /* MapSceneLoader.cpp */; };
 		CE12F1181800560E00CBBE13 /* actor4.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE12F0FF1800560E00CBBE13 /* actor4.plist */; };
 		CE12F1191800560E00CBBE13 /* actor4.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE12F0FF1800560E00CBBE13 /* actor4.plist */; };
 		CE12F11A1800560E00CBBE13 /* actor4.png in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1001800560E00CBBE13 /* actor4.png */; };
@@ -122,6 +106,14 @@
 		CE12F1471800560E00CBBE13 /* TitleScene.ccbi in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1161800560E00CBBE13 /* TitleScene.ccbi */; };
 		CE12F1481800560E00CBBE13 /* tmx in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1171800560E00CBBE13 /* tmx */; };
 		CE12F1491800560E00CBBE13 /* tmx in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1171800560E00CBBE13 /* tmx */; };
+		CE8356F318005F960076FF8E /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356DD18005F960076FF8E /* AppDelegate.cpp */; };
+		CE8356F418005F960076FF8E /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356E218005F960076FF8E /* ActorSprite.cpp */; };
+		CE8356F518005F960076FF8E /* SRPGMapLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */; };
+		CE8356F618005F960076FF8E /* SRPGScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356E718005F960076FF8E /* SRPGScene.cpp */; };
+		CE8356F718005F960076FF8E /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356EA18005F960076FF8E /* TitleScene.cpp */; };
+		CE8356F818005F960076FF8E /* TitleSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356EC18005F960076FF8E /* TitleSceneLoader.cpp */; };
+		CE8356F918005F960076FF8E /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356EF18005F960076FF8E /* MapScene.cpp */; };
+		CE8356FA18005F960076FF8E /* MapSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356F118005F960076FF8E /* MapSceneLoader.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -301,8 +293,6 @@
 /* Begin PBXFileReference section */
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1AF4C2BB17865D9500122817 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../../../cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
-		1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../Classes/AppDelegate.cpp; sourceTree = "<group>"; };
-		1AFAF8B416D35DE700DB1158 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../Classes/AppDelegate.h; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Cocos2dxSRPGQuest iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cocos2dxSRPGQuest iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -342,22 +332,6 @@
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		CE12F0451800542D00CBBE13 /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = ../Classes/AppMacros.h; sourceTree = "<group>"; };
-		CE12F0481800542D00CBBE13 /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
-		CE12F0491800542D00CBBE13 /* ActorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActorSprite.h; sourceTree = "<group>"; };
-		CE12F04A1800542D00CBBE13 /* SRPGMapLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGMapLayer.cpp; sourceTree = "<group>"; };
-		CE12F04B1800542D00CBBE13 /* SRPGMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapLayer.h; sourceTree = "<group>"; };
-		CE12F04C1800542D00CBBE13 /* SRPGMapMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapMacro.h; sourceTree = "<group>"; };
-		CE12F04D1800542D00CBBE13 /* SRPGScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGScene.cpp; sourceTree = "<group>"; };
-		CE12F04E1800542D00CBBE13 /* SRPGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGScene.h; sourceTree = "<group>"; };
-		CE12F0501800542D00CBBE13 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
-		CE12F0511800542D00CBBE13 /* TitleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScene.h; sourceTree = "<group>"; };
-		CE12F0521800542D00CBBE13 /* TitleSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleSceneLoader.cpp; sourceTree = "<group>"; };
-		CE12F0531800542D00CBBE13 /* TitleSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleSceneLoader.h; sourceTree = "<group>"; };
-		CE12F0551800542D00CBBE13 /* MapScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapScene.cpp; sourceTree = "<group>"; };
-		CE12F0561800542D00CBBE13 /* MapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapScene.h; sourceTree = "<group>"; };
-		CE12F0571800542D00CBBE13 /* MapSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapSceneLoader.cpp; sourceTree = "<group>"; };
-		CE12F0581800542D00CBBE13 /* MapSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSceneLoader.h; sourceTree = "<group>"; };
 		CE12F0FF1800560E00CBBE13 /* actor4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor4.plist; sourceTree = "<group>"; };
 		CE12F1001800560E00CBBE13 /* actor4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor4.png; sourceTree = "<group>"; };
 		CE12F1011800560E00CBBE13 /* bg_jan.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg_jan.jpg; sourceTree = "<group>"; };
@@ -383,6 +357,24 @@
 		CE12F1151800560E00CBBE13 /* MapScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = MapScene.ccbi; sourceTree = "<group>"; };
 		CE12F1161800560E00CBBE13 /* TitleScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = TitleScene.ccbi; sourceTree = "<group>"; };
 		CE12F1171800560E00CBBE13 /* tmx */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tmx; sourceTree = "<group>"; };
+		CE8356DD18005F960076FF8E /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../Classes/AppDelegate.cpp; sourceTree = "<group>"; };
+		CE8356DE18005F960076FF8E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../Classes/AppDelegate.h; sourceTree = "<group>"; };
+		CE8356DF18005F960076FF8E /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = ../Classes/AppMacros.h; sourceTree = "<group>"; };
+		CE8356E218005F960076FF8E /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
+		CE8356E318005F960076FF8E /* ActorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActorSprite.h; sourceTree = "<group>"; };
+		CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGMapLayer.cpp; sourceTree = "<group>"; };
+		CE8356E518005F960076FF8E /* SRPGMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapLayer.h; sourceTree = "<group>"; };
+		CE8356E618005F960076FF8E /* SRPGMapMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapMacro.h; sourceTree = "<group>"; };
+		CE8356E718005F960076FF8E /* SRPGScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGScene.cpp; sourceTree = "<group>"; };
+		CE8356E818005F960076FF8E /* SRPGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGScene.h; sourceTree = "<group>"; };
+		CE8356EA18005F960076FF8E /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
+		CE8356EB18005F960076FF8E /* TitleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScene.h; sourceTree = "<group>"; };
+		CE8356EC18005F960076FF8E /* TitleSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleSceneLoader.cpp; sourceTree = "<group>"; };
+		CE8356ED18005F960076FF8E /* TitleSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleSceneLoader.h; sourceTree = "<group>"; };
+		CE8356EF18005F960076FF8E /* MapScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapScene.cpp; sourceTree = "<group>"; };
+		CE8356F018005F960076FF8E /* MapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapScene.h; sourceTree = "<group>"; };
+		CE8356F118005F960076FF8E /* MapSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapSceneLoader.cpp; sourceTree = "<group>"; };
+		CE8356F218005F960076FF8E /* MapSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSceneLoader.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -455,12 +447,12 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CE12F0451800542D00CBBE13 /* AppMacros.h */,
-				CE12F0461800542D00CBBE13 /* quest */,
-				CE12F04F1800542D00CBBE13 /* title */,
-				CE12F0541800542D00CBBE13 /* world_map */,
-				1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */,
-				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
+				CE8356DD18005F960076FF8E /* AppDelegate.cpp */,
+				CE8356DE18005F960076FF8E /* AppDelegate.h */,
+				CE8356DF18005F960076FF8E /* AppMacros.h */,
+				CE8356E018005F960076FF8E /* quest */,
+				CE8356E918005F960076FF8E /* title */,
+				CE8356EE18005F960076FF8E /* world_map */,
 			);
 			name = Classes;
 			path = ../classes;
@@ -609,48 +601,48 @@
 			path = ../Resources;
 			sourceTree = "<group>";
 		};
-		CE12F0461800542D00CBBE13 /* quest */ = {
+		CE8356E018005F960076FF8E /* quest */ = {
 			isa = PBXGroup;
 			children = (
-				CE12F0471800542D00CBBE13 /* actor */,
-				CE12F04A1800542D00CBBE13 /* SRPGMapLayer.cpp */,
-				CE12F04B1800542D00CBBE13 /* SRPGMapLayer.h */,
-				CE12F04C1800542D00CBBE13 /* SRPGMapMacro.h */,
-				CE12F04D1800542D00CBBE13 /* SRPGScene.cpp */,
-				CE12F04E1800542D00CBBE13 /* SRPGScene.h */,
+				CE8356E118005F960076FF8E /* actor */,
+				CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */,
+				CE8356E518005F960076FF8E /* SRPGMapLayer.h */,
+				CE8356E618005F960076FF8E /* SRPGMapMacro.h */,
+				CE8356E718005F960076FF8E /* SRPGScene.cpp */,
+				CE8356E818005F960076FF8E /* SRPGScene.h */,
 			);
 			name = quest;
 			path = ../Classes/quest;
 			sourceTree = "<group>";
 		};
-		CE12F0471800542D00CBBE13 /* actor */ = {
+		CE8356E118005F960076FF8E /* actor */ = {
 			isa = PBXGroup;
 			children = (
-				CE12F0481800542D00CBBE13 /* ActorSprite.cpp */,
-				CE12F0491800542D00CBBE13 /* ActorSprite.h */,
+				CE8356E218005F960076FF8E /* ActorSprite.cpp */,
+				CE8356E318005F960076FF8E /* ActorSprite.h */,
 			);
 			path = actor;
 			sourceTree = "<group>";
 		};
-		CE12F04F1800542D00CBBE13 /* title */ = {
+		CE8356E918005F960076FF8E /* title */ = {
 			isa = PBXGroup;
 			children = (
-				CE12F0501800542D00CBBE13 /* TitleScene.cpp */,
-				CE12F0511800542D00CBBE13 /* TitleScene.h */,
-				CE12F0521800542D00CBBE13 /* TitleSceneLoader.cpp */,
-				CE12F0531800542D00CBBE13 /* TitleSceneLoader.h */,
+				CE8356EA18005F960076FF8E /* TitleScene.cpp */,
+				CE8356EB18005F960076FF8E /* TitleScene.h */,
+				CE8356EC18005F960076FF8E /* TitleSceneLoader.cpp */,
+				CE8356ED18005F960076FF8E /* TitleSceneLoader.h */,
 			);
 			name = title;
 			path = ../Classes/title;
 			sourceTree = "<group>";
 		};
-		CE12F0541800542D00CBBE13 /* world_map */ = {
+		CE8356EE18005F960076FF8E /* world_map */ = {
 			isa = PBXGroup;
 			children = (
-				CE12F0551800542D00CBBE13 /* MapScene.cpp */,
-				CE12F0561800542D00CBBE13 /* MapScene.h */,
-				CE12F0571800542D00CBBE13 /* MapSceneLoader.cpp */,
-				CE12F0581800542D00CBBE13 /* MapSceneLoader.h */,
+				CE8356EF18005F960076FF8E /* MapScene.cpp */,
+				CE8356F018005F960076FF8E /* MapScene.h */,
+				CE8356F118005F960076FF8E /* MapSceneLoader.cpp */,
+				CE8356F218005F960076FF8E /* MapSceneLoader.h */,
 			);
 			name = world_map;
 			path = ../Classes/world_map;
@@ -932,17 +924,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE8356F318005F960076FF8E /* AppDelegate.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				CE8356F618005F960076FF8E /* SRPGScene.cpp in Sources */,
+				CE8356FA18005F960076FF8E /* MapSceneLoader.cpp in Sources */,
+				CE8356F518005F960076FF8E /* SRPGMapLayer.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
-				CE12F05D1800542D00CBBE13 /* SRPGScene.cpp in Sources */,
-				CE12F0651800542D00CBBE13 /* MapSceneLoader.cpp in Sources */,
-				CE12F05B1800542D00CBBE13 /* SRPGMapLayer.cpp in Sources */,
-				1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */,
-				CE12F0631800542D00CBBE13 /* MapScene.cpp in Sources */,
+				CE8356F918005F960076FF8E /* MapScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-				CE12F0611800542D00CBBE13 /* TitleSceneLoader.cpp in Sources */,
-				CE12F0591800542D00CBBE13 /* ActorSprite.cpp in Sources */,
-				CE12F05F1800542D00CBBE13 /* TitleScene.cpp in Sources */,
+				CE8356F818005F960076FF8E /* TitleSceneLoader.cpp in Sources */,
+				CE8356F418005F960076FF8E /* ActorSprite.cpp in Sources */,
+				CE8356F718005F960076FF8E /* TitleScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,15 +942,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE12F05C1800542D00CBBE13 /* SRPGMapLayer.cpp in Sources */,
-				CE12F0641800542D00CBBE13 /* MapScene.cpp in Sources */,
-				5087E75717EB910900C73F5D /* AppDelegate.cpp in Sources */,
-				CE12F05A1800542D00CBBE13 /* ActorSprite.cpp in Sources */,
-				CE12F0621800542D00CBBE13 /* TitleSceneLoader.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
-				CE12F05E1800542D00CBBE13 /* SRPGScene.cpp in Sources */,
-				CE12F0601800542D00CBBE13 /* TitleScene.cpp in Sources */,
-				CE12F0661800542D00CBBE13 /* MapSceneLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
