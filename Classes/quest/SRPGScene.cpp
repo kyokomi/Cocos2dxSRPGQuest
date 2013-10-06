@@ -12,6 +12,7 @@
 USING_NS_CC;
 
 SRPGScene::SRPGScene()
+:m_touched(false)
 {
 }
 
@@ -54,7 +55,11 @@ bool SRPGScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     // 基点となるタップ位置を記録しておく
     m_pStartPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
+	m_pDelta = Point::ZERO;
+	m_touched = true;
+
     // updateメソッドを毎フレーム実行
+	this->unscheduleUpdate();
     this->scheduleUpdate();
     
     auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
@@ -77,9 +82,14 @@ void SRPGScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void SRPGScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    // タップ終了時にupdateメソッドの毎フレーム実行をキャンセル
-    this->unscheduleUpdate();
-    
+    // タップ終了の0.3秒後くらいにupdateメソッドの毎フレーム実行をキャンセル
+	if (this->isScheduled(schedule_selector(SRPGScene::touchUnSchedule)))
+	{
+		this->unschedule(schedule_selector(SRPGScene::touchUnSchedule));
+	}
+	this->scheduleOnce(schedule_selector(SRPGScene::touchUnSchedule), 0.3f);
+	m_touched = false;
+
     // フリック対象に場合はグリッドのイベントは処理しない
     if (checkFlick()) return;
     
@@ -88,6 +98,11 @@ void SRPGScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     {
         pMapLayer->onTouchEnded(touch, event);
     }
+}
+
+void SRPGScene::touchUnSchedule(float time)
+{
+	if (!m_touched) this->unscheduleUpdate();
 }
 
 void SRPGScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)

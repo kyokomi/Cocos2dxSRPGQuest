@@ -41,6 +41,7 @@ public:
     CREATE_FUNC(SRPGMapLayer);
     
     // グリッドの表示/非表示
+    bool isShowGrid();
     void showGrid();
     void hideGrid();
     

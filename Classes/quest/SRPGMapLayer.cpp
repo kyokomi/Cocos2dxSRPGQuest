@@ -202,6 +202,14 @@ void SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
         {
             auto* actorMapItem = m_mapManager.getActorMapItem(&endSRPGMapIndex);
             CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
+            if (isShowGrid())
+            {
+            	hideGrid();
+            }
+            else
+            {
+            	showGrid();
+            }
         }
     }
 }
@@ -218,6 +226,19 @@ Point SRPGMapLayer::convertToSRPGMapPoint(Touch *pTouch)
 
 #pragma mark
 #pragma mark マップLayer制御
+
+/**
+ * グリッド表示
+ */
+bool SRPGMapLayer::isShowGrid()
+{
+    auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
+    if (node)
+    {
+        return node->isVisible();
+    }
+    return false;
+}
 
 /**
  * グリッド表示
@@ -254,7 +275,7 @@ Point SRPGMapLayer::createTouchMoveMapPoint(Point mapPosition, float updateDelta
     Size tileSize = pTileMap->getTileSize();
     
     // 基点からのタップ移動量を計算
-    float speed = 1.5;
+    float speed = 4.0;
     Point calcDelta = Point(pDelta.x * updateDelta, pDelta.y * updateDelta) * -1 * speed;
     
     // タイルマップの位置を移動量に応じて移動させる

@@ -16,6 +16,7 @@ class SRPGScene : public cocos2d::Layer
 private:
     cocos2d::Point m_pStartPoint;
     cocos2d::Point m_pDelta;
+    bool m_touched;
     
     bool checkFlick();
 protected:
@@ -40,6 +41,8 @@ public:
     virtual void update(float delta);
     
     virtual void onEnterTransitionDidFinish();
+
+    void touchUnSchedule(float time);
 };
 
 #endif /* defined(__Cocos2dxSRPGQuest__SRPGScene__) */
