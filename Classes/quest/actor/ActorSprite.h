@@ -12,6 +12,8 @@
 #include "cocos2d.h"
 #include "SRPGMapMacro.h"
 
+USING_NS_CC;
+
 class ActorSprite  : public cocos2d::Sprite
 {
 public:
@@ -64,9 +66,16 @@ public:
     void setActorMapItem(ActorMapItem actorMapItem);
     ActorMapItem* getActorMapItem();
     ActorDto* getActorDto();
+    
 private:
     ActorMapItem m_actorMapItem;
     ActorDto m_actorDto;
+    
+    FiniteTimeAction* createBottomActorAnimate();
+    FiniteTimeAction* createLeftActorAnimate();
+    FiniteTimeAction* createRightActorAnimate();
+    FiniteTimeAction* createTopActorAnimate();
+    FiniteTimeAction* createActorAnimate(std::string frameName);
 };
 
 #endif /* defined(__Cocos2dxSRPGQuest__ActorSprite__) */

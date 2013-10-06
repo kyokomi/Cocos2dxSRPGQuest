@@ -19,13 +19,7 @@ private:
     
 protected:
     enum kTag {
-        kTiledMapTag = 1,
-        kActorTag = 100,
-        
-        kActionBottom = 1000,
-        kActionLeft   = 1001,
-        kActionRight  = 1002,
-        kActionTop    = 1003
+        kSRPGMapLayerTag = 1,
     };
 public:
     SRPGScene();

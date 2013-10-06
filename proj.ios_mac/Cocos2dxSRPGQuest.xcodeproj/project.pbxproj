@@ -106,6 +106,8 @@
 		CE12F1471800560E00CBBE13 /* TitleScene.ccbi in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1161800560E00CBBE13 /* TitleScene.ccbi */; };
 		CE12F1481800560E00CBBE13 /* tmx in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1171800560E00CBBE13 /* tmx */; };
 		CE12F1491800560E00CBBE13 /* tmx in Resources */ = {isa = PBXBuildFile; fileRef = CE12F1171800560E00CBBE13 /* tmx */; };
+		CE7C051A180132070082BDD4 /* grid32.png in Resources */ = {isa = PBXBuildFile; fileRef = CE7C0519180132070082BDD4 /* grid32.png */; };
+		CE7C052418014E410082BDD4 /* MapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7C052218014E410082BDD4 /* MapManager.cpp */; };
 		CE8356F318005F960076FF8E /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356DD18005F960076FF8E /* AppDelegate.cpp */; };
 		CE8356F418005F960076FF8E /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356E218005F960076FF8E /* ActorSprite.cpp */; };
 		CE8356F518005F960076FF8E /* SRPGMapLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */; };
@@ -357,6 +359,9 @@
 		CE12F1151800560E00CBBE13 /* MapScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = MapScene.ccbi; sourceTree = "<group>"; };
 		CE12F1161800560E00CBBE13 /* TitleScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = TitleScene.ccbi; sourceTree = "<group>"; };
 		CE12F1171800560E00CBBE13 /* tmx */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tmx; sourceTree = "<group>"; };
+		CE7C0519180132070082BDD4 /* grid32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid32.png; sourceTree = "<group>"; };
+		CE7C052218014E410082BDD4 /* MapManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapManager.cpp; sourceTree = "<group>"; };
+		CE7C052318014E410082BDD4 /* MapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
 		CE8356DD18005F960076FF8E /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../Classes/AppDelegate.cpp; sourceTree = "<group>"; };
 		CE8356DE18005F960076FF8E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../Classes/AppDelegate.h; sourceTree = "<group>"; };
 		CE8356DF18005F960076FF8E /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = ../Classes/AppMacros.h; sourceTree = "<group>"; };
@@ -571,6 +576,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CE7C0519180132070082BDD4 /* grid32.png */,
 				CE12F0FF1800560E00CBBE13 /* actor4.plist */,
 				CE12F1001800560E00CBBE13 /* actor4.png */,
 				CE12F1011800560E00CBBE13 /* bg_jan.jpg */,
@@ -601,9 +607,19 @@
 			path = ../Resources;
 			sourceTree = "<group>";
 		};
+		CE7C052118014E320082BDD4 /* map */ = {
+			isa = PBXGroup;
+			children = (
+				CE7C052218014E410082BDD4 /* MapManager.cpp */,
+				CE7C052318014E410082BDD4 /* MapManager.h */,
+			);
+			path = map;
+			sourceTree = "<group>";
+		};
 		CE8356E018005F960076FF8E /* quest */ = {
 			isa = PBXGroup;
 			children = (
+				CE7C052118014E320082BDD4 /* map */,
 				CE8356E118005F960076FF8E /* actor */,
 				CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */,
 				CE8356E518005F960076FF8E /* SRPGMapLayer.h */,
@@ -868,6 +884,7 @@
 				CE12F1321800560E00CBBE13 /* btn-test-2.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
+				CE7C051A180132070082BDD4 /* grid32.png in Resources */,
 				CE12F1301800560E00CBBE13 /* btn-test-1.png in Resources */,
 				CE12F13C1800560E00CBBE13 /* HelloWorld.png in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
@@ -932,6 +949,7 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CE8356F918005F960076FF8E /* MapScene.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				CE7C052418014E410082BDD4 /* MapManager.cpp in Sources */,
 				CE8356F818005F960076FF8E /* TitleSceneLoader.cpp in Sources */,
 				CE8356F418005F960076FF8E /* ActorSprite.cpp in Sources */,
 				CE8356F718005F960076FF8E /* TitleScene.cpp in Sources */,

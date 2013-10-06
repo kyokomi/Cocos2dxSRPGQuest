@@ -43,6 +43,9 @@ bool SRPGMapLayer::init()
     m_baseTileSize = pTiledMap->getTileSize();
     m_baseContentSize = pTiledMap->getContentSize();
     
+    // マップマネージャを生成
+    m_mapManager.init(0, (int)m_baseMapSize.height, 0, (int)m_baseMapSize.width);
+    
     // ---------------------
     // グリッド線を生成
     // ---------------------
@@ -65,7 +68,7 @@ bool SRPGMapLayer::init()
         float yPoint = y * m_baseTileSize.height;
         draw->drawSegment(Point(0, yPoint), Point(m_baseContentSize.width, yPoint), lineSize, color);
     }
-    pTiledMap->addChild(draw, SRPGMapLayer::zGridLineIndex, SRPGMapLayer::kGridLineTag);
+    this->addChild(draw, SRPGMapLayer::zGridLineIndex, SRPGMapLayer::kGridLineTag);
 
     // ---------------------
     // アクターを生成
@@ -74,19 +77,55 @@ bool SRPGMapLayer::init()
     actorDto.attackRange = 1;
     actorDto.movePoint = 5;
     actorDto.playerId = 4;
-    addActor(MapDataType::PLAYER, 1, 5, 5, actorDto);
+    ActorMapItem* pActorMapItem = addActor(MapDataType::PLAYER, 1, 5, 5, actorDto);
+    
+    std::list<MapIndex> moveList = m_mapManager.createActorFindDist(pActorMapItem->mapIndex, pActorMapItem->moveDist);
+
+    addMapCursor(MapDataType::MOVE_DIST, moveList);
     
     return true;
 }
 
+void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList)
+{
+    // バッチノードを登録しレイヤに追加
+    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    if (!pBatchNode)
+    {
+        pBatchNode = SpriteBatchNode::create("grid32.png");
+        this->addChild(pBatchNode, SRPGMapLayer::zCursorBaseIndex, SRPGMapLayer::kCursorBaseTag);
+    }
+    
+    for (MapIndex mapIndex : moveMapPointList)
+    {
+        auto* sprite = Sprite::createWithTexture(pBatchNode->getTexture());
+        sprite->setPosition(indexToPoint(mapIndex.x, mapIndex.y));
+        sprite->setColor(Color3B::GREEN);
+        sprite->setOpacity(128);
+        sprite->setZOrder(SRPGMapLayer::zCursorBaseIndex);
+        // バッチノードに登録
+        pBatchNode->addChild(sprite);
+        
+        FadeTo* fadeIn = FadeTo::create(0.5f, 128);
+        FadeTo* fadeOut = FadeTo::create(0.5f, 0);
+        Sequence* sequence = Sequence::create(fadeOut, fadeIn, NULL);
+        RepeatForever* repeat = RepeatForever::create(sequence);
+        
+        sprite->runAction(repeat);
+    }
+    
+//    MapItem mapItem;
+//    mapItem.attackDist = 0;
+//    mapItem.moveDist = 0;
+//    mapItem.mapPointX = pMapPointX;
+//    mapItem.mapPointY = pMapPointY;
+//    mapItem.mapDataType = pMapDataType;
+}
+
 /**
  * アクター追加.
- * @param mapDataType
- * @param mapPointX
- * @param mapPointY
- * @param actorPlayer
  */
-void SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX, int pMapPointY, ActorSprite::ActorDto pActorDto)
+ActorMapItem* SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX, int pMapPointY, ActorSprite::ActorDto pActorDto)
 {
     Size winSize = Director::getInstance()->getWinSize();
     
@@ -108,12 +147,14 @@ void SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX
     
     actorMapItem.mapPointX = pMapPointX;
     actorMapItem.mapPointY = pMapPointY;
+    actorMapItem.mapIndex = mapIndex;
     actorMapItem.mapDataType = pMapDataType;
     
     actorMapItem.moveDone = false;
     actorMapItem.attackDone = false;
     pActorSprite->setActorMapItem(actorMapItem);
     
+    return pActorSprite->getActorMapItem();
 //    mMapItemManager.setObject(mapPointX, mapPointY, playerMapItem);
 }
 
@@ -134,6 +175,45 @@ void SRPGMapLayer::hideGrid()
         node->setVisible(false);
     }
 }
+
+/**
+ * マップ座標の移動計算
+ */
+Point SRPGMapLayer::moveMapPoint(Point mapPosition, float updateDelta, Point pDelta)
+{
+    Size winSize = Director::getInstance()->getWinSize();
+    
+    TMXTiledMap* pTileMap = (TMXTiledMap*) this->getChildByTag(kTiledMapTag);
+    Size tileSize = pTileMap->getTileSize();
+    
+    // 基点からのタップ移動量を計算
+    float speed = 1.5;
+    Point calcDelta = Point(pDelta.x * updateDelta, pDelta.y * updateDelta) * -1 * speed;
+    
+    // タイルマップの位置を移動量に応じて移動させる
+    CCLOG("mapPosition x = %f y = %f", mapPosition.x, mapPosition.y);
+    Point point = mapPosition + calcDelta;
+    CCLOG("calcDelta x = %f y = %f", calcDelta.x, calcDelta.y);
+    CCLOG("after point x = %f y = %f", point.x, point.y);
+    // マップの端から出ないように調整する
+    Size mapSize = pTileMap->getContentSize();
+    CCLOG("winSize w = %f h = %f", winSize.width, winSize.height);
+    CCLOG("mapSize w = %f h = %f", mapSize.width, mapSize.height);
+    
+    // 画面半分まで真っ黒領域が見れる
+//    point.x = MAX(point.x, winSize.width * 0.5 - mapSize.width + tileSize.width * 0.5);
+//    point.x = MIN(point.x, winSize.width * 0.5 - tileSize.width * 0.5);
+//    point.y = MAX(point.y, winSize.height * 0.5 - mapSize.height + tileSize.height * 0.5);
+//    point.y = MIN(point.y, winSize.height * 0.5 - tileSize.height * 0.5);
+    // 画面ピッタリ
+    point.x = MAX(point.x, winSize.width - mapSize.width);
+    point.x = MIN(point.x, 0);
+    point.y = MAX(point.y, winSize.height - mapSize.height);
+    point.y = MIN(point.y, 0);
+    
+    return point;
+}
+
 
 Point SRPGMapLayer::indexToPoint(int mapIndex_x, int mapIndex_y)
 {

@@ -68,3 +68,41 @@ ActorSprite::ActorDto* ActorSprite::getActorDto()
 {
     return &m_actorDto;
 }
+
+FiniteTimeAction* ActorSprite::createBottomActorAnimate()
+{
+    return createActorAnimate("bottom");
+}
+
+FiniteTimeAction* ActorSprite::createLeftActorAnimate()
+{
+    return createActorAnimate("left");
+}
+
+FiniteTimeAction* ActorSprite::createRightActorAnimate()
+{
+    return createActorAnimate("right");
+}
+
+FiniteTimeAction* ActorSprite::createTopActorAnimate()
+{
+    return createActorAnimate("top");
+}
+
+FiniteTimeAction* ActorSprite::createActorAnimate(std::string frameName)
+{
+    cocos2d::Animation* animation = cocos2d::Animation::create();
+    String* pszStartSpriteFrameName = String::createWithFormat("actor_4_%s_%d.jpg", frameName.c_str(), 2);
+    SpriteFrame *pStartFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszStartSpriteFrameName->getCString());
+    animation->addSpriteFrame(pStartFrame);
+    for (int i = 0; i < 3; i++)
+    {
+        String* pszSpriteFrameName = String::createWithFormat("actor_4_%s_%d.jpg", frameName.c_str(), (i + 1));
+        SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszSpriteFrameName->getCString());
+        animation->addSpriteFrame(pFrame);
+    }
+    animation->setDelayPerUnit(0.5);
+    animation->setLoops(-1);
+    
+    return Animate::create(animation);
+}

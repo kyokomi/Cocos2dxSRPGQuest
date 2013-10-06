@@ -18,6 +18,11 @@ enum MapDataType {
     ENEMY = 5
 };
 
+typedef struct _MapIndex {
+    int x;
+    int y;
+}MapIndex;
+
 typedef struct _MapItem {
     /** 短形マップ上の区分. */
     MapDataType mapDataType;
@@ -27,6 +32,8 @@ typedef struct _MapItem {
     
     /** 短形マップ横軸表示位置. */
     int mapPointY;
+    
+    MapIndex mapIndex;
     
     /** 移動可能距離. */
     int moveDist;
@@ -43,10 +50,6 @@ typedef struct _ActorMapItem : public MapItem {
     bool attackDone;
 }ActorMapItem;
 
-typedef struct _MapIndex {
-    int x;
-    int y;
-}MapIndex;
 // TileMapから取得する
 //#define GRID_X 128
 //#define GRID_Y 64
