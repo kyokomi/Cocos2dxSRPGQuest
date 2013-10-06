@@ -17,6 +17,7 @@ private:
     cocos2d::Point m_pStartPoint;
     cocos2d::Point m_pDelta;
     
+    bool checkFlick();
 protected:
     enum kTag {
         kSRPGMapLayerTag = 1,

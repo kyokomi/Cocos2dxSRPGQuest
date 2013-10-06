@@ -56,6 +56,13 @@ bool SRPGScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
     m_pStartPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
     // updateメソッドを毎フレーム実行
     this->scheduleUpdate();
+    
+    auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+    if (pMapLayer)
+    {
+        pMapLayer->onTouchBegan(touch, event);
+    }
+    
     return true;
 }
 
@@ -64,6 +71,7 @@ void SRPGScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
     Point touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
     // タップを移動させた位置を記憶する
     m_pDelta = m_pStartPoint - touchPoint;
+    //CCLOG("m_pDelta = [%f, %f]", m_pDelta.x, m_pDelta.y);
 }
 
 
@@ -71,6 +79,15 @@ void SRPGScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     // タップ終了時にupdateメソッドの毎フレーム実行をキャンセル
     this->unscheduleUpdate();
+    
+    // フリック対象に場合はグリッドのイベントは処理しない
+    if (checkFlick()) return;
+    
+    auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+    if (pMapLayer)
+    {
+        pMapLayer->onTouchEnded(touch, event);
+    }
 }
 
 void SRPGScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -80,14 +97,24 @@ void SRPGScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void SRPGScene::update(float delta)
 {
-    CCLOG("delta = %f", delta);
+    // フリック対象でない場合はマップ移動を行わない
+    if (!checkFlick()) return;
     
     auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
-    Point movePoint = pMapLayer->moveMapPoint(pMapLayer->getPosition(), delta, m_pDelta);
-    pMapLayer->setPosition(movePoint);
-    
-    CCLOG("mapPoint x = %f y = %f", movePoint.x, movePoint.y);
+    if (pMapLayer)
+    {
+        Point movePoint = pMapLayer->createTouchMoveMapPoint(pMapLayer->getPosition(), delta, m_pDelta);
+        pMapLayer->setPosition(movePoint);
+    }
 }
 
+bool SRPGScene::checkFlick()
+{
+    if (abs(m_pDelta.x) >= 30 || abs(m_pDelta.y) >= 30)
+    {
+        return true;
+    }
+    return false;
+}
 
 

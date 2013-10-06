@@ -13,7 +13,8 @@ USING_NS_CC;
 SRPGMapLayer::SRPGMapLayer()
 :m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
-m_baseContentSize(Size::ZERO)
+m_baseContentSize(Size::ZERO),
+m_touchStartPoint(Point::ZERO)
 {
 }
 
@@ -87,6 +88,9 @@ bool SRPGMapLayer::init()
     return true;
 }
 
+#pragma mark
+#pragma mark マップ上オブジェクト制御
+
 void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList)
 {
     // バッチノードを登録しレイヤに追加
@@ -157,10 +161,67 @@ ActorMapItem* SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int p
     actorMapItem.attackDone = false;
     pActorSprite->setActorMapItem(actorMapItem);
     
+    m_mapManager.addActor(pActorSprite->getActorMapItem());
+    
     return pActorSprite->getActorMapItem();
 //    mMapItemManager.setObject(mapPointX, mapPointY, playerMapItem);
 }
 
+#pragma mark
+#pragma mark タッチイベント制御
+
+bool SRPGMapLayer::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+    // タッチした位置をマップ座標に変換
+    Point locationPoint = convertToSRPGMapPoint(touch);
+    MapIndex locationMapIndex = touchPointToIndex(locationPoint);
+    CCLOG("onTouchBegan location mapIdx x = %d y = %d", locationMapIndex.x, locationMapIndex.y);
+    m_touchStartPoint = locationPoint;
+    return true;
+}
+
+void SRPGMapLayer::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+    
+}
+
+
+void SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+    // タッチした位置をマップ座標に変換
+    MapIndex startSRPGMapIndex = touchPointToIndex(m_touchStartPoint);
+    MapIndex endSRPGMapIndex = touchPointToIndex(convertToSRPGMapPoint(touch));
+    // タッチの開始位置と終了位置のグリッドが一致したらグリッド選択とする
+    if (MAP_INDEX_DIFF(startSRPGMapIndex, endSRPGMapIndex))
+    {
+        // グリッド選択
+        CCLOG("onTouchEnded mapIdx x = %d y = %d grid selected", endSRPGMapIndex.x, endSRPGMapIndex.y);
+        auto* mapItem = m_mapManager.getMapItem(&endSRPGMapIndex);
+        CCLOG("mapDataType = %d", mapItem->mapDataType);
+        if (mapItem->mapDataType == MapDataType::PLAYER)
+        {
+            auto* actorMapItem = m_mapManager.getActorMapItem(&endSRPGMapIndex);
+            CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
+        }
+    }
+}
+
+void SRPGMapLayer::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+    
+}
+
+Point SRPGMapLayer::convertToSRPGMapPoint(Touch *pTouch)
+{
+    return this->convertToWorldSpace(this->convertTouchToNodeSpace(pTouch)) - this->getPosition();
+}
+
+#pragma mark
+#pragma mark マップLayer制御
+
+/**
+ * グリッド表示
+ */
 void SRPGMapLayer::showGrid()
 {
     auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
@@ -170,6 +231,9 @@ void SRPGMapLayer::showGrid()
     }
 }
 
+/**
+ * グリッド非表示
+ */
 void SRPGMapLayer::hideGrid()
 {
     auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
@@ -180,9 +244,9 @@ void SRPGMapLayer::hideGrid()
 }
 
 /**
- * マップ座標の移動計算
+ * マップ座標の移動距離生成
  */
-Point SRPGMapLayer::moveMapPoint(Point mapPosition, float updateDelta, Point pDelta)
+Point SRPGMapLayer::createTouchMoveMapPoint(Point mapPosition, float updateDelta, Point pDelta)
 {
     Size winSize = Director::getInstance()->getWinSize();
     
@@ -194,15 +258,10 @@ Point SRPGMapLayer::moveMapPoint(Point mapPosition, float updateDelta, Point pDe
     Point calcDelta = Point(pDelta.x * updateDelta, pDelta.y * updateDelta) * -1 * speed;
     
     // タイルマップの位置を移動量に応じて移動させる
-    CCLOG("mapPosition x = %f y = %f", mapPosition.x, mapPosition.y);
     Point point = mapPosition + calcDelta;
-    CCLOG("calcDelta x = %f y = %f", calcDelta.x, calcDelta.y);
-    CCLOG("after point x = %f y = %f", point.x, point.y);
     // マップの端から出ないように調整する
     Size mapSize = pTileMap->getContentSize();
-    CCLOG("winSize w = %f h = %f", winSize.width, winSize.height);
-    CCLOG("mapSize w = %f h = %f", mapSize.width, mapSize.height);
-    
+
     // 画面半分まで真っ黒領域が見れる
 //    point.x = MAX(point.x, winSize.width * 0.5 - mapSize.width + tileSize.width * 0.5);
 //    point.x = MIN(point.x, winSize.width * 0.5 - tileSize.width * 0.5);
@@ -218,21 +277,33 @@ Point SRPGMapLayer::moveMapPoint(Point mapPosition, float updateDelta, Point pDe
 }
 
 
-Point SRPGMapLayer::indexToPoint(int mapIndex_x, int mapIndex_y)
-{
-    return Point(m_baseTileSize.width * mapIndex_x - m_baseTileSize.width * 0.5, m_baseTileSize.height * mapIndex_y - m_baseTileSize.height * 0.5);
-}
+#pragma mark
+#pragma mark マップ座標変換
 
 Point SRPGMapLayer::indexToPoint(MapIndex mapIndex)
 {
     return indexToPoint(mapIndex.x, mapIndex.y);
 }
 
+Point SRPGMapLayer::indexToPoint(int mapIndex_x, int mapIndex_y)
+{
+    // タイルサイズを考慮
+    return Point(m_baseTileSize.width * mapIndex_x + m_baseTileSize.width * 0.5, m_baseTileSize.height * mapIndex_y + m_baseTileSize.height * 0.5);
+}
+
 MapIndex SRPGMapLayer::pointToIndex(Point point)
 {
+    // タイルサイズを考慮
+    point.x = point.x - m_baseTileSize.width * 0.5;
+    point.y = point.y - m_baseTileSize.height * 0.5;
+    return touchPointToIndex(point);
+}
+
+MapIndex SRPGMapLayer::touchPointToIndex(Point point)
+{
     MapIndex mapIndex;
-    mapIndex.x = (point.x + m_baseTileSize.width * 0.5) / m_baseTileSize.width;
-    mapIndex.y = (point.y + m_baseTileSize.height * 0.5) / m_baseTileSize.height;
+    mapIndex.x = point.x / m_baseTileSize.width;
+    mapIndex.y = point.y / m_baseTileSize.height;
     return mapIndex;
 }
 

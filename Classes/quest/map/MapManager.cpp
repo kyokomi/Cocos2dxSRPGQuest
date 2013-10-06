@@ -14,6 +14,8 @@ void MapManager::init(int top, int bottom, int left, int right)
     m_bottom = bottom;
     m_left = left;
     m_right = right;
+    
+    clearMapItemArray(&m_mapObjectDataArray);
 }
 
 /**
@@ -22,7 +24,7 @@ void MapManager::init(int top, int bottom, int left, int right)
 std::list<MapIndex> MapManager::createActorFindDist(MapIndex mapIndex, int dist)
 {
     // カーソル情報を初期化
-    clearCursorMapItemArray();
+    clearMapItemArray(&m_mapCursorDataArray);
     
     // 検索開始(再帰呼び出し)
     findDist(mapIndex.x, mapIndex.y, dist, true);
@@ -71,9 +73,10 @@ void MapManager::findDist(int x, int y, int dist, bool first)
 
 bool MapManager::chkMove(int mapPointX, int mapPointY, int dist)
 {
-    MapItem mapItem = m_mapCursorDataArray[mapPointX][mapPointY];
-    if (mapItem.mapDataType == MapDataType::NONE ||
-        (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist))
+    MapIndex mapIndex = {mapPointX, mapPointY};
+    MapItem* mapItem = getMapItem(&mapIndex);
+    if (mapItem->mapDataType == MapDataType::NONE ||
+        (mapItem->mapDataType == MapDataType::MOVE_DIST && mapItem->moveDist < dist))
     {
         return true;
     }
@@ -110,21 +113,42 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
     }
 }
 
-void MapManager::clearCursorMapItemArray()
+void MapManager::addActor(ActorMapItem* actorMapItem)
 {
-    m_mapCursorDataArray.clear();
-    
-    for (int x = 0; x < m_right; x++)
-    {
-        std::vector<MapItem> mapItemArray;
-        
-        for (int y = 0; y < m_bottom; y++)
-        {
-            MapItem mapItem;
-            mapItem.mapDataType = MapDataType::NONE;
-            mapItemArray.push_back(mapItem);
-        }
-        m_mapCursorDataArray.push_back(mapItemArray);
-    }
+    m_mapObjectDataArray[actorMapItem->mapIndex.x][actorMapItem->mapIndex.y] = *actorMapItem;
 }
+
+MapItem* MapManager::getMapItem(MapIndex* pMapIndex)
+{
+    if (m_mapCursorDataArray[pMapIndex->x][pMapIndex->y].mapDataType == MapDataType::NONE)
+    {
+        return getActorMapItem(pMapIndex);
+    }
+    return &(m_mapCursorDataArray[pMapIndex->x][pMapIndex->y]);
+}
+
+ActorMapItem* MapManager::getActorMapItem(MapIndex* pMapIndex)
+{
+    return &(m_mapObjectDataArray[pMapIndex->x][pMapIndex->y]);
+}
+
+//void MapManager::clearMapItemArray(std::vector<std::vector<MapItem>> *pMapItemArray)
+//{
+//    m_mapCursorDataArray.clear();
+//    pMapItemArray->clear();
+//    
+//    for (int x = 0; x < m_right; x++)
+//    {
+//        std::vector<MapItem> mapItemArray;
+//        
+//        for (int y = 0; y < m_bottom; y++)
+//        {
+//            MapItem mapItem;
+//            mapItem.mapDataType = MapDataType::NONE;
+//            mapItemArray.push_back(mapItem);
+//        }
+//        pMapItemArray->push_back(mapItemArray);
+//    }
+//}
+
 

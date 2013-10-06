@@ -623,9 +623,9 @@
 				CE8356E118005F960076FF8E /* actor */,
 				CE8356E418005F960076FF8E /* SRPGMapLayer.cpp */,
 				CE8356E518005F960076FF8E /* SRPGMapLayer.h */,
-				CE8356E618005F960076FF8E /* SRPGMapMacro.h */,
 				CE8356E718005F960076FF8E /* SRPGScene.cpp */,
 				CE8356E818005F960076FF8E /* SRPGScene.h */,
+				CE8356E618005F960076FF8E /* SRPGMapMacro.h */,
 			);
 			name = quest;
 			path = ../Classes/quest;

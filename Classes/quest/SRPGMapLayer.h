@@ -32,42 +32,49 @@ protected:
         zGridLineIndex   = 100000,
     };
 public:
+    // コンストラクタ、デストラクタ
     SRPGMapLayer();
     ~SRPGMapLayer();
     
+    // 初期化、生成
     virtual bool init();
-    
     CREATE_FUNC(SRPGMapLayer);
     
+    // グリッドの表示/非表示
     void showGrid();
     void hideGrid();
     
+    // マップ座標変換
     Point indexToPoint(int mapIndex_x, int mapIndex_y);
     Point indexToPoint(MapIndex mapIndex);
     MapIndex pointToIndex(Point point);
+    MapIndex touchPointToIndex(Point point);
     
-    Point moveMapPoint(Point mapPosition, float updateDelta, Point pDelta);
-private:
+    // マップ移動生成
+    Point createTouchMoveMapPoint(Point mapPosition, float updateDelta, Point pDelta);
 
+    // タッチイベント関連
+    virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event);
+
+private:
+    // マップ制御
     MapManager m_mapManager;
     
-//    // マップデータ（カーソル用？）
-//    std::vector<std::vector<MapItem>> m_mapCursorDataArray;
-//    std::list<MapIndex> m_mapMoveCursorList;
-    
+    // マップベース情報
     Size m_baseContentSize;
     Size m_baseMapSize;
     Size m_baseTileSize;
     
+    // カーソル追加
     void addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList);
+    // アクター追加
     ActorMapItem* addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX, int pMapPointY, ActorSprite::ActorDto pActorDto);
     
-  
-//    std::list<MapIndex> createActorFindDist(MapIndex mapIndex, int dist);
-//    void clearCursorMapItemArray();
-//    void findDist(int x, int y, int dist, bool first);
-//    bool chkMove(int mapPointX, int mapPointY, int dist);
-//    void addDistCursor(int mapPointX, int mapPointY, int dist);
+    Point m_touchStartPoint;
+    Point convertToSRPGMapPoint(Touch *pTouch);
 };
 
 

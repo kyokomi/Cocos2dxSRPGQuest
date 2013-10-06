@@ -10,12 +10,12 @@
 #define Cocos2dxSRPGQuest_SRPGMapMacro_h
 
 enum MapDataType {
-    NONE = 0,
-    MOVE_DIST = 1,
+    NONE        = 0,
+    MOVE_DIST   = 1,
     ATTACK_DIST = 2,
-    MAP_ITEM = 3,
-    PLAYER = 4,
-    ENEMY = 5
+    MAP_ITEM    = 3,
+    PLAYER      = 4,
+    ENEMY       = 5
 };
 
 typedef struct _MapIndex {
@@ -49,6 +49,8 @@ typedef struct _ActorMapItem : public MapItem {
     /** 攻撃済みフラグ. */
     bool attackDone;
 }ActorMapItem;
+
+#define MAP_INDEX_DIFF(mapIndexA, mapIndexB) (mapIndexA.x == mapIndexB.x && mapIndexA.y == mapIndexB.y)
 
 // TileMapから取得する
 //#define GRID_X 128
