@@ -79,8 +79,9 @@ bool SRPGMapLayer::init()
     actorDto.playerId = 4;
     ActorMapItem* pActorMapItem = addActor(MapDataType::PLAYER, 1, 5, 5, actorDto);
     
+    // 移動可能範囲のリストを作成
     std::list<MapIndex> moveList = m_mapManager.createActorFindDist(pActorMapItem->mapIndex, pActorMapItem->moveDist);
-
+    // 移動可能範囲を表示
     addMapCursor(MapDataType::MOVE_DIST, moveList);
     
     return true;
@@ -92,12 +93,14 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
     auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (!pBatchNode)
     {
+        // 白い32x32の四角い画像を使う
         pBatchNode = SpriteBatchNode::create("grid32.png");
         this->addChild(pBatchNode, SRPGMapLayer::zCursorBaseIndex, SRPGMapLayer::kCursorBaseTag);
     }
     
     for (MapIndex mapIndex : moveMapPointList)
     {
+        // 緑半透明50%
         auto* sprite = Sprite::createWithTexture(pBatchNode->getTexture());
         sprite->setPosition(indexToPoint(mapIndex.x, mapIndex.y));
         sprite->setColor(Color3B::GREEN);
@@ -106,11 +109,11 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
         // バッチノードに登録
         pBatchNode->addChild(sprite);
         
+        // 1.0秒でフェードイン、フェードアウトを繰り返すように設定
         FadeTo* fadeIn = FadeTo::create(0.5f, 128);
         FadeTo* fadeOut = FadeTo::create(0.5f, 0);
         Sequence* sequence = Sequence::create(fadeOut, fadeIn, NULL);
         RepeatForever* repeat = RepeatForever::create(sequence);
-        
         sprite->runAction(repeat);
     }
     

@@ -37,28 +37,34 @@ std::list<MapIndex> MapManager::createActorFindDist(MapIndex mapIndex, int dist)
 void MapManager::findDist(int x, int y, int dist, bool first)
 {
     // 初期位置は移動対象外とする制御
-    if (!first) {
+    if (!first)
+    {
         // 移動可能範囲に追加
         addDistCursor(x, y, dist);
     }
-    if (dist == 0) {
+    if (dist == 0)
+    {
         return;
     }
     
     // 上にいけるか?
-    if (y > m_top && chkMove(x, y - 1, dist)) {
+    if (y > m_top && chkMove(x, y - 1, dist))
+    {
         findDist(x, y - 1, dist - 1, false);
     }
     // 下にいけるか?
-    if (y < (m_bottom - 1) && chkMove(x, y + 1, dist)) {
+    if (y < (m_bottom - 1) && chkMove(x, y + 1, dist))
+    {
         findDist(x, y + 1, dist - 1, false);
     }
     // 左にいけるか?
-    if (x > m_left && chkMove(x - 1, y, dist)) {
+    if (x > m_left && chkMove(x - 1, y, dist))
+    {
         findDist(x - 1, y, dist - 1, false);
     }
     // 右にいけるか?
-    if (x < (m_right - 1) && chkMove(x + 1, y, dist)) {
+    if (x < (m_right - 1) && chkMove(x + 1, y, dist))
+    {
         findDist(x + 1, y, dist - 1, false);
     }
 }
@@ -67,7 +73,8 @@ bool MapManager::chkMove(int mapPointX, int mapPointY, int dist)
 {
     MapItem mapItem = m_mapCursorDataArray[mapPointX][mapPointY];
     if (mapItem.mapDataType == MapDataType::NONE ||
-        (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist)) {
+        (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist))
+    {
         return true;
     }
     return false;
@@ -81,8 +88,8 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
     // 未設定 or 移動オブジェクトで移動力が上の場合
     MapItem mapItem = m_mapCursorDataArray[mapPointX][mapPointY];
     if (mapItem.mapDataType == MapDataType::NONE ||
-        (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist)) {
-        
+        (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist))
+    {        
 		// リストに入れたやつだけあとで描画する
         MapItem cursorItem;
         cursorItem.mapDataType = MapDataType::MOVE_DIST;
