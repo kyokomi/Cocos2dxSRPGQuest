@@ -9,13 +9,45 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Classes/quest/SRPGMapLayer.cpp"
-            timestampString = "402756285.959969"
+            filePath = "../Classes/quest/map/MapManager.cpp"
+            timestampString = "403950743.606793"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "MapManager::createMovePointList(MapIndex* moveFromMapIndex, MapItem* moveToMapItem)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/quest/map/MapManager.cpp"
+            timestampString = "403950743.606793"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/quest/map/MapManager.cpp"
+            timestampString = "403950743.606793"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

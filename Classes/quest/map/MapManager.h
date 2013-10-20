@@ -24,6 +24,8 @@ private:
     std::vector<std::vector<ActorMapItem>> m_mapObjectDataArray;
     // マップ移動カーソルリスト
     std::list<MapIndex> m_mapMoveCursorList;
+    // マップ移動経路リスト
+    std::list<MapIndex> m_mapMovePointList;
     
     int m_top;
     int m_bottom;
@@ -36,7 +38,6 @@ private:
     template <typename TYPE>
     void clearMapItemArray(std::vector<std::vector<TYPE>> *pMapItemArray)
     {
-        m_mapCursorDataArray.clear();
         pMapItemArray->clear();
         for (int x = 0; x < m_right; x++)
         {
@@ -50,19 +51,27 @@ private:
             pMapItemArray->push_back(mapItemArray);
         }
     }
-
+    void findDist(int x, int y, int dist, bool first);
+    void findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem);
+    bool chkMove(int mapPointX, int mapPointY, int dist);
+    bool chkMovePoint(int mapPointX, int mapPointY, int dist, MapDataType ignoreMapDataType);
+    void addDistCursor(int mapPointX, int mapPointY, int dist);
+    
 public:
     void init(int top, int bottom, int left, int right);
     
     std::list<MapIndex> createActorFindDist(MapIndex mapIndex, int dist);
-    void findDist(int x, int y, int dist, bool first);
-    bool chkMove(int mapPointX, int mapPointY, int dist);
-    void addDistCursor(int mapPointX, int mapPointY, int dist);
+//    std::list<MapIndex> createMovePointList(MapIndex mapIndex, int dist, MapItem* moveToMapItem);
+    std::list<MapIndex> createMovePointList(MapIndex* moveFromMapIndex, MapItem* moveToMapItem);
     
     void addActor(ActorMapItem* pActorMapItem);
     
     ActorMapItem* getActorMapItem(MapIndex* pMapIndex);
     MapItem* getMapItem(MapIndex* pMapIndex);
+    ActorMapItem* getActorMapItemById(int seqNo);
+
+//    void createMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem);
+//    void createMovePointList(MapItem* moveToMapItem, MapIndex* moveFromMapIndex);
 };
 
 #endif /* defined(__Cocos2dxSRPGQuest__MapManager__) */

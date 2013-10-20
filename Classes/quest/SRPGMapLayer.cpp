@@ -107,9 +107,21 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
         // 緑半透明50%
         auto* sprite = Sprite::createWithTexture(pBatchNode->getTexture());
         sprite->setPosition(indexToPoint(mapIndex.x, mapIndex.y));
-        sprite->setColor(Color3B::GREEN);
         sprite->setOpacity(128);
-        sprite->setZOrder(SRPGMapLayer::zCursorBaseIndex);
+        
+        if (pMapDataType == MapDataType::MOVE_DIST)
+        {
+            sprite->setColor(Color3B::GREEN);
+            sprite->setZOrder(SRPGMapLayer::zCursorMoveFindIndex);
+            //sprite->setTag(SRPGMapLayer::kCursorMoveFindTag);
+        }
+        else if (pMapDataType == MapDataType::MOVE_STEP_DIST)
+        {
+            sprite->setColor(Color3B::ORANGE);
+            sprite->setZOrder(SRPGMapLayer::zCursorMoveStepIndex);
+            //sprite->setTag(SRPGMapLayer::kCursorMoveStepTag);
+        }
+
         // バッチノードに登録
         pBatchNode->addChild(sprite);
         
@@ -127,6 +139,50 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
 //    mapItem.mapPointX = pMapPointX;
 //    mapItem.mapPointY = pMapPointY;
 //    mapItem.mapDataType = pMapDataType;
+}
+
+/**
+ * マップカーソル削除
+ */
+void SRPGMapLayer::claerMapCursor()
+{
+    // バッチノード取得
+    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    if (pBatchNode)
+    {
+        pBatchNode->removeAllChildren();
+    }
+}
+
+void SRPGMapLayer::showMapCursor(MapDataType mapDataType)
+{
+    visibleMapCursor(mapDataType, true);
+}
+
+void SRPGMapLayer::hideMapCursor(MapDataType mapDataType)
+{
+    visibleMapCursor(mapDataType, false);
+}
+
+void SRPGMapLayer::visibleMapCursor(MapDataType mapDataType, bool visible)
+{
+    // バッチノード取得
+    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    if (pBatchNode)
+    {
+        Object* object = NULL;
+        CCARRAY_FOREACH(pBatchNode->getChildren(), object)
+        {
+            if (mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
+            {
+                ((Sprite*)object)->setVisible(visible);
+            }
+            else if (mapDataType == MapDataType::MOVE_STEP_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveStepIndex)
+            {
+                ((Sprite*)object)->setVisible(visible);
+            }
+        }
+    }
 }
 
 /**
@@ -201,15 +257,35 @@ void SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
         if (mapItem->mapDataType == MapDataType::PLAYER)
         {
             auto* actorMapItem = m_mapManager.getActorMapItem(&endSRPGMapIndex);
+            // 表示前のカーソルクリア
+            claerMapCursor();
+            // 移動可能範囲のリストを作成
+            std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
+            // 移動可能範囲を表示
+            addMapCursor(MapDataType::MOVE_DIST, moveList);
+            
             CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
+
+        }
+        else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
+        {
+            auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず
+            std::list<MapIndex> list = m_mapManager.createMovePointList(&mapItem->mapIndex, actorMapItem);
+            hideMapCursor(MapDataType::MOVE_DIST);
+            addMapCursor(MapDataType::MOVE_STEP_DIST, list);
+        }
+        else
+        {
             if (isShowGrid())
             {
+                hideMapCursor(MapDataType::MOVE_DIST);
             	hideGrid();
             }
             else
             {
+                showMapCursor(MapDataType::MOVE_DIST);
             	showGrid();
-            }
+            }   
         }
     }
 }

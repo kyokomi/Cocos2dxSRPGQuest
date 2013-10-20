@@ -22,12 +22,16 @@ protected:
     enum kTag {
         kTiledMapTag    = 1,
         kCursorBaseTag  = 9000,
+        kCursorMoveFindTag  = 9001,
+        kCursorMoveStepTag  = 9002,
         kActorBaseTag   = 10000,
         kGridLineTag    = 100000,
     };
     enum zIndex {
         zTiledMapIndex   = 1,
         zCursorBaseIndex = 9000,
+        zCursorMoveFindIndex = 9001,
+        zCursorMoveStepIndex = 9002,
         zActorBaseIndex  = 10000,
         zGridLineIndex   = 100000,
     };
@@ -71,6 +75,12 @@ private:
     
     // カーソル追加
     void addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList);
+    // カーソル消去
+    void claerMapCursor();
+    void showMapCursor(MapDataType mapDataType);
+    void hideMapCursor(MapDataType mapDataType);
+    void visibleMapCursor(MapDataType mapDataType, bool visible);
+    
     // アクター追加
     ActorMapItem* addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX, int pMapPointY, ActorSprite::ActorDto pActorDto);
     

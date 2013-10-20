@@ -16,6 +16,8 @@ void MapManager::init(int top, int bottom, int left, int right)
     m_right = right;
     
     clearMapItemArray(&m_mapObjectDataArray);
+    
+    m_mapMovePointList.clear();
 }
 
 /**
@@ -25,12 +27,34 @@ std::list<MapIndex> MapManager::createActorFindDist(MapIndex mapIndex, int dist)
 {
     // カーソル情報を初期化
     clearMapItemArray(&m_mapCursorDataArray);
+    m_mapMoveCursorList.clear();
     
     // 検索開始(再帰呼び出し)
     findDist(mapIndex.x, mapIndex.y, dist, true);
     
     // cursorListを作成
     return m_mapMoveCursorList;
+}
+
+/**
+ * キャラクター移動範囲検索.
+ */
+std::list<MapIndex> MapManager::createMovePointList(MapIndex* moveFromMapIndex, MapItem* moveToMapItem)
+{
+    // 経路情報を初期化
+    m_mapMovePointList.clear();
+    
+    // 移動先を取得
+    MapItem* moveFromMapItem = getMapItem(moveFromMapIndex);
+    
+    // 経路探索(再帰呼び出し)
+    findMovePointList(moveFromMapItem->mapIndex.x, moveFromMapItem->mapIndex.y, moveFromMapItem->moveDist, moveToMapItem);
+    
+    // 目的地を最終到達点として最後に追加
+    m_mapMovePointList.push_back(*moveFromMapIndex);
+    
+    // movePointListを返却
+    return m_mapMovePointList;
 }
 
 /**
@@ -83,6 +107,17 @@ bool MapManager::chkMove(int mapPointX, int mapPointY, int dist)
     return false;
 }
 
+bool MapManager::chkMovePoint(int mapPointX, int mapPointY, int dist, MapDataType ignoreMapDataType)
+{
+    MapIndex mapIndex = {mapPointX, mapPointY};
+    MapItem* mapItem = getMapItem(&mapIndex);
+    if (mapItem && mapItem->moveDist == dist && mapItem->mapDataType != ignoreMapDataType)
+    {
+        return true;
+    }
+    return false;
+}
+
 /**
  * 移動カーソル追加.
  */
@@ -92,7 +127,11 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
     MapItem mapItem = m_mapCursorDataArray[mapPointX][mapPointY];
     if (mapItem.mapDataType == MapDataType::NONE ||
         (mapItem.mapDataType == MapDataType::MOVE_DIST && mapItem.moveDist < dist))
-    {        
+    {
+        MapIndex mapIndex;
+        mapIndex.x = mapPointX;
+        mapIndex.y = mapPointY;
+        
 		// リストに入れたやつだけあとで描画する
         MapItem cursorItem;
         cursorItem.mapDataType = MapDataType::MOVE_DIST;
@@ -100,14 +139,12 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
         cursorItem.mapPointY = mapPointY;
         cursorItem.moveDist  = dist;
         cursorItem.attackDist = 0;
+        cursorItem.mapIndex = mapIndex;
         m_mapCursorDataArray[mapPointX][mapPointY] = cursorItem;
         
         // 描画用のリスト
         if (mapItem.mapDataType == MapDataType::NONE)
         {
-            MapIndex mapIndex;
-            mapIndex.x = mapPointX;
-            mapIndex.y = mapPointY;
             m_mapMoveCursorList.push_back(mapIndex);
         }
     }
@@ -132,23 +169,83 @@ ActorMapItem* MapManager::getActorMapItem(MapIndex* pMapIndex)
     return &(m_mapObjectDataArray[pMapIndex->x][pMapIndex->y]);
 }
 
-//void MapManager::clearMapItemArray(std::vector<std::vector<MapItem>> *pMapItemArray)
-//{
-//    m_mapCursorDataArray.clear();
-//    pMapItemArray->clear();
-//    
-//    for (int x = 0; x < m_right; x++)
-//    {
-//        std::vector<MapItem> mapItemArray;
-//        
-//        for (int y = 0; y < m_bottom; y++)
-//        {
-//            MapItem mapItem;
-//            mapItem.mapDataType = MapDataType::NONE;
-//            mapItemArray.push_back(mapItem);
-//        }
-//        pMapItemArray->push_back(mapItemArray);
-//    }
-//}
+ActorMapItem* MapManager::getActorMapItemById(int seqNo)
+{
+    int xCount = m_mapObjectDataArray.size();
+    for (int x = 0; x < xCount; x++)
+    {
+        int yCount = m_mapObjectDataArray[x].size();
+        for (int y = 0; y < yCount; y++)
+        {
+            if (m_mapObjectDataArray[x][y].mapDataType == MapDataType::PLAYER &&
+                m_mapObjectDataArray[x][y].seqNo == seqNo)
+            {
+                return &(m_mapObjectDataArray[x][y]);
+            }
+        }
+    }
 
+    return NULL;
+}
+
+/**
+ * 移動ルート情報を作成.
+ * 移動先のカーソルから移動元のMapItemまでの最短経路を検索する。
+ * movePointListに追加していきます.
+ *
+ */
+void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)
+{
+    // 自軍キャラでなければ通過不可能とする除外Type
+    MapDataType ignoreDataType = MapDataType::NONE;
+    if (moveToMapItem->mapDataType == MapDataType::PLAYER)
+    {
+        ignoreDataType = MapDataType::ENEMY;
+    }
+    else if (moveToMapItem->mapDataType == MapDataType::ENEMY)
+    {
+        ignoreDataType = MapDataType::PLAYER;
+    }
+    else
+    {
+        // プレイヤーと敵以外は移動しない
+        return;
+    }
+    
+    // タップ位置から自キャラがいるところまでの最短ルートを探す
+    MapIndex moveMapIndex;
+    moveMapIndex.x = moveX;
+    moveMapIndex.y = moveY;
+    MapItem* mapItem = getMapItem(&moveMapIndex);
+    if (mapItem && mapItem != moveToMapItem)
+    {
+        // タップした位置のdistの次はどこか探す
+        moveDist++;
+        
+        // 下か
+        if (moveY > m_top && chkMovePoint(moveX, moveY - 1, moveDist, ignoreDataType)) {
+            findMovePointList(moveX, moveY - 1, moveDist, moveToMapItem);
+            MapIndex movePointIndex = {moveX, moveY - 1, MoveDirectionType::MOVE_DOWN};
+            m_mapMovePointList.push_back(movePointIndex);
+        }
+        // 上か？
+        else if (moveY < (m_bottom -1) && chkMovePoint(moveX, moveY + 1, moveDist, ignoreDataType)) {
+            findMovePointList(moveX, moveY + 1, moveDist, moveToMapItem);
+            MapIndex movePointIndex = {moveX, moveY + 1, MoveDirectionType::MOVE_UP};
+            m_mapMovePointList.push_back(movePointIndex);
+        }
+        // 右か?
+        else if (moveX > m_left && chkMovePoint(moveX - 1, moveY, moveDist, ignoreDataType)) {
+            findMovePointList(moveX - 1, moveY, moveDist, moveToMapItem);
+            MapIndex movePointIndex = {moveX - 1, moveY, MoveDirectionType::MOVE_RIGHT};
+            m_mapMovePointList.push_back(movePointIndex);
+        }
+        // 左にいけるか?
+        else if (moveX < (m_right - 1) && chkMovePoint(moveX + 1, moveY, moveDist, ignoreDataType)) {
+            findMovePointList(moveX + 1, moveY, moveDist, moveToMapItem);
+            MapIndex movePointIndex = {moveX + 1, moveY, MoveDirectionType::MOVE_LEFT};
+            m_mapMovePointList.push_back(movePointIndex);
+        }
+    }
+}
 

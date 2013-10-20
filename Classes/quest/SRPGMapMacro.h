@@ -15,12 +15,21 @@ enum MapDataType {
     ATTACK_DIST = 2,
     MAP_ITEM    = 3,
     PLAYER      = 4,
-    ENEMY       = 5
+    ENEMY       = 5,
+    MOVE_STEP_DIST   = 6, // 移動経路
+};
+
+enum MoveDirectionType {
+	MOVE_DOWN  = 0,
+	MOVE_LEFT  = 1,
+	MOVE_RIGHT = 2,
+	MOVE_UP    = 3
 };
 
 typedef struct _MapIndex {
     int x;
     int y;
+    MoveDirectionType moveDictType;
 }MapIndex;
 
 typedef struct _MapItem {
