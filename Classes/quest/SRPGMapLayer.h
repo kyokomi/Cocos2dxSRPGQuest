@@ -21,17 +21,19 @@ class SRPGMapLayer : public Layer
 protected:
     enum kTag {
         kTiledMapTag    = 1,
-        kCursorBaseTag  = 9000,
+        kCursorBaseTag      = 9000,
         kCursorMoveFindTag  = 9001,
         kCursorMoveStepTag  = 9002,
+        kCursorSelectedTag  = 9003,
         kActorBaseTag   = 10000,
         kGridLineTag    = 100000,
     };
     enum zIndex {
         zTiledMapIndex   = 1,
-        zCursorBaseIndex = 9000,
+        zCursorBaseIndex     = 9000,
         zCursorMoveFindIndex = 9001,
         zCursorMoveStepIndex = 9002,
+        zCursorSelectedIndex = 9003,
         zActorBaseIndex  = 10000,
         zGridLineIndex   = 100000,
     };
@@ -64,6 +66,13 @@ public:
     virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
     virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event);
 
+    // カーソル全消去
+    void clearAllMapCursor();
+    // カーソル表示/非表示
+    bool isMapCursor(MapDataType mapDataType);
+    void showMapCursor(MapDataType mapDataType);
+    void hideMapCursor(MapDataType mapDataType);
+    
 private:
     // マップ制御
     MapManager m_mapManager;
@@ -75,10 +84,6 @@ private:
     
     // カーソル追加
     void addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList);
-    // カーソル消去
-    void claerMapCursor();
-    void showMapCursor(MapDataType mapDataType);
-    void hideMapCursor(MapDataType mapDataType);
     void visibleMapCursor(MapDataType mapDataType, bool visible);
     
     // アクター追加
@@ -86,6 +91,8 @@ private:
     
     Point m_touchStartPoint;
     Point convertToSRPGMapPoint(Touch *pTouch);
+    
+    void executeMapIndex(MapIndex* mapIndex);
 };
 
 

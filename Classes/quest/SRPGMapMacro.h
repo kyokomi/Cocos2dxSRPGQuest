@@ -17,6 +17,7 @@ enum MapDataType {
     PLAYER      = 4,
     ENEMY       = 5,
     MOVE_STEP_DIST   = 6, // 移動経路
+    SELECTED_DIST = 7, // 選択位置
 };
 
 enum MoveDirectionType {

@@ -113,15 +113,17 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
         {
             sprite->setColor(Color3B::GREEN);
             sprite->setZOrder(SRPGMapLayer::zCursorMoveFindIndex);
-            //sprite->setTag(SRPGMapLayer::kCursorMoveFindTag);
         }
         else if (pMapDataType == MapDataType::MOVE_STEP_DIST)
         {
             sprite->setColor(Color3B::ORANGE);
             sprite->setZOrder(SRPGMapLayer::zCursorMoveStepIndex);
-            //sprite->setTag(SRPGMapLayer::kCursorMoveStepTag);
         }
-
+        else if (pMapDataType == MapDataType::SELECTED_DIST)
+        {
+            sprite->setColor(Color3B::BLUE);
+            sprite->setZOrder(SRPGMapLayer::zCursorSelectedIndex);
+        }
         // バッチノードに登録
         pBatchNode->addChild(sprite);
         
@@ -144,7 +146,7 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
 /**
  * マップカーソル削除
  */
-void SRPGMapLayer::claerMapCursor()
+void SRPGMapLayer::clearAllMapCursor()
 {
     // バッチノード取得
     auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
@@ -152,6 +154,28 @@ void SRPGMapLayer::claerMapCursor()
     {
         pBatchNode->removeAllChildren();
     }
+}
+
+bool SRPGMapLayer::isMapCursor(MapDataType mapDataType)
+{
+    bool isShow = false;
+    
+    // バッチノード取得
+    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    if (pBatchNode)
+    {
+        Object* object = NULL;
+        CCARRAY_FOREACH(pBatchNode->getChildren(), object)
+        {
+            if ((mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
+            || (mapDataType == MapDataType::MOVE_STEP_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveStepIndex))
+            {
+                if(((Sprite*)object)->isVisible()) isShow = true;
+                break;
+            }
+        }
+    }
+    return isShow;
 }
 
 void SRPGMapLayer::showMapCursor(MapDataType mapDataType)
@@ -250,43 +274,15 @@ void SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     // タッチの開始位置と終了位置のグリッドが一致したらグリッド選択とする
     if (MAP_INDEX_DIFF(startSRPGMapIndex, endSRPGMapIndex))
     {
-        // グリッド選択
-        CCLOG("onTouchEnded mapIdx x = %d y = %d grid selected", endSRPGMapIndex.x, endSRPGMapIndex.y);
-        auto* mapItem = m_mapManager.getMapItem(&endSRPGMapIndex);
-        CCLOG("mapDataType = %d", mapItem->mapDataType);
-        if (mapItem->mapDataType == MapDataType::PLAYER)
-        {
-            auto* actorMapItem = m_mapManager.getActorMapItem(&endSRPGMapIndex);
-            // 表示前のカーソルクリア
-            claerMapCursor();
-            // 移動可能範囲のリストを作成
-            std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
-            // 移動可能範囲を表示
-            addMapCursor(MapDataType::MOVE_DIST, moveList);
-            
-            CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
-
-        }
-        else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
-        {
-            auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず
-            std::list<MapIndex> list = m_mapManager.createMovePointList(&mapItem->mapIndex, actorMapItem);
-            hideMapCursor(MapDataType::MOVE_DIST);
-            addMapCursor(MapDataType::MOVE_STEP_DIST, list);
-        }
-        else
-        {
-            if (isShowGrid())
-            {
-                hideMapCursor(MapDataType::MOVE_DIST);
-            	hideGrid();
-            }
-            else
-            {
-                showMapCursor(MapDataType::MOVE_DIST);
-            	showGrid();
-            }   
-        }
+        // 表示前のカーソルクリア
+        clearAllMapCursor();
+        
+        // 選択カーソル表示
+        std::list<MapIndex> moveMapPointList;
+        moveMapPointList.push_back(endSRPGMapIndex);
+        addMapCursor(MapDataType::SELECTED_DIST, moveMapPointList);
+        // 選択位置の処理実行
+        executeMapIndex(&endSRPGMapIndex);
     }
 }
 
@@ -298,6 +294,34 @@ void SRPGMapLayer::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event
 Point SRPGMapLayer::convertToSRPGMapPoint(Touch *pTouch)
 {
     return this->convertToWorldSpace(this->convertTouchToNodeSpace(pTouch)) - this->getPosition();
+}
+
+void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
+{
+    // グリッド選択
+    CCLOG("onTouchEnded mapIdx x = %d y = %d grid selected", mapIndex->x, mapIndex->y);
+    auto* mapItem = m_mapManager.getMapItem(mapIndex);
+    CCLOG("mapDataType = %d", mapItem->mapDataType);
+    if (mapItem->mapDataType == MapDataType::PLAYER)
+    {
+        auto* actorMapItem = m_mapManager.getActorMapItem(mapIndex);
+        // 移動可能範囲のリストを作成
+        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
+        // 移動可能範囲を表示
+        addMapCursor(MapDataType::MOVE_DIST, moveList);
+        
+        CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
+        
+    }
+    else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
+    {
+        auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず
+        // 移動範囲も表示する
+        executeMapIndex(&actorMapItem->mapIndex);
+        // 移動経路の作成と表示
+        std::list<MapIndex> list = m_mapManager.createMovePointList(&mapItem->mapIndex, actorMapItem);
+        addMapCursor(MapDataType::MOVE_STEP_DIST, list);
+    }
 }
 
 #pragma mark

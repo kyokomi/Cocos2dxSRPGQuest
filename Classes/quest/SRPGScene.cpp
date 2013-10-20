@@ -35,13 +35,61 @@ bool SRPGScene::init()
     {
         return false;
     }
+    Size winSize = Director::getInstance()->getWinSize();
     
     this->setTouchEnabled(true);
     this->setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
     
-    SRPGMapLayer* srpgMapLayer = SRPGMapLayer::create();
+    auto* srpgMapLayer = SRPGMapLayer::create();
     srpgMapLayer->setTag(SRPGScene::kSRPGMapLayerTag);
     this->addChild(srpgMapLayer);
+    
+    // ----------------------------------------
+    Point baseMenuPoint = Point(0, 24);
+    
+    // グリッド表示/非表示
+    auto* menuItem1 = MenuItemLabel::create(LabelTTF::create("A", "", 24), [this](Object *pSender) {
+        //ログ出力
+        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        if (pMapLayer)
+        {
+            if (pMapLayer->isShowGrid())
+            	pMapLayer->hideGrid();
+            else
+            	pMapLayer->showGrid();
+        }
+    });
+    menuItem1->setColor(Color3B::RED);
+    menuItem1->setPosition(menuItem1->getContentSize().width * 0.5, menuItem1->getContentSize().height * 0.5);
+
+    auto* menuItem2 = MenuItemLabel::create(LabelTTF::create("B", "", 24), [this](Object *pSender) {
+        //ログ出力
+        CCLOG("menuItem2が押された！");
+        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        if (pMapLayer) pMapLayer->clearAllMapCursor();
+    });
+    menuItem2->setColor(Color3B::RED);
+    menuItem2->setPosition(menuItem2->getContentSize().width * 0.5, menuItem1->getContentSize().height * 0.5 + menuItem1->getPositionY() + menuItem2->getContentSize().height * 0.5);
+
+    auto* menuItem3 = MenuItemLabel::create(LabelTTF::create("C", "", 24), [this](Object *pSender) {
+        //ログ出力
+        CCLOG("menuItem3が押された！");
+        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        if (pMapLayer)
+        {
+            if (pMapLayer->isMapCursor(MapDataType::MOVE_DIST))
+            	pMapLayer->hideMapCursor(MapDataType::MOVE_DIST);
+            else
+            	pMapLayer->showMapCursor(MapDataType::MOVE_DIST);
+        }
+    });
+    menuItem3->setColor(Color3B::RED);
+    menuItem3->setPosition(menuItem3->getContentSize().width * 0.5, menuItem2->getContentSize().height * 0.5 + menuItem2->getPositionY() + menuItem3->getContentSize().height * 0.5);
+    
+    auto* menu = Menu::create(menuItem1, menuItem2, menuItem3, NULL);
+    menu->setPosition(baseMenuPoint);
+    this->addChild(menu);
+    // ----------------------------------------
     
     return true;
 }
