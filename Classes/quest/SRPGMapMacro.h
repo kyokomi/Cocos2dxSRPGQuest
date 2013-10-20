@@ -37,12 +37,12 @@ typedef struct _MapItem {
     /** 短形マップ上の区分. */
     MapDataType mapDataType;
     
-    /** 短形マップ縦軸表示位置. */
-    int mapPointX;
-    
-    /** 短形マップ横軸表示位置. */
-    int mapPointY;
-    
+//    /** 短形マップ縦軸表示位置. */
+//    int mapPointX;
+//    
+//    /** 短形マップ横軸表示位置. */
+//    int mapPointY;
+//    
     MapIndex mapIndex;
     
     /** 移動可能距離. */

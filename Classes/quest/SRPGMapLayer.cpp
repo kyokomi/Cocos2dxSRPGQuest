@@ -232,8 +232,6 @@ ActorMapItem* SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int p
     actorMapItem.attackDist = pActorDto.attackRange;
     actorMapItem.moveDist = pActorDto.movePoint;
     
-    actorMapItem.mapPointX = pMapPointX;
-    actorMapItem.mapPointY = pMapPointY;
     actorMapItem.mapIndex = mapIndex;
     actorMapItem.mapDataType = pMapDataType;
     
@@ -245,6 +243,16 @@ ActorMapItem* SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int p
     
     return pActorSprite->getActorMapItem();
 //    mMapItemManager.setObject(mapPointX, mapPointY, playerMapItem);
+}
+
+ActorSprite* SRPGMapLayer::findActorSprite(int seqNo)
+{
+    auto* actorSprite = this->getChildByTag((SRPGMapLayer::kActorBaseTag + seqNo));
+    if (actorSprite && typeid(*actorSprite) == typeid(ActorSprite))
+    {
+        return (ActorSprite*)actorSprite;
+    }
+    return NULL;
 }
 
 #pragma mark
@@ -315,12 +323,40 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
     }
     else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
     {
-        auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず
-        // 移動範囲も表示する
-        executeMapIndex(&actorMapItem->mapIndex);
+        // 移動対象を取得
+        auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず1固定
+        // 移動可能範囲のリストを作成
+        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
+        // 移動可能範囲を表示
+        addMapCursor(MapDataType::MOVE_DIST, moveList);
         // 移動経路の作成と表示
         std::list<MapIndex> list = m_mapManager.createMovePointList(&mapItem->mapIndex, actorMapItem);
         addMapCursor(MapDataType::MOVE_STEP_DIST, list);
+        
+        // 移動
+        auto* pActorSprite = findActorSprite(actorMapItem->seqNo);
+        if (pActorSprite)
+        {
+            // 移動アニメーション作成。移動後にマップカーソルを初期化
+            auto* pCallFunc = CallFunc::create([this](void) {
+                CCLOG("call func!!！");
+                clearAllMapCursor();
+            });
+            int movePointSize = list.size();
+            auto* moveArray = Array::create();
+            for (MapIndex mapIndex : list)
+            {
+                auto* pMoveTo = MoveTo::create(1.0 / movePointSize, indexToPoint(mapIndex));
+                moveArray->addObject(pMoveTo);
+            }
+            auto* pMoveSeq = Sequence::create(moveArray);
+            auto* pAnimation = Sequence::create(pMoveSeq, pCallFunc, NULL);
+            pActorSprite->runAction(pAnimation);
+            
+            // マップ情報も更新する
+            m_mapManager.moveActor(actorMapItem, &(mapItem->mapIndex));
+            m_mapManager.clearCursor();
+        }
     }
 }
 

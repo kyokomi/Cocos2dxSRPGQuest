@@ -25,8 +25,8 @@ protected:
         kCursorMoveFindTag  = 9001,
         kCursorMoveStepTag  = 9002,
         kCursorSelectedTag  = 9003,
-        kActorBaseTag   = 10000,
-        kGridLineTag    = 100000,
+        kGridLineTag    = 10000,
+        kActorBaseTag   = 100000,
     };
     enum zIndex {
         zTiledMapIndex   = 1,
@@ -34,8 +34,8 @@ protected:
         zCursorMoveFindIndex = 9001,
         zCursorMoveStepIndex = 9002,
         zCursorSelectedIndex = 9003,
-        zActorBaseIndex  = 10000,
-        zGridLineIndex   = 100000,
+        zGridLineIndex   = 10000,
+        zActorBaseIndex  = 100000,
     };
 public:
     // コンストラクタ、デストラクタ
@@ -88,6 +88,8 @@ private:
     
     // アクター追加
     ActorMapItem* addActor(MapDataType pMapDataType, int pSeqNo, int pMapPointX, int pMapPointY, ActorSprite::ActorDto pActorDto);
+    // アクター検索
+    ActorSprite* findActorSprite(int seqNo);
     
     Point m_touchStartPoint;
     Point convertToSRPGMapPoint(Touch *pTouch);

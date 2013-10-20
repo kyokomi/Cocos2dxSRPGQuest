@@ -46,6 +46,8 @@ private:
             {
                 TYPE mapItem;
                 mapItem.mapDataType = MapDataType::NONE;
+                MapIndex mapIndex = {x, y};
+                mapItem.mapIndex = mapIndex;
                 mapItemArray.push_back(mapItem);
             }
             pMapItemArray->push_back(mapItemArray);
@@ -63,8 +65,10 @@ public:
     std::list<MapIndex> createActorFindDist(MapIndex mapIndex, int dist);
 //    std::list<MapIndex> createMovePointList(MapIndex mapIndex, int dist, MapItem* moveToMapItem);
     std::list<MapIndex> createMovePointList(MapIndex* moveFromMapIndex, MapItem* moveToMapItem);
+    void clearCursor();
     
     void addActor(ActorMapItem* pActorMapItem);
+    void moveActor(ActorMapItem* actorMapItem, MapIndex* moveMapIndex);
     
     ActorMapItem* getActorMapItem(MapIndex* pMapIndex);
     MapItem* getMapItem(MapIndex* pMapIndex);

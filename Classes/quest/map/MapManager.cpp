@@ -26,14 +26,19 @@ void MapManager::init(int top, int bottom, int left, int right)
 std::list<MapIndex> MapManager::createActorFindDist(MapIndex mapIndex, int dist)
 {
     // カーソル情報を初期化
-    clearMapItemArray(&m_mapCursorDataArray);
-    m_mapMoveCursorList.clear();
+    clearCursor();
     
     // 検索開始(再帰呼び出し)
     findDist(mapIndex.x, mapIndex.y, dist, true);
     
     // cursorListを作成
     return m_mapMoveCursorList;
+}
+
+void MapManager::clearCursor()
+{
+    clearMapItemArray(&m_mapCursorDataArray);
+    m_mapMoveCursorList.clear();
 }
 
 /**
@@ -135,8 +140,6 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
 		// リストに入れたやつだけあとで描画する
         MapItem cursorItem;
         cursorItem.mapDataType = MapDataType::MOVE_DIST;
-        cursorItem.mapPointX = mapPointX;
-        cursorItem.mapPointY = mapPointY;
         cursorItem.moveDist  = dist;
         cursorItem.attackDist = 0;
         cursorItem.mapIndex = mapIndex;
@@ -153,6 +156,18 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
 void MapManager::addActor(ActorMapItem* actorMapItem)
 {
     m_mapObjectDataArray[actorMapItem->mapIndex.x][actorMapItem->mapIndex.y] = *actorMapItem;
+}
+
+void MapManager::moveActor(ActorMapItem* pActorMapItem, MapIndex* pMoveMapIndex)
+{
+    MapIndex beforeMapIndex = pActorMapItem->mapIndex;
+    pActorMapItem->mapIndex = *pMoveMapIndex;
+    m_mapObjectDataArray[pMoveMapIndex->x][pMoveMapIndex->y] = *pActorMapItem;
+    
+    ActorMapItem mapItem;
+    mapItem.mapDataType = MapDataType::NONE;
+    mapItem.mapIndex = beforeMapIndex;
+    m_mapObjectDataArray[beforeMapIndex.x][beforeMapIndex.y] = mapItem;
 }
 
 MapItem* MapManager::getMapItem(MapIndex* pMapIndex)
