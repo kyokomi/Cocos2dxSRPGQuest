@@ -11,7 +11,7 @@
 
 ## 開発状況
 
-![開発中の画面](https://raw.github.com/kyokomi/Cocos2dxNovelGame/master/work/.png)
+![開発中の画面](https://raw.github.com/kyokomi/Cocos2dxNovelGame/master/work/20131020_17-50-54.png)
 
 
 
