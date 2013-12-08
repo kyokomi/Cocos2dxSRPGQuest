@@ -10,13 +10,14 @@
 #define __Cocos2dxSRPGQuest__TitleScene__
 
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
+#include "cocosbuilder/CocosBuilder.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 
 class TitleScene : public Layer
-, public CCBSelectorResolver /** CocosBuilderからメニューとかコントロールボタンを取得するのに必要 */
+, public cocosbuilder::CCBSelectorResolver /** CocosBuilderからメニューとかコントロールボタンを取得するのに必要 */
 //, public CCBMemberVariableAssigner /** CocosBuilderから変数を読み込むときに必要 */
 {
 //    // ccb

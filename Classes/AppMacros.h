@@ -9,7 +9,7 @@
 #ifndef nyandash_AppMacros_h
 #define nyandash_AppMacros_h
 
-#include "cocos2d.h"
+#include "extensions/cocos-ext.h"
 
 typedef struct tagResource
 {

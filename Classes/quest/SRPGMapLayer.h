@@ -74,6 +74,8 @@ public:
     void hideMapCursor(MapDataType mapDataType);
     
 private:
+    bool m_moveAnimation;
+
     // マップ制御
     MapManager m_mapManager;
     

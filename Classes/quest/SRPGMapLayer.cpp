@@ -14,7 +14,8 @@ SRPGMapLayer::SRPGMapLayer()
 :m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
 m_baseContentSize(Size::ZERO),
-m_touchStartPoint(Point::ZERO)
+m_touchStartPoint(Point::ZERO),
+m_moveAnimation(false)
 {
 }
 
@@ -282,6 +283,9 @@ void SRPGMapLayer::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     // タッチの開始位置と終了位置のグリッドが一致したらグリッド選択とする
     if (MAP_INDEX_DIFF(startSRPGMapIndex, endSRPGMapIndex))
     {
+    	if (m_moveAnimation) return;
+    	m_moveAnimation = true;
+
         // 表示前のカーソルクリア
         clearAllMapCursor();
         
@@ -319,7 +323,7 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
         addMapCursor(MapDataType::MOVE_DIST, moveList);
         
         CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
-        
+        m_moveAnimation = false;
     }
     else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
     {
@@ -341,6 +345,8 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
             auto* pCallFunc = CallFunc::create([this](void) {
                 CCLOG("call func!!！");
                 clearAllMapCursor();
+                m_mapManager.clearCursor();
+                m_moveAnimation = false;
             });
             int movePointSize = list.size();
             auto* moveArray = Array::create();
@@ -355,8 +361,11 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
             
             // マップ情報も更新する
             m_mapManager.moveActor(actorMapItem, &(mapItem->mapIndex));
-            m_mapManager.clearCursor();
         }
+    }
+    else
+    {
+    	m_moveAnimation = false;
     }
 }
 

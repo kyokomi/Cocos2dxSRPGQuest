@@ -48,6 +48,7 @@ private:
                 mapItem.mapDataType = MapDataType::NONE;
                 MapIndex mapIndex = {x, y};
                 mapItem.mapIndex = mapIndex;
+                mapItem.moveDist = 0;
                 mapItemArray.push_back(mapItem);
             }
             pMapItemArray->push_back(mapItemArray);

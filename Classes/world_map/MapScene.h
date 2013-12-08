@@ -10,13 +10,14 @@
 #define __Cocos2dxSRPGQuest__MapScene__
 
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
+#include "cocosbuilder/CocosBuilder.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 
 class MapScene : public Layer
-, public CCBSelectorResolver /** CocosBuilderからメニューとかコントロールボタンを取得するのに必要 */
+, public cocosbuilder::CCBSelectorResolver /** CocosBuilderからメニューとかコントロールボタンを取得するのに必要 */
 {
     // CCBSelector
     virtual SEL_MenuHandler onResolveCCBCCMenuItemSelector(Object* pTarget, const char* pSelectorName);

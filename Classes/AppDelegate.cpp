@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "AppMacros.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
 
 #include "TitleSceneLoader.h"
 
@@ -22,7 +22,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     EGLView* eglView = EGLView::getInstance();
 
     // チラツキ対策
-    Director::getInstance()->setProjection(Director::Projection::_2D);
+//    Director::getInstance()->setProjection(Director::Projection::_2D);
     Director::getInstance()->setDepthTest(false);
   
     Director::getInstance()->setOpenGLView(eglView);

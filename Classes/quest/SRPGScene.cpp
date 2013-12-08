@@ -36,9 +36,15 @@ bool SRPGScene::init()
         return false;
     }
     Size winSize = Director::getInstance()->getWinSize();
+
+    // TouchEvent settings
+    auto listener = EventListenerTouchOneByOne::create();
+    //listener->setSwallowTouches(true);
     
-    this->setTouchEnabled(true);
-    this->setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
+    listener->onTouchBegan = CC_CALLBACK_2(SRPGScene::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(SRPGScene::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(SRPGScene::onTouchEnded, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     auto* srpgMapLayer = SRPGMapLayer::create();
     srpgMapLayer->setTag(SRPGScene::kSRPGMapLayerTag);
@@ -124,12 +130,14 @@ void SRPGScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
     Point touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
     // タップを移動させた位置を記憶する
     m_pDelta = m_pStartPoint - touchPoint;
-    //CCLOG("m_pDelta = [%f, %f]", m_pDelta.x, m_pDelta.y);
+    CCLOG("m_pDelta = [%f, %f]", m_pDelta.x, m_pDelta.y);
 }
 
 
 void SRPGScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
+    CCLOG("onTouchEnded = [%f, %f]", m_pDelta.x, m_pDelta.y);
+    
     // タップ終了の0.3秒後くらいにupdateメソッドの毎フレーム実行をキャンセル
 	if (this->isScheduled(schedule_selector(SRPGScene::touchUnSchedule)))
 	{

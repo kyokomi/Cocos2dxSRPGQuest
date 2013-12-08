@@ -11,7 +11,10 @@
 
 #include "MapScene.h"
 
-class MapSceneLoader : public cocos2d::extension::LayerLoader
+#include "extensions/cocos-ext.h"
+#include "cocosbuilder/CocosBuilder.h"
+
+class MapSceneLoader : public cocosbuilder::LayerLoader
 {
 public:
     CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(MapSceneLoader, loader);

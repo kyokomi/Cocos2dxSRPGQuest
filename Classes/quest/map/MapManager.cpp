@@ -167,6 +167,7 @@ void MapManager::moveActor(ActorMapItem* pActorMapItem, MapIndex* pMoveMapIndex)
     ActorMapItem mapItem;
     mapItem.mapDataType = MapDataType::NONE;
     mapItem.mapIndex = beforeMapIndex;
+    mapItem.moveDist = 0;
     m_mapObjectDataArray[beforeMapIndex.x][beforeMapIndex.y] = mapItem;
 }
 
@@ -264,3 +265,41 @@ void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* 
     }
 }
 
+
+//void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
+//	Log.d(TAG, "====== DEBUG_LOG_MAP_ITEM_LAYER ======");
+//
+//	StringBuffer buffer = null;
+//	for (int y = 0; y < mMapY; y++) {
+//		buffer = new StringBuffer();
+//		for (int x = 0; x < mMapX; x++) {
+//			String outPutStr = "-";
+//			String baseLayerStr = logOutString(mBaseMapItemLayer[x][y]);
+//			String objectLayerStr = logOutString(mObjectMapItemLayer[x][y]);
+//			String cursorLayerStr = logOutString(mCursorMapItemLayer[x][y]);
+//			if (cursorLayerStr != null) {
+//				outPutStr = cursorLayerStr;
+//			} else if (objectLayerStr != null) {
+//				outPutStr = objectLayerStr;
+//			} else if (baseLayerStr != null) {
+//				outPutStr = baseLayerStr;
+//			}
+//			buffer.append(outPutStr);
+//			buffer.append(".");
+//		}
+//		Log.d(TAG, buffer.toString());
+//	}
+//}
+//std::string MapManager::logOutString(MapItem mapItem) {
+//	if (mapItem) {
+//		return "";
+//	} else if (mapItem.mapDataType == MapDataType::ENEMY) {
+//		return ("E");
+//	} else if (mapItem.mapDataType == MapDataType::MAP_ITEM) {
+//		return ("@");
+//	} else if (mapItem.mapDataType == MapDataType::PLAYER) {
+//		return ("P");
+//	} else {
+//		return mapItem.moveDist;
+//	}
+//}

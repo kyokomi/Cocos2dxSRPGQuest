@@ -10,8 +10,10 @@
 #define Cocos2dxSRPGQuest_TitleSceneLoader_h
 
 #include "TitleScene.h"
+#include "extensions/cocos-ext.h"
+#include "cocosbuilder/CocosBuilder.h"
 
-class TitleSceneLoader : public cocos2d::extension::LayerLoader
+class TitleSceneLoader : public cocosbuilder::LayerLoader
 {
 public:
     CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(TitleSceneLoader, loader);
