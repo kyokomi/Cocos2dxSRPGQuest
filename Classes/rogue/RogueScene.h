@@ -23,6 +23,7 @@ protected:
 //        kCursorSelectedTag  = 9003,
         kGridLineTag    = 10000,
         kActorBaseTag   = 100000,
+        kStatusBarTag   = 200000,
     };
     enum zIndex {
         zTiledMapIndex   = 1,
@@ -32,6 +33,7 @@ protected:
 //        zCursorSelectedIndex = 9003,
         zGridLineIndex   = 10000,
         zActorBaseIndex  = 100000,
+        zStatusBarIndex  = 200000,
     };
 
 private:

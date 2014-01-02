@@ -103,6 +103,20 @@ bool RogueScene::init()
     actorSprite->setActorMapItem(actorMapItem);
     this->addChild(actorSprite, RogueScene::zActorBaseIndex, (RogueScene::kActorBaseTag + actorMapItem.seqNo));
     
+    //-------------------------
+    // ステータスバー？
+    //-------------------------
+    auto statusLayer = LayerColor::create(Color4B::BLACK);
+    statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
+    statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
+    
+    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100 ", "", 12);
+    sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
+    statusLayer->addChild(sampleText);
+    
+    this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
+    
+    
     return true;
 }
 
