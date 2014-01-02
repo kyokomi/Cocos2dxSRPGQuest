@@ -6,3 +6,8 @@ gen
 *.so
 *.o
 *o.d
+
+.gradle
+proj.android/build
+
+modules/libcocos

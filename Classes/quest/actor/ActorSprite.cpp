@@ -69,6 +69,51 @@ ActorSprite::ActorDto* ActorSprite::getActorDto()
     return &m_actorDto;
 }
 
+void ActorSprite::runBottomAction()
+{
+    if (this->isRunning() && this->getActionByTag(1))
+    {
+        return;
+    }
+    this->stopAllActions();
+    auto action = createBottomActorAnimate();
+    action->setTag(1);
+    this->runAction(action);
+}
+void ActorSprite::runLeftAction()
+{
+    if (this->isRunning() && this->getActionByTag(2))
+    {
+        return;
+    }
+    this->stopAllActions();
+    auto action = createLeftActorAnimate();
+    action->setTag(2);
+    this->runAction(action);
+}
+void ActorSprite::runRightAction()
+{
+    if (this->isRunning() && this->getActionByTag(3))
+    {
+        return;
+    }
+    this->stopAllActions();
+    auto action = createRightActorAnimate();
+    action->setTag(3);
+    this->runAction(action);
+}
+void ActorSprite::runTopAction()
+{
+    if (this->isRunning() && this->getActionByTag(4))
+    {
+        return;
+    }
+    this->stopAllActions();
+    auto action = createTopActorAnimate();
+    action->setTag(4);
+    this->runAction(action);
+}
+
 FiniteTimeAction* ActorSprite::createBottomActorAnimate()
 {
     return createActorAnimate("bottom");

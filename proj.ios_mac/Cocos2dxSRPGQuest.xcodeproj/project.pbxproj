@@ -92,6 +92,7 @@
 		CE15C7E81854B2E200B74DFE /* TitleSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7DC1854B2E200B74DFE /* TitleSceneLoader.cpp */; };
 		CE15C7E91854B2E200B74DFE /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7DF1854B2E200B74DFE /* MapScene.cpp */; };
 		CE15C7EA1854B2E200B74DFE /* MapSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7E11854B2E200B74DFE /* MapSceneLoader.cpp */; };
+		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -355,6 +356,8 @@
 		CE15C7E01854B2E200B74DFE /* MapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapScene.h; sourceTree = "<group>"; };
 		CE15C7E11854B2E200B74DFE /* MapSceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapSceneLoader.cpp; sourceTree = "<group>"; };
 		CE15C7E21854B2E200B74DFE /* MapSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSceneLoader.h; sourceTree = "<group>"; };
+		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
+		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -428,6 +431,7 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CE88A49F1875AF42001C5E99 /* rogue */,
 				CE15C7CD1854B2E200B74DFE /* quest */,
 				CE15C7D91854B2E200B74DFE /* title */,
 				CE15C7DE1854B2E200B74DFE /* world_map */,
@@ -637,6 +641,16 @@
 			);
 			name = world_map;
 			path = ../Classes/world_map;
+			sourceTree = "<group>";
+		};
+		CE88A49F1875AF42001C5E99 /* rogue */ = {
+			isa = PBXGroup;
+			children = (
+				CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */,
+				CEA8AC311874C5DC00E67E3C /* RogueScene.h */,
+			);
+			name = rogue;
+			path = ../Classes/rogue;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -896,6 +910,7 @@
 				CE15C7E61854B2E200B74DFE /* SRPGScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */,
+				CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CE15C7E91854B2E200B74DFE /* MapScene.cpp in Sources */,
 				1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */,

@@ -14,12 +14,14 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/world_map/MapSceneLoader.cpp \
                    ../../Classes/quest/SRPGScene.cpp \
                    ../../Classes/quest/SRPGMapLayer.cpp \
+                   ../../Classes/rogue/RogueScene.cpp \
                    ../../Classes/quest/actor/ActorSprite.cpp \
                    ../../Classes/quest/map/MapManager.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
                    $(LOCAL_PATH)/../../Classes/title \
                    $(LOCAL_PATH)/../../Classes/world_map \
+                   $(LOCAL_PATH)/../../Classes/rogue \
                    $(LOCAL_PATH)/../../Classes/quest \
                    $(LOCAL_PATH)/../../Classes/quest/actor \
                    $(LOCAL_PATH)/../../Classes/quest/map

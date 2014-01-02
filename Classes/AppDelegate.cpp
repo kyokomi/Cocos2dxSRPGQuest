@@ -28,8 +28,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     Director::getInstance()->setOpenGLView(eglView);
 	
     // 800x480基準
-    eglView->setDesignResolutionSize(800.0 * 0.6,
-                                     480.0 * 0.6,
+    eglView->setDesignResolutionSize(800.0 * 0.6,//480
+                                     480.0 * 0.6,//288
                                      ResolutionPolicy::SHOW_ALL);
     
     // turn on display FPS

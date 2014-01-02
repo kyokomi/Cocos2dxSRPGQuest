@@ -9,6 +9,7 @@
 #include "MapScene.h"
 #include "SRPGScene.h"
 #include "TitleSceneLoader.h"
+#include "RogueScene.h"
 
 MapScene::MapScene()
 {
@@ -71,6 +72,9 @@ void MapScene::tappedMenuItem2(Object * pTarget)
 void MapScene::tappedMenuItem3(Object * pTarget)
 {
     CCLOG("tappedMenuItem3");
+    auto scene = RogueScene::scene();
+    auto trans = TransitionProgressOutIn::create(1, scene);
+    Director::getInstance()->replaceScene(trans);
 }
 
 

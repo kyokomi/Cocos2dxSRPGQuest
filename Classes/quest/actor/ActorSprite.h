@@ -67,6 +67,11 @@ public:
     ActorMapItem* getActorMapItem();
     ActorDto* getActorDto();
     
+    void runBottomAction();
+    void runLeftAction();
+    void runRightAction();
+    void runTopAction();
+    
 private:
     ActorMapItem m_actorMapItem;
     ActorDto m_actorDto;

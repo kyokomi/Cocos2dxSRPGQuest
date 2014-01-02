@@ -4,14 +4,19 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
 apply plugin: 'android'
 
+dependencies {
+  compile project(':modules:libcocos')
+}
+
 android {
-  compileSdkVersion 18
+  compileSdkVersion 19
+  buildToolsVersion '19.0.0'
 
   sourceSets {
     main {
@@ -24,7 +29,25 @@ android {
             assets.srcDirs = ['assets']
     }
   }
-
-  
 }
+
+// https://gist.github.com/khernyo/4226923
+task copyNativeLibs(type: Copy) {
+        // libs/armeabi下にある*.soをすべてbuild/libs/armeabi下にコピーする
+        from(new File('libs/armeabi')) { include '**/*.so' }
+        into new File(buildDir, 'libs/armeabi')
+}
+
+// compileTask呼び出し時にcopyNativeLibsを呼び出すように指定
+tasks.withType(Compile) { compileTask ->
+        compileTask.dependsOn copyNativeLibs
+}
+
+tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
+    pkgTask.jniFolders = new HashSet<File>()
+    pkgTask.jniFolders.add(new File(buildDir, 'libs'))
+}
+
+// cleanの前にcleanCopyNativeLibsを依存するように指定
+clean.dependsOn 'cleanCopyNativeLibs'
 
