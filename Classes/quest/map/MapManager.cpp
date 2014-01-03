@@ -7,6 +7,8 @@
 //
 
 #include "MapManager.h"
+#include <iostream>
+#include <string>
 
 void MapManager::init(int top, int bottom, int left, int right)
 {
@@ -15,6 +17,7 @@ void MapManager::init(int top, int bottom, int left, int right)
     m_left = left;
     m_right = right;
     
+    clearCursor();
     clearMapItemArray(&m_mapObjectDataArray);
     
     m_mapMovePointList.clear();
@@ -156,6 +159,8 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
 void MapManager::addActor(ActorMapItem* actorMapItem)
 {
     m_mapObjectDataArray[actorMapItem->mapIndex.x][actorMapItem->mapIndex.y] = *actorMapItem;
+    
+    DEBUG_LOG_MAP_ITEM_LAYER();
 }
 
 void MapManager::moveActor(ActorMapItem* pActorMapItem, MapIndex* pMoveMapIndex)
@@ -169,6 +174,8 @@ void MapManager::moveActor(ActorMapItem* pActorMapItem, MapIndex* pMoveMapIndex)
     mapItem.mapIndex = beforeMapIndex;
     mapItem.moveDist = 0;
     m_mapObjectDataArray[beforeMapIndex.x][beforeMapIndex.y] = mapItem;
+    
+    DEBUG_LOG_MAP_ITEM_LAYER();
 }
 
 MapItem* MapManager::getMapItem(MapIndex* pMapIndex)
@@ -266,40 +273,41 @@ void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* 
 }
 
 
-//void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
-//	Log.d(TAG, "====== DEBUG_LOG_MAP_ITEM_LAYER ======");
-//
+void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
+	//Log.d(TAG, "====== DEBUG_LOG_MAP_ITEM_LAYER ======");
+    
+    std::string buffer;
 //	StringBuffer buffer = null;
-//	for (int y = 0; y < mMapY; y++) {
+	for (int y = m_bottom - 1; y >= 0; y--) {
 //		buffer = new StringBuffer();
-//		for (int x = 0; x < mMapX; x++) {
-//			String outPutStr = "-";
-//			String baseLayerStr = logOutString(mBaseMapItemLayer[x][y]);
-//			String objectLayerStr = logOutString(mObjectMapItemLayer[x][y]);
-//			String cursorLayerStr = logOutString(mCursorMapItemLayer[x][y]);
-//			if (cursorLayerStr != null) {
-//				outPutStr = cursorLayerStr;
-//			} else if (objectLayerStr != null) {
-//				outPutStr = objectLayerStr;
-//			} else if (baseLayerStr != null) {
-//				outPutStr = baseLayerStr;
-//			}
+        buffer = "";
+		for (int x = 0; x < m_right; x++) {
+            std::string outPutStr = "-";
+			std::string objectLayerStr = logOutString(m_mapObjectDataArray[x][y]);
+			std::string cursorLayerStr = logOutString(m_mapCursorDataArray[x][y]);
+			if (cursorLayerStr != "") {
+				outPutStr = cursorLayerStr;
+			} else if (objectLayerStr != "") {
+				outPutStr = objectLayerStr;
+			}
+            buffer += outPutStr + ".";
 //			buffer.append(outPutStr);
 //			buffer.append(".");
-//		}
+		}
+        printf("%s\n", buffer.c_str());
 //		Log.d(TAG, buffer.toString());
-//	}
-//}
-//std::string MapManager::logOutString(MapItem mapItem) {
-//	if (mapItem) {
-//		return "";
-//	} else if (mapItem.mapDataType == MapDataType::ENEMY) {
-//		return ("E");
-//	} else if (mapItem.mapDataType == MapDataType::MAP_ITEM) {
-//		return ("@");
-//	} else if (mapItem.mapDataType == MapDataType::PLAYER) {
-//		return ("P");
-//	} else {
-//		return mapItem.moveDist;
-//	}
-//}
+	}
+}
+std::string MapManager::logOutString(MapItem mapItem) {
+	if (mapItem.mapDataType == MapDataType::NONE) {
+		return "";
+	} else if (mapItem.mapDataType == MapDataType::ENEMY) {
+		return ("E");
+	} else if (mapItem.mapDataType == MapDataType::MAP_ITEM) {
+		return ("@");
+	} else if (mapItem.mapDataType == MapDataType::PLAYER) {
+		return ("P");
+	} else {
+		return std::string("%d", mapItem.moveDist);
+	}
+}

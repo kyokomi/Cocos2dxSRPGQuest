@@ -12,6 +12,9 @@
 USING_NS_CC;
 
 RogueScene::RogueScene()
+:m_baseMapSize(Size::ZERO),
+m_baseTileSize(Size::ZERO),
+m_baseContentSize(Size::ZERO)
 {
 }
 
@@ -56,6 +59,8 @@ bool RogueScene::init()
     m_baseMapSize = pTiledMap->getMapSize();
     m_baseTileSize = pTiledMap->getTileSize();
     m_baseContentSize = pTiledMap->getContentSize();
+    
+    m_mapManager.init(0, (int)m_baseMapSize.height, 0, (int)m_baseMapSize.width);
     
     // ---------------------
     // グリッド線を生成
@@ -103,6 +108,9 @@ bool RogueScene::init()
     actorSprite->setActorMapItem(actorMapItem);
     this->addChild(actorSprite, RogueScene::zActorBaseIndex, (RogueScene::kActorBaseTag + actorMapItem.seqNo));
     
+    // マップに追加
+    m_mapManager.addActor(actorSprite->getActorMapItem());
+    
     //-------------------------
     // ステータスバー？
     //-------------------------
@@ -116,6 +124,21 @@ bool RogueScene::init()
     
     this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
     
+    // ------------------------
+    // ミニマップ
+    // ------------------------
+    auto miniMapLayer = LayerColor::create(Color4B(  0,   0, 196, 128));
+    // 1/8サイズ
+    miniMapLayer->setContentSize(Size(m_baseMapSize.width * m_baseTileSize.width / 8, m_baseMapSize.height * m_baseTileSize.height / 8));
+    miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
+    // プレイヤーの位置
+    auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
+    miniMapActorLayer->setContentSize(m_baseTileSize / 8);
+    miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
+    miniMapActorLayer->setTag(actorSprite->getActorDto()->playerId);
+    miniMapLayer->addChild(miniMapActorLayer);
+    
+    this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
     
     return true;
 }
@@ -130,10 +153,10 @@ void RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 
 }
 
-
 void RogueScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
+    auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
+    auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch)) - mapLayer->getPosition();
     
     MapIndex touchPointMapIndex = touchPointToIndex(touchPoint);
     CCLOG("onTouchBegan touchPointMapIndex x = %d y = %d", touchPointMapIndex.x, touchPointMapIndex.y);
@@ -150,7 +173,14 @@ void RogueScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
 {
+    // 画面外判定
+    if (m_baseMapSize.width <= touchPointMapIndex.x || m_baseMapSize.height <= touchPointMapIndex.y || 0 > touchPointMapIndex.x || 0 > touchPointMapIndex.y)
+    {
+        return;
+    }
+    
     // 移動可能方向かチェック
+    
     // TODO: 障害物とか敵とかね
     
     // 攻撃
@@ -172,7 +202,6 @@ void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
 
 void RogueScene::moveMap(MapIndex touchPointMapIndex)
 {
-    
     // 移動距離計算
     auto actor = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
     
@@ -206,7 +235,7 @@ void RogueScene::moveMap(MapIndex touchPointMapIndex)
     CCLOG("move ok %d,%d %d,%d", actor->getActorMapItem()->mapIndex.x, actor->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
     
     // 移動
-    moveMap(addMoveIndex);
+    //moveMap(addMoveIndex);
     
     CCLOG("addMoveIndex %d,%d", addMoveIndex.x, addMoveIndex.y);
     
@@ -235,6 +264,21 @@ void RogueScene::moveMap(MapIndex touchPointMapIndex)
     auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
     auto moveAction = MoveTo::create(0.3, mapLayer->getPosition() - addMovePoint);
     mapLayer->runAction(moveAction);
+    
+    // マップ情報を更新
+    MapIndex moveMapIndex;
+    moveMapIndex.moveDictType = addMoveIndex.moveDictType;
+    auto actorMapItem = actor->getActorMapItem();
+    moveMapIndex.x = actorMapItem->mapIndex.x + addMoveIndex.x;
+    moveMapIndex.y = actorMapItem->mapIndex.y + addMoveIndex.y;
+    m_mapManager.moveActor(actorMapItem, &moveMapIndex);
+    // actor情報も更新
+    actorMapItem->mapIndex = moveMapIndex;
+    
+    // ミニマップも更新
+    auto miniMapLayer = getChildByTag(kMiniMapTag);
+    auto miniMapActorNode = (Node*) miniMapLayer->getChildByTag(actor->getActorDto()->playerId);
+    miniMapActorNode->setPosition(indexToPointNotTileSize(actorMapItem->mapIndex) / 8);
 }
 
 #pragma mark
@@ -267,3 +311,14 @@ MapIndex RogueScene::touchPointToIndex(Point point)
     return mapIndex;
 }
 
+Point RogueScene::indexToPointNotTileSize(MapIndex mapIndex)
+{
+    // タイルサイズを考慮
+    return indexToPointNotTileSize(mapIndex.x, mapIndex.y);
+}
+
+Point RogueScene::indexToPointNotTileSize(int mapIndex_x, int mapIndex_y)
+{
+    // タイルサイズを考慮
+    return Point(m_baseTileSize.width * mapIndex_x, m_baseTileSize.height * mapIndex_y);
+}

@@ -23,6 +23,7 @@ protected:
 //        kCursorSelectedTag  = 9003,
         kGridLineTag    = 10000,
         kActorBaseTag   = 100000,
+        kMiniMapTag     = 150000,
         kStatusBarTag   = 200000,
     };
     enum zIndex {
@@ -33,6 +34,7 @@ protected:
 //        zCursorSelectedIndex = 9003,
         zGridLineIndex   = 10000,
         zActorBaseIndex  = 100000,
+        zMiniMapIndex    = 150000,
         zStatusBarIndex  = 200000,
     };
 
@@ -42,6 +44,9 @@ private:
     cocos2d::Size m_baseMapSize;
     cocos2d::Size m_baseTileSize;
 
+    // マップ制御
+    MapManager m_mapManager;
+    
     // タッチイベント系
     void touchEventExec(MapIndex touchPointMapIndex);
     void moveMap(MapIndex touchPointMapIndex);
@@ -49,6 +54,9 @@ private:
     // マップ座標変換
     cocos2d::Point indexToPoint(int mapIndex_x, int mapIndex_y);
     cocos2d::Point indexToPoint(MapIndex mapIndex);
+    cocos2d::Point indexToPointNotTileSize(int mapIndex_x, int mapIndex_y);
+    cocos2d::Point indexToPointNotTileSize(MapIndex mapIndex);
+    
     MapIndex pointToIndex(cocos2d::Point point);
     MapIndex touchPointToIndex(cocos2d::Point point);
     

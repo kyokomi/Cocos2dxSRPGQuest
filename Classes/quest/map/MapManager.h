@@ -60,7 +60,11 @@ private:
     bool chkMovePoint(int mapPointX, int mapPointY, int dist, MapDataType ignoreMapDataType);
     void addDistCursor(int mapPointX, int mapPointY, int dist);
     
+    std::string logOutString(MapItem mapItem);
+    
 public:
+    void DEBUG_LOG_MAP_ITEM_LAYER();
+    
     void init(int top, int bottom, int left, int right);
     
     std::list<MapIndex> createActorFindDist(MapIndex mapIndex, int dist);
