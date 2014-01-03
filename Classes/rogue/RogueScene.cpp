@@ -127,15 +127,22 @@ bool RogueScene::init()
     // ------------------------
     // ミニマップ
     // ------------------------
-    auto miniMapLayer = LayerColor::create(Color4B(  0,   0, 196, 128));
+    // 青で半透明
+    auto miniMapLayer = LayerColor::create(Color4B(0, 0, 196, 128));
     // 1/8サイズ
-    miniMapLayer->setContentSize(Size(m_baseMapSize.width * m_baseTileSize.width / 8, m_baseMapSize.height * m_baseTileSize.height / 8));
+    miniMapLayer->setContentSize(Size(m_baseMapSize.width * m_baseTileSize.width / 8,
+                                      m_baseMapSize.height * m_baseTileSize.height / 8));
+    // ステータスバーの下くらい
     miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
-    // プレイヤーの位置
+    // プレイヤーの位置表示用（同じく1/8サイズ）
     auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
+    // タイルの1/8サイズ
     miniMapActorLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
     miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにplayerIdをtag管理
     miniMapActorLayer->setTag(actorSprite->getActorDto()->playerId);
+    
     miniMapLayer->addChild(miniMapActorLayer);
     
     this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
