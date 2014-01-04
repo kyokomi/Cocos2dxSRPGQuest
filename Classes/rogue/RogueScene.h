@@ -48,6 +48,7 @@ protected:
         kActorBaseTag         = 100000,
         kMiniMapTag           = 150000,
         kStatusBarTag         = 200000,
+        kGameLogTag           = 210000,
     };
     enum Index {
         zTiledMapIndex   = 1,
@@ -59,6 +60,7 @@ protected:
         zActorBaseIndex  = 100000,
         zMiniMapIndex    = 150000,
         zStatusBarIndex  = 200000,
+        zGameLogIndex    = 210000,
     };
 
 private:
@@ -81,6 +83,9 @@ private:
     MapIndex checkTouchEventIndex(MapIndex touchPointMapIndex);
     void moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapDataType, cocos2d::CallFunc* moveFinishedCallFunc);
     bool isTiledMapColisionLayer(MapIndex touchPointMapIndex);
+    
+    // UI関連
+    void logMessage(const char * pszFormat, ...);
     
     // マップ座標変換
     cocos2d::Point indexToPoint(int mapIndex_x, int mapIndex_y);

@@ -175,16 +175,16 @@ bool RogueScene::init()
     //-------------------------
     // ゲームログ表示
     //-------------------------
-    // TODO: あとで
-//    auto statusLayer = LayerColor::create(Color4B::BLACK);
-//    statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
-//    statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
-//    
-//    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
-//    sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
-//    statusLayer->addChild(sampleText);
-//    
-//    this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
+    auto pGameLogLayer = LayerColor::create(Color4B(0, 0, 0, 192));
+    pGameLogLayer->setContentSize(Size(winSize.width / 3, winSize.height / 2));
+    pGameLogLayer->setPosition(winSize.width - pGameLogLayer->getContentSize().width, 0);
+    
+    auto pLogTextLabel = LabelTTF::create("start", "", 10, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::BOTTOM);
+    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2));
+//    pLogTextLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+//    pLogTextLabel->setVerticalAlignment(TextVAlignment::BOTTOM);
+    pGameLogLayer->addChild(pLogTextLabel);
+    this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
     
     // ------------------------
     // ミニマップ
@@ -316,16 +316,16 @@ void RogueScene::enemyTurn()
             }
             else if (isTiledMapColisionLayer(moveMapIndex))
             {
-                CCLOG("壁ドーン seqNo = %d", enemyMapItem.seqNo);
+                logMessage("壁ドーン seqNo = %d", enemyMapItem.seqNo);
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::ENEMY)
             {
-                CCLOG("敵ドーン seqNo = %d", enemyMapItem.seqNo);
+                logMessage("敵ドーン seqNo = %d", enemyMapItem.seqNo);
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::PLAYER)
             {
                 // 攻撃イベント
-                CCLOG("プレイヤーに攻撃開始 seqNo = %d", enemyMapItem.seqNo);
+                logMessage("プレイヤーに攻撃開始 seqNo = %d", enemyMapItem.seqNo);
             }
             else
             {
@@ -339,7 +339,7 @@ void RogueScene::enemyTurn()
 //                    changeGameStatus(GameStatus::ENEMY_TURN);
                     changeGameStatus(GameStatus::PLAYER_TURN);
                 }));
-                CCLOG("移動した seqNo = %d", enemyMapItem.seqNo);
+                logMessage("移動した seqNo = %d", enemyMapItem.seqNo);
             }
         }
     }
@@ -409,7 +409,7 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
     if (m_mapManager.getActorMapItem(&touchPointMapIndex)->mapDataType == MapDataType::ENEMY)
     {
         // 攻撃イベント
-        CCLOG("敵に攻撃開始");
+        logMessage("敵に攻撃開始");
     }
     else
     {
@@ -417,7 +417,7 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
         if (isTiledMapColisionLayer(touchPointMapIndex))
         {
             // TODO: ぶつかるSE再生
-            CCLOG("壁ドーン");
+            logMessage("壁ドーン");
         }
         else
         {
@@ -556,6 +556,47 @@ bool RogueScene::isTiledMapColisionLayer(MapIndex touchPointMapIndex)
     }
     
     return false;
+}
+
+#pragma mark
+#pragma mark UI関連
+
+void RogueScene::logMessage(const char * pszFormat, ...)
+{
+    char szBuf[kMaxLogLen+1] = {0};
+    va_list ap;
+    va_start(ap, pszFormat);
+    vsnprintf(szBuf, kMaxLogLen, pszFormat, ap);
+    va_end(ap);
+    //printf("%s", szBuf);
+    
+    CCLOG("logMessage: %s", szBuf);
+    
+    auto pGameLogNode = getChildByTag(RogueScene::kGameLogTag);
+    auto pGameLogText = (LabelTTF*) pGameLogNode->getChildren()->getObjectAtIndex(0);
+    if (pGameLogText)
+    {
+        
+        auto pMessage = String::create(szBuf);
+        
+        pMessage->append("\n");
+        std::string nowString = pGameLogText->getString();
+        // 10行まで
+        if (std::count(nowString.begin(), nowString.end(), '\n') >= 9)
+        {
+            unsigned int loc = nowString.find_last_of('\n', nowString.size());
+            CCLOG("logMessage: loc = %d size = %ld", loc, nowString.size());
+            if (loc != std::string::npos)
+            {
+                nowString.erase(loc, nowString.size() - loc);
+            }
+        }
+        pMessage->append(nowString);
+        pGameLogText->setString(pMessage->getCString());
+        pGameLogText->setPosition(Point(pGameLogText->getContentSize().width / 2, pGameLogNode->getContentSize().height - pGameLogText->getContentSize().height / 2));
+    }
+    
+    free(szBuf);
 }
 
 #pragma mark
