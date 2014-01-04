@@ -48,6 +48,7 @@ private:
     MapManager m_mapManager;
     
     // タッチイベント系
+    void touchEventExec(cocos2d::Point touchPoint);
     void touchEventExec(MapIndex touchPointMapIndex);
     void moveMap(MapIndex touchPointMapIndex);
     
@@ -59,6 +60,8 @@ private:
     
     MapIndex pointToIndex(cocos2d::Point point);
     MapIndex touchPointToIndex(cocos2d::Point point);
+    // MapIndexからtileIndexに変換
+    MapIndex mapIndexToTileIndex(MapIndex mapIndex);
     
 public:
     RogueScene();

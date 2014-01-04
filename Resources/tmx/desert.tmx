@@ -3,9 +3,21 @@
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
  </tileset>
- <layer name="タイル・レイヤー1" width="40" height="20">
+ <layer name="background" width="40" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjY2BgYB/EmA+I+QcxHonuYwFicSTMSoQadAzTQwv3CQCxGhJGtwPkNjks2AAJy0HdSAv38TCgpnFeLO4H2S9PwH18NHIfMeGL7C49HOE5WNyHCw+U+9DjHxfmHSD3kYJH3TfqvlH3jbpv1H2DE4sx4G+HDTQGALI8MVI=
+   eJzt0LEKACEMA9BOnpPepE7+/2faUTJYBCt3kOFNKSS0i0gn2hDUM4lGjvD+tKTy5DVyhPfe+3bd3vf1/2FfUXWhOe/Dfu8+IiKivxlqf1kv
   </data>
  </layer>
+ <layer name="colision" width="40" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztlmELgjAQhq/6FH0q60OWpJRCadH//3W9A4WxutM5lwN94WFwMvYM72ALIloGygqswR7sAuMANrWfWkNL4zVVv0KjLW8Dye8IYgdOFne4MJ6SXwZu4NGDHFwt/Jq8ftQkvz5nuO4108UvZVZi6ndQ/tGPS9ryfYj4+L9qtmzmQ4rkV9H3PHaZ6yf57z/VQ/pMlkydw3f/hZLZzy2zn1t0vzON/1Y2SWq/LY3/VuaIwAdOKhZU
+  </data>
+ </layer>
+ <objectgroup name="オブジェクト・レイヤー 1" width="40" height="20">
+  <object name="event_start" x="288" y="384" width="32" height="32">
+   <properties>
+    <property name="id" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

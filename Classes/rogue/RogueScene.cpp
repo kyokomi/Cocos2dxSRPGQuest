@@ -162,14 +162,11 @@ void RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void RogueScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
-    auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch)) - mapLayer->getPosition();
-    
-    MapIndex touchPointMapIndex = touchPointToIndex(touchPoint);
-    CCLOG("onTouchBegan touchPointMapIndex x = %d y = %d", touchPointMapIndex.x, touchPointMapIndex.y);
+//    auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
+    auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
 
     // 行動判定
-    touchEventExec(touchPointMapIndex);
+    touchEventExec(touchPoint);
 }
 
 void RogueScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -178,8 +175,14 @@ void RogueScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 
 
-void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
+//void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
+void RogueScene::touchEventExec(cocos2d::Point touchPoint)
 {
+    auto pMapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
+    // マップ移動分を考慮
+    MapIndex touchPointMapIndex = touchPointToIndex(touchPoint - pMapLayer->getPosition());
+    CCLOG("onTouchBegan touchPointMapIndex x = %d y = %d", touchPointMapIndex.x, touchPointMapIndex.y);
+    
     // 画面外判定
     if (m_baseMapSize.width <= touchPointMapIndex.x || m_baseMapSize.height <= touchPointMapIndex.y || 0 > touchPointMapIndex.x || 0 > touchPointMapIndex.y)
     {
@@ -187,6 +190,19 @@ void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
     }
     
     // 移動可能方向かチェック
+    
+    // 障害物判定
+    auto pColisionLayer = pMapLayer->getLayer("colision");
+    // TileMapは左上から0,0なので座標変換する
+    auto touchPointTileIndex = mapIndexToTileIndex(touchPointMapIndex);
+    auto pTileSprite = pColisionLayer->getTileAt(Point(touchPointTileIndex.x, touchPointTileIndex.y));
+    if (pTileSprite)
+    {
+        // 障害物なので移動とかできない
+        CCLOG("colision touchPointTileIndex x = %d y = %d", touchPointTileIndex.x, touchPointTileIndex.y);
+        // TODO: ぶつかるSE再生
+        return;
+    }
     
     // TODO: 障害物とか敵とかね
     
@@ -198,9 +214,6 @@ void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
     
     // 宝箱
         // 宝箱イベント
-    
-    // 障害物ぶつかる
-        // SE再生
     
     // 移動
         // 移動処理
@@ -240,9 +253,6 @@ void RogueScene::moveMap(MapIndex touchPointMapIndex)
     
     // プレイヤーから1マス以内なら移動or攻撃と判断
     CCLOG("move ok %d,%d %d,%d", actor->getActorMapItem()->mapIndex.x, actor->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
-    
-    // 移動
-    //moveMap(addMoveIndex);
     
     CCLOG("addMoveIndex %d,%d", addMoveIndex.x, addMoveIndex.y);
     
@@ -320,12 +330,18 @@ MapIndex RogueScene::touchPointToIndex(Point point)
 
 Point RogueScene::indexToPointNotTileSize(MapIndex mapIndex)
 {
-    // タイルサイズを考慮
     return indexToPointNotTileSize(mapIndex.x, mapIndex.y);
 }
 
 Point RogueScene::indexToPointNotTileSize(int mapIndex_x, int mapIndex_y)
 {
-    // タイルサイズを考慮
     return Point(m_baseTileSize.width * mapIndex_x, m_baseTileSize.height * mapIndex_y);
+}
+
+MapIndex RogueScene::mapIndexToTileIndex(MapIndex mapIndex)
+{
+    MapIndex tileIndex;
+    tileIndex.x = mapIndex.x;
+    tileIndex.y = m_baseMapSize.height - mapIndex.y - 1;
+    return tileIndex;
 }
