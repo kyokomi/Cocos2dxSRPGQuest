@@ -63,12 +63,11 @@ private:
     std::string logOutString(MapItem mapItem);
     
 public:
-    void DEBUG_LOG_MAP_ITEM_LAYER();
+    void DEBUG_LOG_MAP_ITEM_LAYER(); // デバッグ用のマップログ出力
     
     void init(int top, int bottom, int left, int right);
     
     std::list<MapIndex> createActorFindDist(MapIndex mapIndex, int dist);
-//    std::list<MapIndex> createMovePointList(MapIndex mapIndex, int dist, MapItem* moveToMapItem);
     std::list<MapIndex> createMovePointList(MapIndex* moveFromMapIndex, MapItem* moveToMapItem);
     void clearCursor();
     
@@ -79,8 +78,7 @@ public:
     MapItem* getMapItem(MapIndex* pMapIndex);
     ActorMapItem* getActorMapItemById(int seqNo);
 
-//    void createMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem);
-//    void createMovePointList(MapItem* moveToMapItem, MapIndex* moveFromMapIndex);
+    std::list<ActorMapItem> findEnemyMapItem();
 };
 
 #endif /* defined(__Cocos2dxSRPGQuest__MapManager__) */

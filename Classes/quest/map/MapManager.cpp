@@ -272,14 +272,32 @@ void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* 
     }
 }
 
+std::list<ActorMapItem> MapManager::findEnemyMapItem()
+{
+    std::list<ActorMapItem> enemyMapItem;
+    enemyMapItem.clear();
+    
+    int xCount = m_mapObjectDataArray.size();
+    for (int x = 0; x < xCount; x++)
+    {
+        int yCount = m_mapObjectDataArray[x].size();
+        for (int y = 0; y < yCount; y++)
+        {
+            if (m_mapObjectDataArray[x][y].mapDataType == MapDataType::ENEMY)
+            {
+                enemyMapItem.push_back(m_mapObjectDataArray[x][y]);
+            }
+        }
+    }
+    return enemyMapItem;
+}
+
+#pragma mark
+#pragma mark DEBUG関連
 
 void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
-	//Log.d(TAG, "====== DEBUG_LOG_MAP_ITEM_LAYER ======");
-    
     std::string buffer;
-//	StringBuffer buffer = null;
 	for (int y = m_bottom - 1; y >= 0; y--) {
-//		buffer = new StringBuffer();
         buffer = "";
 		for (int x = 0; x < m_right; x++) {
             std::string outPutStr = "-";
@@ -291,11 +309,8 @@ void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
 				outPutStr = objectLayerStr;
 			}
             buffer += outPutStr + ".";
-//			buffer.append(outPutStr);
-//			buffer.append(".");
 		}
         printf("%s\n", buffer.c_str());
-//		Log.d(TAG, buffer.toString());
 	}
 }
 std::string MapManager::logOutString(MapItem mapItem) {

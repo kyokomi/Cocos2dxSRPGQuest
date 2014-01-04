@@ -16,6 +16,12 @@ class RogueScene : public cocos2d::Layer
 {
 protected:
     
+    enum GameStatus {
+        INIT        = 0,
+        PLAYER_TURN = 1,
+        ENEMY_TURN  = 2,
+        ENEMY_ACTION  = 3,
+    };
     // TiledMap（background, colision)
         // TiledMapFront
         // TiledMapEnemy
@@ -56,6 +62,11 @@ protected:
     };
 
 private:
+    // ゲームステート管理
+    GameStatus m_gameStatus;
+    void changeGameStatus(GameStatus gameStatus);
+    void enemyTurn();
+    
     // マップベース情報
     cocos2d::Size m_baseContentSize;
     cocos2d::Size m_baseMapSize;
@@ -68,7 +79,7 @@ private:
     void touchEventExec(cocos2d::Point touchPoint);
     void touchEventExec(MapIndex touchPointMapIndex);
     MapIndex checkTouchEventIndex(MapIndex touchPointMapIndex);
-    void moveMap(MapIndex touchPointMapIndex);
+    void moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapDataType, cocos2d::CallFunc* moveFinishedCallFunc);
     bool isTiledMapColisionLayer(MapIndex touchPointMapIndex);
     
     // マップ座標変換

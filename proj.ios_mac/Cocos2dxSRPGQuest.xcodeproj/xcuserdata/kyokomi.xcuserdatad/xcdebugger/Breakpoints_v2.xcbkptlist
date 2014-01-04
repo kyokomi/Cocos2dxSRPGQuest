@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/quest/map/MapManager.cpp"
-            timestampString = "410451556.28014"
+            timestampString = "410527728.377884"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
             landmarkName = "MapManager::DEBUG_LOG_MAP_ITEM_LAYER()"
             landmarkType = "5">
          </BreakpointContent>

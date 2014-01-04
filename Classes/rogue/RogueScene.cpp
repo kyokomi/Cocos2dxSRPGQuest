@@ -11,8 +11,11 @@
 
 USING_NS_CC;
 
+int GetRandom(int min,int max);
+
 RogueScene::RogueScene()
-:m_baseMapSize(Size::ZERO),
+:m_gameStatus(GameStatus::INIT),
+m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
 m_baseContentSize(Size::ZERO)
 {
@@ -37,6 +40,9 @@ bool RogueScene::init()
     {
         return false;
     }
+    
+    // 乱数
+    srand((unsigned int)time(NULL));
     
     // TouchEvent settings
     auto listener = EventListenerTouchOneByOne::create();
@@ -99,8 +105,7 @@ bool RogueScene::init()
     
     // マップのフロントレイヤーに追加
     pFrontLayer->addChild(draw, RogueScene::TiledMapIndex::zGridLineIndex, RogueScene::TiledMapTag::kGridLineTag);
-//    this->addChild(draw, RogueScene::zGridLineIndex, RogueScene::kGridLineTag);
-    
+
     // ---------------------
     // プレイヤー生成
     // ---------------------
@@ -150,7 +155,6 @@ bool RogueScene::init()
     enemySprite->setActorMapItem(enemyMapItem);
     enemySprite->runBottomAction();
     pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::zTiledMapEnemyBaseIndex + enemyMapItem.seqNo));
-//    this->addChild(enemySprite, RogueScene::zActorBaseIndex, (RogueScene::kActorBaseTag + enemyMapItem.seqNo));
     
     // マップに追加
     m_mapManager.addActor(enemySprite->getActorMapItem());
@@ -167,6 +171,20 @@ bool RogueScene::init()
     statusLayer->addChild(sampleText);
     
     this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
+
+    //-------------------------
+    // ゲームログ表示
+    //-------------------------
+    // TODO: あとで
+//    auto statusLayer = LayerColor::create(Color4B::BLACK);
+//    statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
+//    statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
+//    
+//    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
+//    sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
+//    statusLayer->addChild(sampleText);
+//    
+//    this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
     
     // ------------------------
     // ミニマップ
@@ -203,15 +221,145 @@ bool RogueScene::init()
     // add
     miniMapLayer->addChild(miniMapEnemyLayer);
     
-    
     this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
+    
+    // プレイヤーの先行
+    changeGameStatus(GameStatus::PLAYER_TURN);
     
     return true;
 }
 
+#pragma mark
+#pragma mark ゲームステート関連
+
+void RogueScene::changeGameStatus(GameStatus gameStatus)
+{
+    CCLOG("change gameStatus %d => %d", m_gameStatus, gameStatus);
+    GameStatus beforeGameStatus = m_gameStatus;
+    m_gameStatus = gameStatus;
+    
+    // 敵のターン開始時
+    if (beforeGameStatus == GameStatus::PLAYER_TURN && m_gameStatus == GameStatus::ENEMY_TURN)
+    {
+        enemyTurn();
+    }
+}
+
+#pragma mark
+#pragma mark モンスターのAI関連
+
+void RogueScene::enemyTurn()
+{
+    // モンスターの数だけ繰り返す
+    std::list<ActorMapItem> enemyList = m_mapManager.findEnemyMapItem();
+    for (ActorMapItem enemyMapItem : enemyList) {
+        
+        // TODO: 全部同時には動かないようにしないといけない（アニメーションのコールバック系どうするかな・・・）
+//        while (true)
+//        {
+//            
+//        }
+        
+        // ランダムでとどまるか移動するかきめる
+        int rand = GetRandom(1, 2);
+        if (rand == 1)
+        {
+            // とどまる
+            CCLOG("とどまる seqNo = %d", enemyMapItem.seqNo);
+        }
+        else if (rand == 2)
+        {
+            // 移動 or 攻撃
+            
+            // 移動方向もとりあえずランダム
+            int moveDict = GetRandom(0, 3);
+            MapIndex addMoveIndex;
+            if (moveDict == MoveDirectionType::MOVE_DOWN)
+            {
+                addMoveIndex.x = 0;
+                addMoveIndex.y = -1;
+                addMoveIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
+            }
+            else if (moveDict == MoveDirectionType::MOVE_UP)
+            {
+                addMoveIndex.x = 0;
+                addMoveIndex.y = 1;
+                addMoveIndex.moveDictType = MoveDirectionType::MOVE_UP;
+            }
+            else if (moveDict == MoveDirectionType::MOVE_RIGHT)
+            {
+                addMoveIndex.x = 1;
+                addMoveIndex.y = 0;
+                addMoveIndex.moveDictType = MoveDirectionType::MOVE_RIGHT;
+            }
+            else if (moveDict == MoveDirectionType::MOVE_LEFT)
+            {
+                addMoveIndex.x = -1;
+                addMoveIndex.y = 0;
+                addMoveIndex.moveDictType = MoveDirectionType::MOVE_LEFT;
+            }
+            
+            // 移動有無関係なく向きは変える
+            auto pEnemyMapLayer = getChildByTag(RogueScene::kTiledMapTag)->getChildByTag(RogueScene::TiledMapTag::kTiledMapEnemyBaseTag);
+            auto pEnemySprite = (ActorSprite*)pEnemyMapLayer->getChildByTag(RogueScene::TiledMapTag::kTiledMapEnemyBaseTag + enemyMapItem.seqNo);
+            pEnemySprite->runMoveAction(addMoveIndex);
+            
+            // 画面外判定とか用に移動先のmapIndex作成
+            MapIndex moveMapIndex = {
+                pEnemySprite->getActorMapItem()->mapIndex.x + addMoveIndex.x,
+                pEnemySprite->getActorMapItem()->mapIndex.y + addMoveIndex.y,
+                addMoveIndex.moveDictType
+            };
+            if (m_baseMapSize.width <= moveMapIndex.x || m_baseMapSize.height <= moveMapIndex.y || 0 > moveMapIndex.x || 0 > moveMapIndex.y)
+            {
+                CCLOG("移動不可 seqNo = %d", enemyMapItem.seqNo);
+            }
+            else if (isTiledMapColisionLayer(moveMapIndex))
+            {
+                CCLOG("壁ドーン seqNo = %d", enemyMapItem.seqNo);
+            }
+            else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::ENEMY)
+            {
+                CCLOG("敵ドーン seqNo = %d", enemyMapItem.seqNo);
+            }
+            else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::PLAYER)
+            {
+                // 攻撃イベント
+                CCLOG("プレイヤーに攻撃開始 seqNo = %d", enemyMapItem.seqNo);
+            }
+            else
+            {
+                // 移動中のステータスへ
+                changeGameStatus(GameStatus::ENEMY_ACTION);
+                // 移動開始
+                moveMap(addMoveIndex, enemyMapItem.seqNo, enemyMapItem.mapDataType, CallFunc::create([this](void) {
+
+                    // 移動終わり次のモンスターへいきたいところ
+                    // listをメンバ変数で持っちゃえばいけるか？
+//                    changeGameStatus(GameStatus::ENEMY_TURN);
+                    changeGameStatus(GameStatus::PLAYER_TURN);
+                }));
+                CCLOG("移動した seqNo = %d", enemyMapItem.seqNo);
+            }
+        }
+    }
+    // 留まった時とかはここでターン終了
+    if (m_gameStatus != GameStatus::ENEMY_ACTION)
+    {
+        changeGameStatus(GameStatus::PLAYER_TURN);
+    }
+}
+
+#pragma mark
+#pragma mark タッチイベント関連
+
 bool RogueScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
-{    
-    return true;
+{
+    if (m_gameStatus == GameStatus::PLAYER_TURN)
+    {
+        return true;
+    }
+    return false;
 }
 
 void RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -221,7 +369,6 @@ void RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void RogueScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-//    auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
     auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
 
     // 行動判定
@@ -234,7 +381,6 @@ void RogueScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
 }
 
 
-//void RogueScene::touchEventExec(MapIndex touchPointMapIndex)
 void RogueScene::touchEventExec(cocos2d::Point touchPoint)
 {
     auto pMapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
@@ -276,15 +422,22 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
         else
         {
             // 移動処理
-            moveMap(addMoveIndex);
+            moveMap(addMoveIndex, pActorSprite->getActorMapItem()->seqNo, pActorSprite->getActorMapItem()->mapDataType, CallFunc::create([this](void) {
+                changeGameStatus(GameStatus::ENEMY_TURN);
+            }));
+            // コールバックまでgameStatusを更新はしない
+            return;
         }
     }
     
-    // 会話
+    // TODO: 会話
         // 会話イベント
     
-    // 宝箱
+    // TODO: 宝箱ひろう
         // 宝箱イベント
+    
+    // ターン終了
+    changeGameStatus(GameStatus::ENEMY_TURN);
 }
 
 MapIndex RogueScene::checkTouchEventIndex(MapIndex touchPointMapIndex)
@@ -328,84 +481,45 @@ MapIndex RogueScene::checkTouchEventIndex(MapIndex touchPointMapIndex)
     return addMoveIndex;
 }
 
-void RogueScene::moveMap(MapIndex addMoveIndex)
+void RogueScene::moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapDataType, CallFunc* moveFinishedCallFunc)
 {
+    ActorSprite* pActorSprite;
+    if (mapDataType == MapDataType::PLAYER)
+    {
+        pActorSprite = (ActorSprite*)getChildByTag(RogueScene::kActorBaseTag + actorSeqNo);
+    }
+    else
+    {
+        auto pEnemyMapLayer = getChildByTag(RogueScene::kTiledMapTag)->getChildByTag(RogueScene::TiledMapTag::kTiledMapEnemyBaseTag);
+        pActorSprite = (ActorSprite*)pEnemyMapLayer->getChildByTag(RogueScene::TiledMapTag::kTiledMapEnemyBaseTag + actorSeqNo);
+    }
+    
     // 移動距離計算
-    auto pActorSprite = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
-    
-//    MapIndex addMoveIndex;
-//    addMoveIndex.x = touchPointMapIndex.x - pActorSprite->getActorMapItem()->mapIndex.x;
-//    addMoveIndex.y = touchPointMapIndex.y - pActorSprite->getActorMapItem()->mapIndex.y;
-//    
-//    if (addMoveIndex.x == 1 && addMoveIndex.y == 0)
-//    {
-//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_RIGHT;
-//    }
-//    else if (addMoveIndex.x == -1 && addMoveIndex.y == 0)
-//    {
-//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_LEFT;
-//    }
-//    else if (addMoveIndex.x == 0 && addMoveIndex.y == 1)
-//    {
-//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_UP;
-//    }
-//    else if (addMoveIndex.x == 0 && addMoveIndex.y == -1)
-//    {
-//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
-//    }
-//    else
-//    {
-//        // 上記以外は有効なタッチじゃない
-//        return;
-//    }
-//    
-//    // プレイヤーから1マス以内なら移動or攻撃と判断
-//    CCLOG("move ok %d,%d %d,%d", pActorSprite->getActorMapItem()->mapIndex.x, pActorSprite->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
-//    
-//    CCLOG("addMoveIndex %d,%d", addMoveIndex.x, addMoveIndex.y);
-    
-//    // キャラの向きを変更?これは別でやるべき？
-//    if (addMoveIndex.moveDictType == MOVE_DOWN)
-//    {
-//        pActorSprite->runBottomAction();
-//    }
-//    else if (addMoveIndex.moveDictType == MOVE_LEFT)
-//    {
-//        pActorSprite->runLeftAction();
-//    }
-//    else if (addMoveIndex.moveDictType == MOVE_RIGHT)
-//    {
-//        pActorSprite->runRightAction();
-//    }
-//    else if (addMoveIndex.moveDictType == MOVE_UP)
-//    {
-//        pActorSprite->runTopAction();
-//    }
-  
-    // 移動可能方向かチェック
-    
     auto pMapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
-    
-//    // 障害物判定
-//    auto pColisionLayer = pMapLayer->getLayer("colision");
-//    // TileMapは左上から0,0なので座標変換する
-//    auto touchPointTileIndex = mapIndexToTileIndex(touchPointMapIndex);
-//    auto pTileSprite = pColisionLayer->getTileAt(Point(touchPointTileIndex.x, touchPointTileIndex.y));
-//    if (pTileSprite)
-//    {
-//        // 障害物なので移動とかできない
-//        CCLOG("colision touchPointTileIndex x = %d y = %d", touchPointTileIndex.x, touchPointTileIndex.y);
-//        // TODO: ぶつかるSE再生
-//        return;
-//    }
     
     // 移動する距離をPointに変換
     auto addMovePoint = Point(m_baseTileSize.width * addMoveIndex.x, m_baseTileSize.height * addMoveIndex.y);
     
+    Node* pActionTargetNode;
+    FiniteTimeAction* pMoveRunAction;
     // マップを指定index分移動
-    auto pMoveToAction = MoveTo::create(0.3, pMapLayer->getPosition() - addMovePoint);
-    pMapLayer->runAction(pMoveToAction);
-    
+    if (pActorSprite->getActorMapItem()->mapDataType == MapDataType::PLAYER)
+    {
+        // プレイヤーならマップが移動
+        pMoveRunAction = MoveTo::create(0.3, pMapLayer->getPosition() - addMovePoint);
+//        pMoveRunAction->setTarget(pMapLayer);
+//      pMapLayer->runAction(pMoveToAction);
+        pActionTargetNode = pMapLayer;
+    }
+    else
+    {
+        // モンスターは普通にモンスターが移動
+        pMoveRunAction = MoveTo::create(0.3, pActorSprite->getPosition() + addMovePoint);
+//        pMoveRunAction->setTarget(pActorSprite);
+//      pActorSprite->runAction(pMoveToAction);
+        pActionTargetNode = pActorSprite;
+    }
+
     // マップ情報を更新
     MapIndex moveMapIndex;
     moveMapIndex.moveDictType = addMoveIndex.moveDictType;
@@ -420,6 +534,9 @@ void RogueScene::moveMap(MapIndex addMoveIndex)
     auto pMiniMapLayer = getChildByTag(kMiniMapTag);
     auto pMiniMapActorNode = (Node*) pMiniMapLayer->getChildByTag(pActorSprite->getActorDto()->playerId);
     pMiniMapActorNode->setPosition(indexToPointNotTileSize(actorMapItem->mapIndex) / 8);
+    
+    // move実行
+    pActionTargetNode->runAction(Sequence::create(pMoveRunAction, moveFinishedCallFunc, NULL));
 }
 
 bool RogueScene::isTiledMapColisionLayer(MapIndex touchPointMapIndex)
@@ -488,3 +605,12 @@ MapIndex RogueScene::mapIndexToTileIndex(MapIndex mapIndex)
     tileIndex.y = m_baseMapSize.height - mapIndex.y - 1;
     return tileIndex;
 }
+
+#pragma mark
+#pragma mark その他
+
+int GetRandom(int min,int max)
+{
+	return min + (int)(rand()*(max-min+1.0)/(1.0+RAND_MAX));
+}
+
