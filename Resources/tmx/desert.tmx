@@ -13,7 +13,7 @@
    eJztlmELgjAQhq/6FH0q60OWpJRCadH//3W9A4WxutM5lwN94WFwMvYM72ALIloGygqswR7sAuMANrWfWkNL4zVVv0KjLW8Dye8IYgdOFne4MJ6SXwZu4NGDHFwt/Jq8ftQkvz5nuO4108UvZVZi6ndQ/tGPS9ryfYj4+L9qtmzmQ4rkV9H3PHaZ6yf57z/VQ/pMlkydw3f/hZLZzy2zn1t0vzON/1Y2SWq/LY3/VuaIwAdOKhZU
   </data>
  </layer>
- <objectgroup name="オブジェクト・レイヤー 1" width="40" height="20">
+ <objectgroup name="test" width="40" height="20">
   <object name="event_start" x="288" y="384" width="32" height="32">
    <properties>
     <property name="id" value="1"/>

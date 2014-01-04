@@ -62,6 +62,18 @@ bool RogueScene::init()
     
     m_mapManager.init(0, (int)m_baseMapSize.height, 0, (int)m_baseMapSize.width);
     
+    // フロントレイヤー
+    auto pFrontLayer = Layer::create();
+    pTiledMap->addChild(pFrontLayer,
+                        RogueScene::TiledMapIndex::zTiledMapFrontIndex,
+                        RogueScene::TiledMapTag::kTiledMapFrontTag);
+
+    // エネミーレイヤー
+    auto pEnemyLayer = Layer::create();
+    pTiledMap->addChild(pEnemyLayer,
+                        RogueScene::TiledMapIndex::zTiledMapEnemyBaseIndex,
+                        RogueScene::TiledMapTag::kTiledMapEnemyBaseTag);
+    
     // ---------------------
     // グリッド線を生成
     // ---------------------
@@ -84,7 +96,10 @@ bool RogueScene::init()
         float yPoint = y * m_baseTileSize.height;
         draw->drawSegment(Point(0, yPoint), Point(m_baseContentSize.width, yPoint), lineSize, color);
     }
-    this->addChild(draw, RogueScene::zGridLineIndex, RogueScene::kGridLineTag);
+    
+    // マップのフロントレイヤーに追加
+    pFrontLayer->addChild(draw, RogueScene::TiledMapIndex::zGridLineIndex, RogueScene::TiledMapTag::kGridLineTag);
+//    this->addChild(draw, RogueScene::zGridLineIndex, RogueScene::kGridLineTag);
     
     // ---------------------
     // プレイヤー生成
@@ -106,10 +121,39 @@ bool RogueScene::init()
     auto actorSprite = ActorSprite::createWithActorDto(actorDto);
     actorSprite->setPosition(indexToPoint(actorMapItem.mapIndex)); // 画面の中心
     actorSprite->setActorMapItem(actorMapItem);
+    actorSprite->runBottomAction();
+    // プレイヤーは画面中心にくるのでmapLayerに追加しない
     this->addChild(actorSprite, RogueScene::zActorBaseIndex, (RogueScene::kActorBaseTag + actorMapItem.seqNo));
     
     // マップに追加
     m_mapManager.addActor(actorSprite->getActorMapItem());
+    
+    // ---------------------
+    // 敵キャラ生成
+    // ---------------------
+    ActorSprite::ActorDto enemyDto;
+    enemyDto.attackRange = 1;
+    enemyDto.movePoint = 5;
+    enemyDto.playerId = 901;
+    
+    ActorMapItem enemyMapItem;
+    enemyMapItem.mapDataType = MapDataType::ENEMY;
+    enemyMapItem.mapIndex = {4, 4, MoveDirectionType::MOVE_DOWN};
+    enemyMapItem.seqNo = 2;
+    enemyMapItem.moveDist = 1; // TODO: 使わないかも
+    enemyMapItem.attackDist = 1;
+    enemyMapItem.moveDone = false;
+    enemyMapItem.attackDone = false;
+    
+    auto enemySprite = ActorSprite::createWithActorDto(enemyDto);
+    enemySprite->setPosition(indexToPoint(enemyMapItem.mapIndex)); // 画面の中心
+    enemySprite->setActorMapItem(enemyMapItem);
+    enemySprite->runBottomAction();
+    pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::zTiledMapEnemyBaseIndex + enemyMapItem.seqNo));
+//    this->addChild(enemySprite, RogueScene::zActorBaseIndex, (RogueScene::kActorBaseTag + enemyMapItem.seqNo));
+    
+    // マップに追加
+    m_mapManager.addActor(enemySprite->getActorMapItem());
     
     //-------------------------
     // ステータスバー？
@@ -118,7 +162,7 @@ bool RogueScene::init()
     statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
     statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
     
-    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100 ", "", 12);
+    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
     sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
     statusLayer->addChild(sampleText);
     
@@ -134,7 +178,8 @@ bool RogueScene::init()
                                       m_baseMapSize.height * m_baseTileSize.height / 8));
     // ステータスバーの下くらい
     miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
-    // プレイヤーの位置表示用（同じく1/8サイズ）
+    
+    // プレイヤーの位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
     auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
     // タイルの1/8サイズ
     miniMapActorLayer->setContentSize(m_baseTileSize / 8);
@@ -142,8 +187,22 @@ bool RogueScene::init()
     miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
     // 移動時に更新できるようにplayerIdをtag管理
     miniMapActorLayer->setTag(actorSprite->getActorDto()->playerId);
-    
+    // add
     miniMapLayer->addChild(miniMapActorLayer);
+    
+    // TODO: 敵の数だけよばないといけないので関数化するといい
+    
+    // 敵の位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
+    auto miniMapEnemyLayer = LayerColor::create(Color4B::RED);
+    // タイルの1/8サイズ
+    miniMapEnemyLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
+    miniMapEnemyLayer->setPosition(indexToPointNotTileSize(enemySprite->getActorMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにplayerIdをtag管理
+    miniMapEnemyLayer->setTag(enemySprite->getActorDto()->playerId);
+    // add
+    miniMapLayer->addChild(miniMapEnemyLayer);
+    
     
     this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
     
@@ -188,46 +247,54 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
     {
         return;
     }
-    
-    // 移動可能方向かチェック
-    
-    // 障害物判定
-    auto pColisionLayer = pMapLayer->getLayer("colision");
-    // TileMapは左上から0,0なので座標変換する
-    auto touchPointTileIndex = mapIndexToTileIndex(touchPointMapIndex);
-    auto pTileSprite = pColisionLayer->getTileAt(Point(touchPointTileIndex.x, touchPointTileIndex.y));
-    if (pTileSprite)
+    // タッチした位置が有効なIndexか判定
+    MapIndex addMoveIndex = checkTouchEventIndex(touchPointMapIndex);
+    if (addMoveIndex.x == 0 && addMoveIndex.y == 0)
     {
-        // 障害物なので移動とかできない
-        CCLOG("colision touchPointTileIndex x = %d y = %d", touchPointTileIndex.x, touchPointTileIndex.y);
-        // TODO: ぶつかるSE再生
+        // タッチ判定とみなさない
         return;
     }
     
-    // TODO: 障害物とか敵とかね
+    // キャラの向きを変更
+    auto pActorSprite = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
+    pActorSprite->runMoveAction(addMoveIndex);
     
-    // 攻撃
+    // 敵をタッチした
+    if (m_mapManager.getActorMapItem(&touchPointMapIndex)->mapDataType == MapDataType::ENEMY)
+    {
         // 攻撃イベント
+        CCLOG("敵に攻撃開始");
+    }
+    else
+    {
+        // 障害物判定
+        if (isTiledMapColisionLayer(touchPointMapIndex))
+        {
+            // TODO: ぶつかるSE再生
+            CCLOG("壁ドーン");
+        }
+        else
+        {
+            // 移動処理
+            moveMap(addMoveIndex);
+        }
+    }
     
     // 会話
         // 会話イベント
     
     // 宝箱
         // 宝箱イベント
-    
-    // 移動
-        // 移動処理
-        moveMap(touchPointMapIndex);
 }
 
-void RogueScene::moveMap(MapIndex touchPointMapIndex)
+MapIndex RogueScene::checkTouchEventIndex(MapIndex touchPointMapIndex)
 {
     // 移動距離計算
-    auto actor = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
+    auto pActorSprite = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
     
     MapIndex addMoveIndex;
-    addMoveIndex.x = touchPointMapIndex.x - actor->getActorMapItem()->mapIndex.x;
-    addMoveIndex.y = touchPointMapIndex.y - actor->getActorMapItem()->mapIndex.y;
+    addMoveIndex.x = touchPointMapIndex.x - pActorSprite->getActorMapItem()->mapIndex.x;
+    addMoveIndex.y = touchPointMapIndex.y - pActorSprite->getActorMapItem()->mapIndex.y;
     
     if (addMoveIndex.x == 1 && addMoveIndex.y == 0)
     {
@@ -247,45 +314,102 @@ void RogueScene::moveMap(MapIndex touchPointMapIndex)
     }
     else
     {
-        // 上記以外は移動じゃない
-        return;
+        // 上記以外は有効なタッチじゃない
+        addMoveIndex.x = 0;
+        addMoveIndex.y = 0;
+        addMoveIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
+        return addMoveIndex;
     }
     
     // プレイヤーから1マス以内なら移動or攻撃と判断
-    CCLOG("move ok %d,%d %d,%d", actor->getActorMapItem()->mapIndex.x, actor->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
+    CCLOG("move ok %d,%d %d,%d", pActorSprite->getActorMapItem()->mapIndex.x, pActorSprite->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
     
     CCLOG("addMoveIndex %d,%d", addMoveIndex.x, addMoveIndex.y);
+    return addMoveIndex;
+}
+
+void RogueScene::moveMap(MapIndex addMoveIndex)
+{
+    // 移動距離計算
+    auto pActorSprite = (ActorSprite*)getChildByTag((RogueScene::kActorBaseTag + 1));
     
-    // キャラの向きを変更?これは別でやるべき？
-    if (addMoveIndex.moveDictType == MOVE_DOWN)
-    {
-        actor->runBottomAction();
-    }
-    else if (addMoveIndex.moveDictType == MOVE_LEFT)
-    {
-        actor->runLeftAction();
-    }
-    else if (addMoveIndex.moveDictType == MOVE_RIGHT)
-    {
-        actor->runRightAction();
-    }
-    else if (addMoveIndex.moveDictType == MOVE_UP)
-    {
-        actor->runTopAction();
-    }
+//    MapIndex addMoveIndex;
+//    addMoveIndex.x = touchPointMapIndex.x - pActorSprite->getActorMapItem()->mapIndex.x;
+//    addMoveIndex.y = touchPointMapIndex.y - pActorSprite->getActorMapItem()->mapIndex.y;
+//    
+//    if (addMoveIndex.x == 1 && addMoveIndex.y == 0)
+//    {
+//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_RIGHT;
+//    }
+//    else if (addMoveIndex.x == -1 && addMoveIndex.y == 0)
+//    {
+//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_LEFT;
+//    }
+//    else if (addMoveIndex.x == 0 && addMoveIndex.y == 1)
+//    {
+//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_UP;
+//    }
+//    else if (addMoveIndex.x == 0 && addMoveIndex.y == -1)
+//    {
+//        addMoveIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
+//    }
+//    else
+//    {
+//        // 上記以外は有効なタッチじゃない
+//        return;
+//    }
+//    
+//    // プレイヤーから1マス以内なら移動or攻撃と判断
+//    CCLOG("move ok %d,%d %d,%d", pActorSprite->getActorMapItem()->mapIndex.x, pActorSprite->getActorMapItem()->mapIndex.y, touchPointMapIndex.x, touchPointMapIndex.y);
+//    
+//    CCLOG("addMoveIndex %d,%d", addMoveIndex.x, addMoveIndex.y);
+    
+//    // キャラの向きを変更?これは別でやるべき？
+//    if (addMoveIndex.moveDictType == MOVE_DOWN)
+//    {
+//        pActorSprite->runBottomAction();
+//    }
+//    else if (addMoveIndex.moveDictType == MOVE_LEFT)
+//    {
+//        pActorSprite->runLeftAction();
+//    }
+//    else if (addMoveIndex.moveDictType == MOVE_RIGHT)
+//    {
+//        pActorSprite->runRightAction();
+//    }
+//    else if (addMoveIndex.moveDictType == MOVE_UP)
+//    {
+//        pActorSprite->runTopAction();
+//    }
+  
+    // 移動可能方向かチェック
+    
+    auto pMapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
+    
+//    // 障害物判定
+//    auto pColisionLayer = pMapLayer->getLayer("colision");
+//    // TileMapは左上から0,0なので座標変換する
+//    auto touchPointTileIndex = mapIndexToTileIndex(touchPointMapIndex);
+//    auto pTileSprite = pColisionLayer->getTileAt(Point(touchPointTileIndex.x, touchPointTileIndex.y));
+//    if (pTileSprite)
+//    {
+//        // 障害物なので移動とかできない
+//        CCLOG("colision touchPointTileIndex x = %d y = %d", touchPointTileIndex.x, touchPointTileIndex.y);
+//        // TODO: ぶつかるSE再生
+//        return;
+//    }
     
     // 移動する距離をPointに変換
     auto addMovePoint = Point(m_baseTileSize.width * addMoveIndex.x, m_baseTileSize.height * addMoveIndex.y);
     
     // マップを指定index分移動
-    auto mapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
-    auto moveAction = MoveTo::create(0.3, mapLayer->getPosition() - addMovePoint);
-    mapLayer->runAction(moveAction);
+    auto pMoveToAction = MoveTo::create(0.3, pMapLayer->getPosition() - addMovePoint);
+    pMapLayer->runAction(pMoveToAction);
     
     // マップ情報を更新
     MapIndex moveMapIndex;
     moveMapIndex.moveDictType = addMoveIndex.moveDictType;
-    auto actorMapItem = actor->getActorMapItem();
+    auto actorMapItem = pActorSprite->getActorMapItem();
     moveMapIndex.x = actorMapItem->mapIndex.x + addMoveIndex.x;
     moveMapIndex.y = actorMapItem->mapIndex.y + addMoveIndex.y;
     m_mapManager.moveActor(actorMapItem, &moveMapIndex);
@@ -293,9 +417,28 @@ void RogueScene::moveMap(MapIndex touchPointMapIndex)
     actorMapItem->mapIndex = moveMapIndex;
     
     // ミニマップも更新
-    auto miniMapLayer = getChildByTag(kMiniMapTag);
-    auto miniMapActorNode = (Node*) miniMapLayer->getChildByTag(actor->getActorDto()->playerId);
-    miniMapActorNode->setPosition(indexToPointNotTileSize(actorMapItem->mapIndex) / 8);
+    auto pMiniMapLayer = getChildByTag(kMiniMapTag);
+    auto pMiniMapActorNode = (Node*) pMiniMapLayer->getChildByTag(pActorSprite->getActorDto()->playerId);
+    pMiniMapActorNode->setPosition(indexToPointNotTileSize(actorMapItem->mapIndex) / 8);
+}
+
+bool RogueScene::isTiledMapColisionLayer(MapIndex touchPointMapIndex)
+{
+    // 障害物判定
+    auto pMapLayer = (TMXTiledMap*)getChildByTag(kTiledMapTag);
+    
+    auto pColisionLayer = pMapLayer->getLayer("colision");
+    // TileMapは左上から0,0なので座標変換する
+    auto touchPointTileIndex = mapIndexToTileIndex(touchPointMapIndex);
+    auto pTileSprite = pColisionLayer->getTileAt(Point(touchPointTileIndex.x, touchPointTileIndex.y));
+    if (pTileSprite)
+    {
+        // 障害物なので移動とかできない
+        CCLOG("colision touchPointTileIndex x = %d y = %d", touchPointTileIndex.x, touchPointTileIndex.y);
+        return true;
+    }
+    
+    return false;
 }
 
 #pragma mark

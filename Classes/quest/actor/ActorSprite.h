@@ -67,6 +67,7 @@ public:
     ActorMapItem* getActorMapItem();
     ActorDto* getActorDto();
     
+    void runMoveAction(MapIndex moveMapIndex);
     void runBottomAction();
     void runLeftAction();
     void runRightAction();
@@ -80,7 +81,7 @@ private:
     FiniteTimeAction* createLeftActorAnimate();
     FiniteTimeAction* createRightActorAnimate();
     FiniteTimeAction* createTopActorAnimate();
-    FiniteTimeAction* createActorAnimate(std::string frameName);
+    FiniteTimeAction* createActorAnimate(int actorId, std::string frameName);
 };
 
 #endif /* defined(__Cocos2dxSRPGQuest__ActorSprite__) */

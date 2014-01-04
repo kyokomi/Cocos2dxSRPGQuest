@@ -25,7 +25,7 @@ bool ActorSprite::initWithActorDto(ActorDto pActorDto)
     m_actorDto = pActorDto;
     
     // ActorのSpriteFrameのplistをキャッシュ
-    String* spriteFramePlistName = String::createWithFormat("actor%d.plist", m_actorDto.playerId);
+    String* spriteFramePlistName = String::createWithFormat("actor_%d.plist", m_actorDto.playerId);
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(spriteFramePlistName->getCString());
     
     // Spriteを生成
@@ -67,6 +67,31 @@ ActorMapItem* ActorSprite::getActorMapItem()
 ActorSprite::ActorDto* ActorSprite::getActorDto()
 {
     return &m_actorDto;
+}
+
+void ActorSprite::runMoveAction(MapIndex moveMapIndex)
+{
+    if (moveMapIndex.x == 0 && moveMapIndex.y == 0)
+    {
+        return;
+    }
+    // キャラの向きを変更
+    if (moveMapIndex.moveDictType == MOVE_DOWN)
+    {
+        this->runBottomAction();
+    }
+    else if (moveMapIndex.moveDictType == MOVE_LEFT)
+    {
+        this->runLeftAction();
+    }
+    else if (moveMapIndex.moveDictType == MOVE_RIGHT)
+    {
+        this->runRightAction();
+    }
+    else if (moveMapIndex.moveDictType == MOVE_UP)
+    {
+        this->runTopAction();
+    }
 }
 
 void ActorSprite::runBottomAction()
@@ -116,37 +141,37 @@ void ActorSprite::runTopAction()
 
 FiniteTimeAction* ActorSprite::createBottomActorAnimate()
 {
-    return createActorAnimate("bottom");
+    return createActorAnimate(m_actorDto.playerId, "bottom");
 }
 
 FiniteTimeAction* ActorSprite::createLeftActorAnimate()
 {
-    return createActorAnimate("left");
+    return createActorAnimate(m_actorDto.playerId, "left");
 }
 
 FiniteTimeAction* ActorSprite::createRightActorAnimate()
 {
-    return createActorAnimate("right");
+    return createActorAnimate(m_actorDto.playerId, "right");
 }
 
 FiniteTimeAction* ActorSprite::createTopActorAnimate()
 {
-    return createActorAnimate("top");
+    return createActorAnimate(m_actorDto.playerId, "top");
 }
 
-FiniteTimeAction* ActorSprite::createActorAnimate(std::string frameName)
+FiniteTimeAction* ActorSprite::createActorAnimate(int actorId, std::string frameName)
 {
     cocos2d::Animation* animation = cocos2d::Animation::create();
-    String* pszStartSpriteFrameName = String::createWithFormat("actor_4_%s_%d.jpg", frameName.c_str(), 2);
+    String* pszStartSpriteFrameName = String::createWithFormat("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), 2);
     SpriteFrame *pStartFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszStartSpriteFrameName->getCString());
     animation->addSpriteFrame(pStartFrame);
     for (int i = 0; i < 3; i++)
     {
-        String* pszSpriteFrameName = String::createWithFormat("actor_4_%s_%d.jpg", frameName.c_str(), (i + 1));
+        String* pszSpriteFrameName = String::createWithFormat("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), (i + 1));
         SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszSpriteFrameName->getCString());
         animation->addSpriteFrame(pFrame);
     }
-    animation->setDelayPerUnit(0.5);
+    animation->setDelayPerUnit(0.3);
     animation->setLoops(-1);
     
     return Animate::create(animation);

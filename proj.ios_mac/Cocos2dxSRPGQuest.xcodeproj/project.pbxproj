@@ -63,8 +63,8 @@
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
-		CE15C7AF1854B26200B74DFE /* actor4.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79A1854B26200B74DFE /* actor4.plist */; };
-		CE15C7B01854B26200B74DFE /* actor4.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79B1854B26200B74DFE /* actor4.png */; };
+		CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79A1854B26200B74DFE /* actor_4.plist */; };
+		CE15C7B01854B26200B74DFE /* actor_4.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79B1854B26200B74DFE /* actor_4.png */; };
 		CE15C7B11854B26200B74DFE /* bg_jan.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79C1854B26200B74DFE /* bg_jan.jpg */; };
 		CE15C7B21854B26200B74DFE /* btn-a-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79D1854B26200B74DFE /* btn-a-0.png */; };
 		CE15C7B31854B26200B74DFE /* btn-a-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79E1854B26200B74DFE /* btn-a-1.png */; };
@@ -93,6 +93,8 @@
 		CE15C7E91854B2E200B74DFE /* MapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7DF1854B2E200B74DFE /* MapScene.cpp */; };
 		CE15C7EA1854B2E200B74DFE /* MapSceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7E11854B2E200B74DFE /* MapSceneLoader.cpp */; };
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
+		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
+		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -317,8 +319,8 @@
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		CE15C79A1854B26200B74DFE /* actor4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor4.plist; sourceTree = "<group>"; };
-		CE15C79B1854B26200B74DFE /* actor4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor4.png; sourceTree = "<group>"; };
+		CE15C79A1854B26200B74DFE /* actor_4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_4.plist; sourceTree = "<group>"; };
+		CE15C79B1854B26200B74DFE /* actor_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_4.png; sourceTree = "<group>"; };
 		CE15C79C1854B26200B74DFE /* bg_jan.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg_jan.jpg; sourceTree = "<group>"; };
 		CE15C79D1854B26200B74DFE /* btn-a-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-a-0.png"; sourceTree = "<group>"; };
 		CE15C79E1854B26200B74DFE /* btn-a-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-a-1.png"; sourceTree = "<group>"; };
@@ -358,6 +360,8 @@
 		CE15C7E21854B2E200B74DFE /* MapSceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSceneLoader.h; sourceTree = "<group>"; };
 		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
+		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
+		CEBDB38C1877EDB900869E9D /* actor_901.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_901.png; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -557,8 +561,10 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CE15C79A1854B26200B74DFE /* actor4.plist */,
-				CE15C79B1854B26200B74DFE /* actor4.png */,
+				CEBDB38B1877EDB900869E9D /* actor_901.plist */,
+				CEBDB38C1877EDB900869E9D /* actor_901.png */,
+				CE15C79A1854B26200B74DFE /* actor_4.plist */,
+				CE15C79B1854B26200B74DFE /* actor_4.png */,
 				CE15C79C1854B26200B74DFE /* bg_jan.jpg */,
 				CE15C79D1854B26200B74DFE /* btn-a-0.png */,
 				CE15C79E1854B26200B74DFE /* btn-a-1.png */,
@@ -851,7 +857,7 @@
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				CE15C7C31854B26200B74DFE /* tmx in Resources */,
 				CE15C7C11854B26200B74DFE /* MapScene.ccbi in Resources */,
-				CE15C7AF1854B26200B74DFE /* actor4.plist in Resources */,
+				CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */,
 				CE15C7B81854B26200B74DFE /* btn-back-0.png in Resources */,
 				CE15C7B61854B26200B74DFE /* btn-b-1.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
@@ -859,6 +865,7 @@
 				1AFAF8BC16D35E4900DB1158 /* CloseNormal.png in Resources */,
 				CE15C7B21854B26200B74DFE /* btn-a-0.png in Resources */,
 				CE15C7B11854B26200B74DFE /* bg_jan.jpg in Resources */,
+				CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */,
 				CE15C7BC1854B26200B74DFE /* btn-test-2.png in Resources */,
 				CE15C7BA1854B26200B74DFE /* btn-test-0.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
@@ -874,10 +881,11 @@
 				CE15C7C01854B26200B74DFE /* map.jpg in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
+				CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */,
 				CE15C7B71854B26200B74DFE /* btn-b-2.png in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				CE15C7B51854B26200B74DFE /* btn-b-0.png in Resources */,
-				CE15C7B01854B26200B74DFE /* actor4.png in Resources */,
+				CE15C7B01854B26200B74DFE /* actor_4.png in Resources */,
 				CE15C7C21854B26200B74DFE /* TitleScene.ccbi in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,

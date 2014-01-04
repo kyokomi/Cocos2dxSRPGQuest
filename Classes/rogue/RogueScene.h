@@ -15,24 +15,41 @@
 class RogueScene : public cocos2d::Layer
 {
 protected:
-    enum kTag {
-        kTiledMapTag    = 1,
+    
+    // TiledMap（background, colision)
+        // TiledMapFront
+        // TiledMapEnemy
+    
+    enum TiledMapTag {
+        kTiledMapEnemyBaseTag = 1000, // + seqNo
+        kTiledMapFrontTag     = 2000,
+        kGridLineTag          = 10000,
+    };
+    
+    enum TiledMapIndex {
+        zTiledMapEnemyBaseIndex = 1000,
+        zTiledMapFrontIndex     = 2000,
+        zGridLineIndex          = 10000,
+    };
+    
+    enum Tag {
+        kTiledMapTag          = 1,
 //        kCursorBaseTag      = 9000,
 //        kCursorMoveFindTag  = 9001,
 //        kCursorMoveStepTag  = 9002,
 //        kCursorSelectedTag  = 9003,
-        kGridLineTag    = 10000,
-        kActorBaseTag   = 100000,
-        kMiniMapTag     = 150000,
-        kStatusBarTag   = 200000,
+//        kGridLineTag          = 10000,
+        kActorBaseTag         = 100000,
+        kMiniMapTag           = 150000,
+        kStatusBarTag         = 200000,
     };
-    enum zIndex {
+    enum Index {
         zTiledMapIndex   = 1,
 //        zCursorBaseIndex     = 9000,
 //        zCursorMoveFindIndex = 9001,
 //        zCursorMoveStepIndex = 9002,
 //        zCursorSelectedIndex = 9003,
-        zGridLineIndex   = 10000,
+//        zGridLineIndex   = 10000,
         zActorBaseIndex  = 100000,
         zMiniMapIndex    = 150000,
         zStatusBarIndex  = 200000,
@@ -50,7 +67,9 @@ private:
     // タッチイベント系
     void touchEventExec(cocos2d::Point touchPoint);
     void touchEventExec(MapIndex touchPointMapIndex);
+    MapIndex checkTouchEventIndex(MapIndex touchPointMapIndex);
     void moveMap(MapIndex touchPointMapIndex);
+    bool isTiledMapColisionLayer(MapIndex touchPointMapIndex);
     
     // マップ座標変換
     cocos2d::Point indexToPoint(int mapIndex_x, int mapIndex_y);
