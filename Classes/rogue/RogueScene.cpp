@@ -174,7 +174,7 @@ bool RogueScene::init()
     enemyMapItem.mapDataType = MapDataType::ENEMY;
     enemyMapItem.mapIndex = {4, 4, MoveDirectionType::MOVE_DOWN};
     enemyMapItem.seqNo = 2;
-    enemyMapItem.moveDist = 1; // TODO: 使わないかも
+    enemyMapItem.moveDist = 10; // 索敵範囲
     enemyMapItem.attackDist = 1;
     enemyMapItem.moveDone = false;
     enemyMapItem.attackDone = false;
@@ -295,7 +295,7 @@ void RogueScene::enemyTurn()
 //        }
         
         // ランダムでとどまるか移動するかきめる
-        int rand = GetRandom(1, 2);
+        int rand = GetRandom(2, 2);
         if (rand == 1)
         {
             // とどまる
@@ -304,60 +304,88 @@ void RogueScene::enemyTurn()
         else if (rand == 2)
         {
             // 移動 or 攻撃
+            auto pPlayerActorSprite = getPlayerActorSprite(1);
             
-            // 移動方向もとりあえずランダム
-            int moveDict = GetRandom(0, 3);
-            MapIndex addMoveIndex;
-            if (moveDict == MoveDirectionType::MOVE_DOWN)
+            // 移動先のプレイヤーを探す（移動コストを作成）
+            m_mapManager.createActorFindDist(enemyMapItem.mapIndex, enemyMapItem.moveDist);
+            
+            // プレイヤーの周辺で最もコストが低い箇所へ移動
+            auto playerMapIndex = pPlayerActorSprite->getActorMapItem()->mapIndex;
+            std::list<MapIndex> searchMapIndexList;
+            // 右
+            MapIndex searchMapIndex = playerMapIndex;
+            searchMapIndex.x += 1;
+            searchMapIndex.y += 0;
+            searchMapIndex.moveDictType = MoveDirectionType::MOVE_LEFT;
+            searchMapIndexList.push_back(searchMapIndex);
+            // 左
+            searchMapIndex = playerMapIndex;
+            searchMapIndex.x += -1;
+            searchMapIndex.y += 0;
+            searchMapIndex.moveDictType = MoveDirectionType::MOVE_RIGHT;
+            searchMapIndexList.push_back(searchMapIndex);
+            // 上
+            searchMapIndex = playerMapIndex;
+            searchMapIndex.x += 0;
+            searchMapIndex.y += 1;
+            searchMapIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
+            searchMapIndexList.push_back(searchMapIndex);
+            // 下
+            searchMapIndex = playerMapIndex;
+            searchMapIndex.x += 0;
+            searchMapIndex.y += -1;
+            searchMapIndex.moveDictType = MoveDirectionType::MOVE_UP;
+            searchMapIndexList.push_back(searchMapIndex);
+            
+            MapItem* pTargetMoveDistMapItem;
+            for (MapIndex mapIndex : searchMapIndexList)
             {
-                addMoveIndex.x = 0;
-                addMoveIndex.y = -1;
-                addMoveIndex.moveDictType = MoveDirectionType::MOVE_DOWN;
+                auto pMapItem = m_mapManager.getMapItem(&mapIndex);
+                if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
+                {
+                    if (!pTargetMoveDistMapItem)
+                    {
+                        pTargetMoveDistMapItem = pMapItem;
+                    }
+                    else if (pTargetMoveDistMapItem->moveDist < pMapItem->moveDist)
+                    {
+                        pTargetMoveDistMapItem = pMapItem;
+                    }
+                }
             }
-            else if (moveDict == MoveDirectionType::MOVE_UP)
-            {
-                addMoveIndex.x = 0;
-                addMoveIndex.y = 1;
-                addMoveIndex.moveDictType = MoveDirectionType::MOVE_UP;
-            }
-            else if (moveDict == MoveDirectionType::MOVE_RIGHT)
-            {
-                addMoveIndex.x = 1;
-                addMoveIndex.y = 0;
-                addMoveIndex.moveDictType = MoveDirectionType::MOVE_RIGHT;
-            }
-            else if (moveDict == MoveDirectionType::MOVE_LEFT)
-            {
-                addMoveIndex.x = -1;
-                addMoveIndex.y = 0;
-                addMoveIndex.moveDictType = MoveDirectionType::MOVE_LEFT;
-            }
+            
+            // 移動リスト作成
+            std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
+                                                                            &enemyMapItem);
+            std::list<MapIndex>::iterator it = moveList.begin();
+            it++;
+            MapIndex moveMapIndex = *it; // 2件目を取得(1件目は自分なので）
+            it = moveList.end();
             
             // 移動有無関係なく向きは変える
             auto pEnemySprite = getEnemyActorSprite(enemyMapItem.seqNo);
+            MapIndex addMoveIndex = {
+                moveMapIndex.x - pEnemySprite->getActorMapItem()->mapIndex.x,
+                moveMapIndex.y - pEnemySprite->getActorMapItem()->mapIndex.y,
+                m_mapManager.checkMoveDirectionType(moveMapIndex, pEnemySprite->getActorMapItem()->mapIndex)
+            };
             pEnemySprite->runMoveAction(addMoveIndex);
             
-            // 画面外判定とか用に移動先のmapIndex作成
-            MapIndex moveMapIndex = {
-                pEnemySprite->getActorMapItem()->mapIndex.x + addMoveIndex.x,
-                pEnemySprite->getActorMapItem()->mapIndex.y + addMoveIndex.y,
-                addMoveIndex.moveDictType
-            };
             if (isMapLayerOver(moveMapIndex))
             {
-                CCLOG("移動不可 seqNo = %d", enemyMapItem.seqNo);
+                CCLOG("移動不可 seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
             }
             else if (isTiledMapColisionLayer(moveMapIndex))
             {
-                logMessage("壁ドーン seqNo = %d", enemyMapItem.seqNo);
+                logMessage("壁ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::ENEMY)
             {
-                logMessage("敵ドーン seqNo = %d", enemyMapItem.seqNo);
+                logMessage("敵ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::PLAYER)
             {
-                auto pPlayerDto = getPlayerActorSprite(m_mapManager.getActorMapItem(&moveMapIndex)->seqNo)->getActorDto();
+                auto pPlayerDto = pPlayerActorSprite->getActorDto();
                 auto pEnemyDto = pEnemySprite->getActorDto();
                 
                 int damage = BattleLogic::exec(pEnemyDto, pPlayerDto);

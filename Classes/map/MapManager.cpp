@@ -25,6 +25,8 @@ void MapManager::init(int top, int bottom, int left, int right)
 
 /**
  * キャラクター移動範囲検索.
+ * @param mapIndex 移動するキャラクターの座標
+ * @param dist 移動可能な距離
  */
 std::list<MapIndex> MapManager::createActorFindDist(MapIndex mapIndex, int dist)
 {
@@ -58,11 +60,42 @@ std::list<MapIndex> MapManager::createMovePointList(MapIndex* moveFromMapIndex, 
     // 経路探索(再帰呼び出し)
     findMovePointList(moveFromMapItem->mapIndex.x, moveFromMapItem->mapIndex.y, moveFromMapItem->moveDist, moveToMapItem);
     
-    // 目的地を最終到達点として最後に追加
-    m_mapMovePointList.push_back(*moveFromMapIndex);
+    // TODO: 1件も取れない時に目的地だけ返してしまう
+    
+    // 目的地を最終到達点として最後に追加（ただしカーソル情報なので移動の向きをここで指定する）
+    MapIndex moveEndMapIndex = *moveFromMapIndex;
+    
+    MoveDirectionType moveDict = checkMoveDirectionType(moveEndMapIndex, m_mapMovePointList.back());
+    moveEndMapIndex.moveDictType = moveDict;
+    
+    m_mapMovePointList.push_back(moveEndMapIndex);
     
     // movePointListを返却
     return m_mapMovePointList;
+}
+
+MoveDirectionType MapManager::checkMoveDirectionType(MapIndex fromMapIndex, MapIndex toMapIndex)
+{
+    int moveX = fromMapIndex.x - toMapIndex.x;
+    int moveY = fromMapIndex.y - toMapIndex.y;
+    
+    if (moveX == 1 && moveY == 0)
+    {
+        return MoveDirectionType::MOVE_RIGHT;
+    }
+    else if (moveX == -1 && moveY == 0)
+    {
+        return MoveDirectionType::MOVE_LEFT;
+    }
+    else if (moveX == 0 && moveY == 1)
+    {
+        return MoveDirectionType::MOVE_UP;
+    }
+    else if (moveX == 0 && moveY == -1)
+    {
+        return MoveDirectionType::MOVE_DOWN;
+    }
+    return MoveDirectionType::MOVE_NONE;
 }
 
 /**
@@ -139,6 +172,7 @@ void MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)
         MapIndex mapIndex;
         mapIndex.x = mapPointX;
         mapIndex.y = mapPointY;
+        mapIndex.moveDictType = MoveDirectionType::MOVE_NONE;
         
 		// リストに入れたやつだけあとで描画する
         MapItem cursorItem;
@@ -215,7 +249,10 @@ ActorMapItem* MapManager::getActorMapItemById(int seqNo)
  * 移動ルート情報を作成.
  * 移動先のカーソルから移動元のMapItemまでの最短経路を検索する。
  * movePointListに追加していきます.
- *
+ * @param moveX 移動先のx座標
+ * @param moveY 移動先のy座標
+ * @param moveDist 索敵する移動距離
+ * @param moveToMapItem 移動元
  */
 void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)
 {
@@ -245,25 +282,25 @@ void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* 
         // タップした位置のdistの次はどこか探す
         moveDist++;
         
-        // 下か
+        // 上か
         if (moveY > m_top && chkMovePoint(moveX, moveY - 1, moveDist, ignoreDataType)) {
             findMovePointList(moveX, moveY - 1, moveDist, moveToMapItem);
-            MapIndex movePointIndex = {moveX, moveY - 1, MoveDirectionType::MOVE_DOWN};
+            MapIndex movePointIndex = {moveX, moveY - 1, MoveDirectionType::MOVE_UP};
             m_mapMovePointList.push_back(movePointIndex);
         }
-        // 上か？
+        // 下か？
         else if (moveY < (m_bottom -1) && chkMovePoint(moveX, moveY + 1, moveDist, ignoreDataType)) {
             findMovePointList(moveX, moveY + 1, moveDist, moveToMapItem);
-            MapIndex movePointIndex = {moveX, moveY + 1, MoveDirectionType::MOVE_UP};
+            MapIndex movePointIndex = {moveX, moveY + 1, MoveDirectionType::MOVE_DOWN};
             m_mapMovePointList.push_back(movePointIndex);
         }
-        // 右か?
+        // 左か?
         else if (moveX > m_left && chkMovePoint(moveX - 1, moveY, moveDist, ignoreDataType)) {
             findMovePointList(moveX - 1, moveY, moveDist, moveToMapItem);
             MapIndex movePointIndex = {moveX - 1, moveY, MoveDirectionType::MOVE_RIGHT};
             m_mapMovePointList.push_back(movePointIndex);
         }
-        // 左にいけるか?
+        // 右にいけるか?
         else if (moveX < (m_right - 1) && chkMovePoint(moveX + 1, moveY, moveDist, ignoreDataType)) {
             findMovePointList(moveX + 1, moveY, moveDist, moveToMapItem);
             MapIndex movePointIndex = {moveX + 1, moveY, MoveDirectionType::MOVE_LEFT};
@@ -303,11 +340,12 @@ void MapManager::DEBUG_LOG_MAP_ITEM_LAYER() {
             std::string outPutStr = "-";
 			std::string objectLayerStr = logOutString(m_mapObjectDataArray[x][y]);
 			std::string cursorLayerStr = logOutString(m_mapCursorDataArray[x][y]);
-			if (cursorLayerStr != "") {
-				outPutStr = cursorLayerStr;
-			} else if (objectLayerStr != "") {
+			if (objectLayerStr != "") {
 				outPutStr = objectLayerStr;
 			}
+            else if (cursorLayerStr != "") {
+				outPutStr = cursorLayerStr;
+            }
             buffer += outPutStr + ".";
 		}
         printf("%s\n", buffer.c_str());
@@ -323,6 +361,9 @@ std::string MapManager::logOutString(MapItem mapItem) {
 	} else if (mapItem.mapDataType == MapDataType::PLAYER) {
 		return ("P");
 	} else {
-		return std::string("%d", mapItem.moveDist);
+        char buff[100];
+        sprintf(buff, "%d", mapItem.moveDist);
+        std::string buffAsStdStr = buff;
+		return buffAsStdStr;
 	}
 }

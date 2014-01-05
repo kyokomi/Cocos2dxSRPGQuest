@@ -25,6 +25,7 @@ enum MapDataType {
 };
 
 enum MoveDirectionType {
+    MOVE_NONE  = -1,
 	MOVE_DOWN  = 0,
 	MOVE_LEFT  = 1,
 	MOVE_RIGHT = 2,
@@ -125,6 +126,8 @@ public:
     MapItem* getMapItem(MapIndex* pMapIndex);
     ActorMapItem* getActorMapItemById(int seqNo);
 
+    MoveDirectionType checkMoveDirectionType(MapIndex fromMapIndex, MapIndex toMapIndex);
+    
     std::list<ActorMapItem> findEnemyMapItem();
 };
 

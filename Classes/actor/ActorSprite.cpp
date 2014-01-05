@@ -73,6 +73,7 @@ void ActorSprite::runMoveAction(MapIndex moveMapIndex)
 {
     if (moveMapIndex.x == 0 && moveMapIndex.y == 0)
     {
+        CCLOG("移動なし");
         return;
     }
     // キャラの向きを変更
