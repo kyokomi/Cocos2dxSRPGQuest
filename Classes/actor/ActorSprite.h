@@ -60,8 +60,8 @@ public:
     ~ActorSprite();
     
     // 初期化とか
-    virtual bool initWithActorDto(ActorDto pActorDto);
-    static ActorSprite* createWithActorDto(ActorDto pActorDto);
+    virtual bool initWithActorDto(ActorDto actorDto);
+    static ActorSprite* createWithActorDto(ActorDto actorDto);
     
     void setActorMapItem(ActorMapItem actorMapItem);
     ActorMapItem* getActorMapItem();

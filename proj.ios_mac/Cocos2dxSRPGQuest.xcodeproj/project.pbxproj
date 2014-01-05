@@ -96,6 +96,9 @@
 		CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4341878EBFC00844C27 /* ActorSprite.cpp */; };
 		CED0A43A1878EBFC00844C27 /* MapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4371878EBFC00844C27 /* MapManager.cpp */; };
 		CED0A43E1878ECC800844C27 /* BattleLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A43C1878ECC800844C27 /* BattleLogic.cpp */; };
+		CED0A449187953DB00844C27 /* DropItemSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A447187953DB00844C27 /* DropItemSprite.cpp */; };
+		CED0A44B18795FE800844C27 /* item_64.png in Resources */ = {isa = PBXBuildFile; fileRef = CED0A44A18795FE800844C27 /* item_64.png */; };
+		CED0A44F18797B2200844C27 /* AccountData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A44D18797B2200844C27 /* AccountData.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -364,6 +367,11 @@
 		CED0A4381878EBFC00844C27 /* MapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
 		CED0A43C1878ECC800844C27 /* BattleLogic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BattleLogic.cpp; sourceTree = "<group>"; };
 		CED0A43D1878ECC800844C27 /* BattleLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleLogic.h; sourceTree = "<group>"; };
+		CED0A447187953DB00844C27 /* DropItemSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DropItemSprite.cpp; sourceTree = "<group>"; };
+		CED0A448187953DB00844C27 /* DropItemSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropItemSprite.h; sourceTree = "<group>"; };
+		CED0A44A18795FE800844C27 /* item_64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = item_64.png; sourceTree = "<group>"; };
+		CED0A44D18797B2200844C27 /* AccountData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccountData.cpp; sourceTree = "<group>"; };
+		CED0A44E18797B2200844C27 /* AccountData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountData.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -437,6 +445,9 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CED0A45018797C3300844C27 /* ui */,
+				CED0A44C18797AD800844C27 /* account */,
+				CED0A440187953CC00844C27 /* game_object */,
 				CED0A43B1878ECB600844C27 /* logic */,
 				CED0A4331878EBFC00844C27 /* actor */,
 				CED0A4361878EBFC00844C27 /* map */,
@@ -566,6 +577,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CED0A44A18795FE800844C27 /* item_64.png */,
 				CEBDB38B1877EDB900869E9D /* actor_901.plist */,
 				CEBDB38C1877EDB900869E9D /* actor_901.png */,
 				CE15C79A1854B26200B74DFE /* actor_4.plist */,
@@ -671,6 +683,34 @@
 			);
 			name = logic;
 			path = ../Classes/logic;
+			sourceTree = "<group>";
+		};
+		CED0A440187953CC00844C27 /* game_object */ = {
+			isa = PBXGroup;
+			children = (
+				CED0A447187953DB00844C27 /* DropItemSprite.cpp */,
+				CED0A448187953DB00844C27 /* DropItemSprite.h */,
+			);
+			name = game_object;
+			path = ../Classes/game_object;
+			sourceTree = "<group>";
+		};
+		CED0A44C18797AD800844C27 /* account */ = {
+			isa = PBXGroup;
+			children = (
+				CED0A44D18797B2200844C27 /* AccountData.cpp */,
+				CED0A44E18797B2200844C27 /* AccountData.h */,
+			);
+			name = account;
+			path = ../Classes/account;
+			sourceTree = "<group>";
+		};
+		CED0A45018797C3300844C27 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ui;
+			path = ../Classes/ui;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -885,6 +925,7 @@
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
+				CED0A44B18795FE800844C27 /* item_64.png in Resources */,
 				CE15C7BE1854B26200B74DFE /* japan_map.tmx in Resources */,
 				1AFAF8BD16D35E4900DB1158 /* CloseSelected.png in Resources */,
 				CE15C7BB1854B26200B74DFE /* btn-test-1.png in Resources */,
@@ -935,6 +976,8 @@
 				CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */,
 				CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */,
 				CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */,
+				CED0A44F18797B2200844C27 /* AccountData.cpp in Sources */,
+				CED0A449187953DB00844C27 /* DropItemSprite.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CE15C7E91854B2E200B74DFE /* MapScene.cpp in Sources */,
 				1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */,

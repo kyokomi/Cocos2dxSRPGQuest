@@ -20,8 +20,9 @@ enum MapDataType {
     MAP_ITEM    = 3,
     PLAYER      = 4,
     ENEMY       = 5,
-    MOVE_STEP_DIST   = 6, // 移動経路
-    SELECTED_DIST = 7, // 選択位置
+    OBSTACLE    = 6,
+    MOVE_STEP_DIST = 10, // 移動経路
+    SELECTED_DIST  = 11, // 選択位置
 };
 
 enum MoveDirectionType {
@@ -59,6 +60,14 @@ typedef struct _ActorMapItem : public MapItem {
     bool attackDone;
 }ActorMapItem;
 
+typedef struct _DropMapItem : public MapItem {
+    /** ドロップアイテムを一意に識別するID. */
+    int seqNo;
+    /** アイテムID */
+    int itemId;
+}DropMapItem;
+
+
 #define MAP_INDEX_DIFF(mapIndexA, mapIndexB) (mapIndexA.x == mapIndexB.x && mapIndexA.y == mapIndexB.y)
 
 
@@ -67,6 +76,8 @@ class MapManager
 private:
     // マップカーソル一時データ
     std::vector<std::vector<MapItem>> m_mapCursorDataArray;
+    // マップオブジェクトデータ（ドロップアイテム等）
+    std::vector<std::vector<DropMapItem>> m_mapDropItemDataArray;
     // マップオブジェクトデータ（キャラ、障害物）
     std::vector<std::vector<ActorMapItem>> m_mapObjectDataArray;
     // マップ移動カーソルリスト
@@ -91,15 +102,21 @@ private:
             std::vector<TYPE> mapItemArray;
             for (int y = 0; y < m_bottom; y++)
             {
-                TYPE mapItem;
-                mapItem.mapDataType = MapDataType::NONE;
-                MapIndex mapIndex = {x, y};
-                mapItem.mapIndex = mapIndex;
-                mapItem.moveDist = 0;
-                mapItemArray.push_back(mapItem);
+                TYPE noneMapItem = createNoneMapItem<TYPE>(x, y);
+                mapItemArray.push_back(noneMapItem);
             }
             pMapItemArray->push_back(mapItemArray);
         }
+    }
+    template <typename TYPE>
+    TYPE createNoneMapItem(int x, int y)
+    {
+        TYPE mapItem;
+        mapItem.mapDataType = MapDataType::NONE;
+        mapItem.mapIndex = {x, y, MoveDirectionType::MOVE_NONE};
+        mapItem.moveDist = 0;
+        mapItem.attackDist = 0;
+        return mapItem;
     }
     void findDist(int x, int y, int dist, bool first);
     void findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem);
@@ -121,6 +138,10 @@ public:
     
     void addActor(ActorMapItem* pActorMapItem);
     void moveActor(ActorMapItem* actorMapItem, MapIndex* moveMapIndex);
+    void addDropItem(DropMapItem* pDropMapItem);
+    void addObstacle(MapIndex* pMapIndex);
+    void removeMapItem(MapItem* pRemoveMapItem);
+//    void removeMapItem(MapItem removeMapItem);
     
     ActorMapItem* getActorMapItem(MapIndex* pMapIndex);
     MapItem* getMapItem(MapIndex* pMapIndex);

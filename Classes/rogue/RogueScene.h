@@ -29,15 +29,17 @@ protected:
         // TiledMapEnemy
     
     enum TiledMapTag {
-        kTiledMapEnemyBaseTag = 1000, // + seqNo
-        kTiledMapFrontTag     = 2000,
-        kGridLineTag          = 10000,
+        kTiledMapDropItemBaseTag = 1000, // + seqNo
+        kTiledMapEnemyBaseTag    = 2000, // + seqNo
+        kTiledMapFrontTag        = 3000,
+        kGridLineTag             = 10000,
     };
     
     enum TiledMapIndex {
-        zTiledMapEnemyBaseIndex = 1000,
-        zTiledMapFrontIndex     = 2000,
-        zGridLineIndex          = 10000,
+        zTiledMapDropItemBaseIndex = 1000,
+        zTiledMapEnemyBaseIndex    = 2000,
+        zTiledMapFrontIndex        = 3000,
+        zGridLineIndex             = 10000,
     };
     
     enum Tag {
@@ -46,7 +48,6 @@ protected:
 //        kCursorMoveFindTag  = 9001,
 //        kCursorMoveStepTag  = 9002,
 //        kCursorSelectedTag  = 9003,
-//        kGridLineTag          = 10000,
         kActorBaseTag         = 100000,
         kMiniMapTag           = 150000,
         kStatusBarTag         = 200000,
@@ -58,7 +59,6 @@ protected:
 //        zCursorMoveFindIndex = 9001,
 //        zCursorMoveStepIndex = 9002,
 //        zCursorSelectedIndex = 9003,
-//        zGridLineIndex   = 10000,
         zActorBaseIndex  = 100000,
         zMiniMapIndex    = 150000,
         zStatusBarIndex  = 200000,

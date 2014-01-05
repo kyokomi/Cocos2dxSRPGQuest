@@ -8,6 +8,7 @@
 
 #include "RogueScene.h"
 #include "ActorSprite.h"
+#include "DropItemSprite.h"
 #include "BattleLogic.h"
 
 USING_NS_CC;
@@ -75,12 +76,33 @@ bool RogueScene::init()
     pTiledMap->addChild(pFrontLayer,
                         RogueScene::TiledMapIndex::zTiledMapFrontIndex,
                         RogueScene::TiledMapTag::kTiledMapFrontTag);
-
+    
     // エネミーレイヤー
     auto pEnemyLayer = Layer::create();
     pTiledMap->addChild(pEnemyLayer,
                         RogueScene::TiledMapIndex::zTiledMapEnemyBaseIndex,
                         RogueScene::TiledMapTag::kTiledMapEnemyBaseTag);
+    
+    // ドロップアイテムレイヤー
+    auto pDropItemLayer = Layer::create();
+    pTiledMap->addChild(pDropItemLayer,
+                        RogueScene::TiledMapIndex::zTiledMapDropItemBaseIndex,
+                        RogueScene::TiledMapTag::kTiledMapDropItemBaseTag);
+    
+    // 障害物をmapManagerに適応する
+    auto pColisionLayer = pTiledMap->getLayer("colision");
+    for (int x = 0; x < m_baseMapSize.width; x++)
+    {
+        for (int y = 0; y < m_baseMapSize.height; y++)
+        {
+            if (pColisionLayer->getTileAt(Point(x, y)))
+            {
+                MapIndex mapIndex = {x, y, MoveDirectionType::MOVE_NONE};
+                auto tileMapIndex = mapIndexToTileIndex(mapIndex);
+                m_mapManager.addObstacle(&tileMapIndex);
+            }
+        }
+    }
     
     // ---------------------
     // グリッド線を生成
@@ -112,6 +134,9 @@ bool RogueScene::init()
     // プレイヤー生成
     // ---------------------
     ActorSprite::ActorDto actorDto;
+    actorDto.name = "ジニー";
+    actorDto.faceImgId = 0;
+    actorDto.imageResId = 1015;
     // 基本
     actorDto.attackRange = 1;
     actorDto.movePoint = 5;
@@ -132,10 +157,11 @@ bool RogueScene::init()
 
     ActorMapItem actorMapItem;
     actorMapItem.mapDataType = MapDataType::PLAYER;
+    // 画面の中心（固定）
     actorMapItem.mapIndex = pointToIndex(Point(winSize.width/2, winSize.height/2));
     actorMapItem.seqNo = 1;
-    actorMapItem.moveDist = 1; // TODO: 使わないかも
-    actorMapItem.attackDist = 1;
+    actorMapItem.moveDist = actorDto.movePoint;
+    actorMapItem.attackDist = actorDto.attackRange;
     actorMapItem.moveDone = false;
     actorMapItem.attackDone = false;
     
@@ -153,8 +179,12 @@ bool RogueScene::init()
     // 敵キャラ生成
     // ---------------------
     ActorSprite::ActorDto enemyDto;
-    enemyDto.attackRange = 1;
-    enemyDto.movePoint = 5;
+    enemyDto.name = "スライム";
+    enemyDto.faceImgId = 0;
+    enemyDto.imageResId = 1011;
+    // 基本
+    enemyDto.attackRange = 1; // TODO: 未使用
+    enemyDto.movePoint = 10; // 索敵範囲
     enemyDto.playerId = 901;
     // 攻守
     enemyDto.attackPoint = 2;
@@ -172,10 +202,10 @@ bool RogueScene::init()
     
     ActorMapItem enemyMapItem;
     enemyMapItem.mapDataType = MapDataType::ENEMY;
-    enemyMapItem.mapIndex = {4, 4, MoveDirectionType::MOVE_DOWN};
+    enemyMapItem.mapIndex = {4, 4, MoveDirectionType::MOVE_DOWN}; // TODO: 場所は仮
     enemyMapItem.seqNo = 2;
-    enemyMapItem.moveDist = 10; // 索敵範囲
-    enemyMapItem.attackDist = 1;
+    enemyMapItem.moveDist = enemyDto.movePoint;
+    enemyMapItem.attackDist = enemyDto.attackRange;
     enemyMapItem.moveDone = false;
     enemyMapItem.attackDone = false;
     
@@ -187,6 +217,29 @@ bool RogueScene::init()
     
     // マップに追加
     m_mapManager.addActor(enemySprite->getActorMapItem());
+    
+    //-------------------------
+    // アイテム配置
+    //-------------------------
+    DropItemSprite::DropItemDto dropItemDto;
+    dropItemDto.itemId = 10064;
+    dropItemDto.imageResId = 64;
+    dropItemDto.name = "ポーション";
+    
+    DropMapItem dropMapItem;
+    dropMapItem.seqNo = 1;
+    dropMapItem.itemId = dropItemDto.itemId;
+    dropMapItem.mapDataType = MapDataType::MAP_ITEM;
+    dropMapItem.moveDist = 0;
+    dropMapItem.mapIndex = {7, 5, MoveDirectionType::MOVE_NONE}; // TODO: 場所は仮
+    
+    auto pDropItemSprite = DropItemSprite::createWithDropItemDto(dropItemDto);
+    pDropItemSprite->setDropMapItem(dropMapItem);
+    pDropItemSprite->setPosition(indexToPoint(dropMapItem.mapIndex));
+    pDropItemLayer->addChild(pDropItemSprite, RogueScene::zTiledMapDropItemBaseIndex, RogueScene::kTiledMapDropItemBaseTag + dropMapItem.seqNo);
+    
+    // マップに追加
+    m_mapManager.addDropItem(pDropItemSprite->getDropMapItem());
     
     //-------------------------
     // ステータスバー？
@@ -232,7 +285,7 @@ bool RogueScene::init()
     // 現在位置からPositionを取得して1/8にする
     miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
     // 移動時に更新できるようにplayerIdをtag管理
-    miniMapActorLayer->setTag(actorSprite->getActorDto()->playerId);
+    miniMapActorLayer->setTag(actorSprite->getTag());
     // add
     miniMapLayer->addChild(miniMapActorLayer);
     
@@ -245,11 +298,26 @@ bool RogueScene::init()
     // 現在位置からPositionを取得して1/8にする
     miniMapEnemyLayer->setPosition(indexToPointNotTileSize(enemySprite->getActorMapItem()->mapIndex) / 8);
     // 移動時に更新できるようにplayerIdをtag管理
-    miniMapEnemyLayer->setTag(enemySprite->getActorDto()->playerId);
+    miniMapEnemyLayer->setTag(enemySprite->getTag());
     // add
     miniMapLayer->addChild(miniMapEnemyLayer);
     
     this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
+    
+    // TODO: アイテムの数だけよばないといけないので関数化するといい
+    
+    // アイテムの位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？ 33ccff
+    auto miniMapItemLayer = LayerColor::create(Color4B(51, 204, 255, 255));
+    // タイルの1/8サイズ
+    miniMapItemLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
+    miniMapItemLayer->setPosition(indexToPointNotTileSize(pDropItemSprite->getDropMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにseqNoをtag管理
+    miniMapItemLayer->setTag(pDropItemSprite->getTag());
+    // add
+    miniMapLayer->addChild(miniMapItemLayer);
+    
+    // ---------------------------------
     
     // プレイヤーの先行
     changeGameStatus(GameStatus::PLAYER_TURN);
@@ -275,6 +343,9 @@ void RogueScene::changeGameStatus(GameStatus gameStatus)
     }
     else if (m_gameStatus == GameStatus::PLAYER_TURN)
     {
+        // カーソルはクリアする
+        m_mapManager.clearCursor();
+        // ターン数を進める
         m_TurnCount++;
     }
 }
@@ -303,10 +374,8 @@ void RogueScene::enemyTurn()
         }
         else if (rand == 2)
         {
-            // 移動 or 攻撃
+            // プレイヤーに向かって移動 or プレイヤーに攻撃
             auto pPlayerActorSprite = getPlayerActorSprite(1);
-            
-            // 4方向にプレイヤーがいるかチェック
             
             // プレイヤーの周辺で最もコストが低い箇所へ移動
             auto playerMapIndex = pPlayerActorSprite->getActorMapItem()->mapIndex;
@@ -348,7 +417,7 @@ void RogueScene::enemyTurn()
                 }
             }
           
-            MapIndex moveMapIndex;
+            MapIndex moveMapIndex = enemyMapItem.mapIndex;
             if (isPlayerAttack)
             {
                 // 攻撃
@@ -377,12 +446,15 @@ void RogueScene::enemyTurn()
                 }
                 
                 // 移動リスト作成
-                std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
-                                                                                &enemyMapItem);
-                std::list<MapIndex>::iterator it = moveList.begin();
-                it++;
-                moveMapIndex = *it; // 2件目を取得(1件目は自分なので）
-                it = moveList.end();
+                if (pTargetMoveDistMapItem)
+                {
+                    std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
+                                                                                    &enemyMapItem);
+                    std::list<MapIndex>::iterator it = moveList.begin();
+                    it++;
+                    moveMapIndex = *it; // 2件目を取得(1件目は自分なので）
+                    it = moveList.end();
+                }
             }
             
             // 移動有無関係なく向きは変える
@@ -414,7 +486,7 @@ void RogueScene::enemyTurn()
                 int damage = BattleLogic::exec(pEnemyDto, pPlayerDto);
                 
                 // 攻撃イベント
-                logMessage("スライムの攻撃: プレイヤーに%dダメージ", damage);
+                logMessage("%sの攻撃: %sに%dダメージ", pEnemyDto->name.c_str(), pPlayerDto->name.c_str(), damage);
             }
             else
             {
@@ -428,7 +500,7 @@ void RogueScene::enemyTurn()
 //                    changeGameStatus(GameStatus::ENEMY_TURN);
                     changeGameStatus(GameStatus::PLAYER_TURN);
                 }));
-                logMessage("移動した seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
+                //logMessage("移動した seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
             }
         }
     }
@@ -499,13 +571,14 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
     auto pEnemyMapItem = m_mapManager.getActorMapItem(&touchPointMapIndex);
     if (pEnemyMapItem->mapDataType == MapDataType::ENEMY)
     {
+//        auto pEnemyMapItem = (ActorMapItem*) pTouchPointMapItem;
         auto pPlayerDto = pActorSprite->getActorDto();
         auto pEnemyDto = getEnemyActorSprite(pEnemyMapItem->seqNo)->getActorDto();
         
         int damage = BattleLogic::exec(pPlayerDto, pEnemyDto);
         
         // 攻撃イベント
-        logMessage("プレイヤーの攻撃: スライムに%dのダメージ", damage);
+        logMessage("%sの攻撃: %sに%dのダメージ", pPlayerDto->name.c_str(), pEnemyDto->name.c_str(), damage);
     }
     else
     {
@@ -519,10 +592,41 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
         {
             changeGameStatus(GameStatus::PLAYER_ACTION);
             
+            // アイテムに重なったときの拾う処理
+            auto pTouchPointMapItem = m_mapManager.getMapItem(&touchPointMapIndex);
+            if (pTouchPointMapItem->mapDataType == MapDataType::MAP_ITEM)
+            {
+                // ドロップアイテムを拾う
+                auto pDropMapItem = (DropMapItem*) pTouchPointMapItem;
+                
+                // TODO: 拾うSE再生
+                
+                // itemを取得
+                auto pDropItemLayer = getChildByTag(RogueScene::kTiledMapTag)->getChildByTag(RogueScene::TiledMapTag::kTiledMapDropItemBaseTag);
+                auto pDropItemSprite = (DropItemSprite*) pDropItemLayer->getChildByTag(RogueScene::TiledMapTag::kTiledMapDropItemBaseTag + pDropMapItem->seqNo);
+                
+                // メッセージログ
+                auto pDropItemDto = pDropItemSprite->getDropItemDto();
+                logMessage("%sを拾った。", pDropItemDto->name.c_str());
+                
+                // mapManagerから消す
+                m_mapManager.removeMapItem(pDropMapItem);
+                
+                // ミニマップを更新
+                auto pMiniMapLayer = getChildByTag(kMiniMapTag);
+                pMiniMapLayer->removeChildByTag(pDropItemSprite->getTag());
+                
+                // Map上からremoveする
+                pDropItemLayer->removeChild(pDropItemSprite);
+                
+                // TODO: イベントリに追加する
+            }
+            
             // 移動処理
             moveMap(addMoveIndex, pActorSprite->getActorMapItem()->seqNo, pActorSprite->getActorMapItem()->mapDataType, CallFunc::create([this](void) {
                 changeGameStatus(GameStatus::ENEMY_TURN);
             }));
+            
             // コールバックまでgameStatusを更新はしない
             return;
         }
@@ -530,9 +634,6 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
     
     // TODO: 会話
         // 会話イベント
-    
-    // TODO: 宝箱ひろう
-        // 宝箱イベント
     
     // ターン終了
     changeGameStatus(GameStatus::ENEMY_TURN);
@@ -625,7 +726,7 @@ void RogueScene::moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapD
     
     // ミニマップも更新
     auto pMiniMapLayer = getChildByTag(kMiniMapTag);
-    auto pMiniMapActorNode = (Node*) pMiniMapLayer->getChildByTag(pActorSprite->getActorDto()->playerId);
+    auto pMiniMapActorNode = (Node*) pMiniMapLayer->getChildByTag(pActorSprite->getTag());
     pMiniMapActorNode->setPosition(indexToPointNotTileSize(actorMapItem->mapIndex) / 8);
     
     // move実行
