@@ -306,8 +306,7 @@ void RogueScene::enemyTurn()
             // 移動 or 攻撃
             auto pPlayerActorSprite = getPlayerActorSprite(1);
             
-            // 移動先のプレイヤーを探す（移動コストを作成）
-            m_mapManager.createActorFindDist(enemyMapItem.mapIndex, enemyMapItem.moveDist);
+            // 4方向にプレイヤーがいるかチェック
             
             // プレイヤーの周辺で最もコストが低い箇所へ移動
             auto playerMapIndex = pPlayerActorSprite->getActorMapItem()->mapIndex;
@@ -337,30 +336,54 @@ void RogueScene::enemyTurn()
             searchMapIndex.moveDictType = MoveDirectionType::MOVE_UP;
             searchMapIndexList.push_back(searchMapIndex);
             
-            MapItem* pTargetMoveDistMapItem;
-            for (MapIndex mapIndex : searchMapIndexList)
+            // そもそもプレイヤーが隣接しているかチェック
+            bool isPlayerAttack = false;
             {
-                auto pMapItem = m_mapManager.getMapItem(&mapIndex);
-                if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
+                for (MapIndex mapIndex : searchMapIndexList)
                 {
-                    if (!pTargetMoveDistMapItem)
+                    if (MAP_INDEX_DIFF(enemyMapItem.mapIndex, mapIndex))
                     {
-                        pTargetMoveDistMapItem = pMapItem;
-                    }
-                    else if (pTargetMoveDistMapItem->moveDist < pMapItem->moveDist)
-                    {
-                        pTargetMoveDistMapItem = pMapItem;
+                        isPlayerAttack = true;
                     }
                 }
             }
-            
-            // 移動リスト作成
-            std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
-                                                                            &enemyMapItem);
-            std::list<MapIndex>::iterator it = moveList.begin();
-            it++;
-            MapIndex moveMapIndex = *it; // 2件目を取得(1件目は自分なので）
-            it = moveList.end();
+          
+            MapIndex moveMapIndex;
+            if (isPlayerAttack)
+            {
+                // 攻撃
+                moveMapIndex =pPlayerActorSprite->getActorMapItem()->mapIndex;
+            }
+            else
+            {
+                // 移動可能な経路情報を設定
+                m_mapManager.createActorFindDist(enemyMapItem.mapIndex, enemyMapItem.moveDist);
+                // 最も移動コストがかからない場所を抽出
+                MapItem* pTargetMoveDistMapItem;
+                for (MapIndex mapIndex : searchMapIndexList)
+                {
+                    auto pMapItem = m_mapManager.getMapItem(&mapIndex);
+                    if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
+                    {
+                        if (!pTargetMoveDistMapItem)
+                        {
+                            pTargetMoveDistMapItem = pMapItem;
+                        }
+                        else if (pTargetMoveDistMapItem->moveDist < pMapItem->moveDist)
+                        {
+                            pTargetMoveDistMapItem = pMapItem;
+                        }
+                    }
+                }
+                
+                // 移動リスト作成
+                std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
+                                                                                &enemyMapItem);
+                std::list<MapIndex>::iterator it = moveList.begin();
+                it++;
+                moveMapIndex = *it; // 2件目を取得(1件目は自分なので）
+                it = moveList.end();
+            }
             
             // 移動有無関係なく向きは変える
             auto pEnemySprite = getEnemyActorSprite(enemyMapItem.seqNo);
