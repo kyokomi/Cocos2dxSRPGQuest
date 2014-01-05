@@ -9,58 +9,58 @@
 #ifndef Cocos2dxSRPGQuest_SRPGMapMacro_h
 #define Cocos2dxSRPGQuest_SRPGMapMacro_h
 
-enum MapDataType {
-    NONE        = 0,
-    MOVE_DIST   = 1,
-    ATTACK_DIST = 2,
-    MAP_ITEM    = 3,
-    PLAYER      = 4,
-    ENEMY       = 5,
-    MOVE_STEP_DIST   = 6, // 移動経路
-    SELECTED_DIST = 7, // 選択位置
-};
-
-enum MoveDirectionType {
-	MOVE_DOWN  = 0,
-	MOVE_LEFT  = 1,
-	MOVE_RIGHT = 2,
-	MOVE_UP    = 3
-};
-
-typedef struct _MapIndex {
-    int x;
-    int y;
-    MoveDirectionType moveDictType;
-}MapIndex;
-
-typedef struct _MapItem {
-    /** 短形マップ上の区分. */
-    MapDataType mapDataType;
-    
-//    /** 短形マップ縦軸表示位置. */
-//    int mapPointX;
+//enum MapDataType {
+//    NONE        = 0,
+//    MOVE_DIST   = 1,
+//    ATTACK_DIST = 2,
+//    MAP_ITEM    = 3,
+//    PLAYER      = 4,
+//    ENEMY       = 5,
+//    MOVE_STEP_DIST   = 6, // 移動経路
+//    SELECTED_DIST = 7, // 選択位置
+//};
+//
+//enum MoveDirectionType {
+//	MOVE_DOWN  = 0,
+//	MOVE_LEFT  = 1,
+//	MOVE_RIGHT = 2,
+//	MOVE_UP    = 3
+//};
+//
+//typedef struct _MapIndex {
+//    int x;
+//    int y;
+//    MoveDirectionType moveDictType;
+//}MapIndex;
+//
+//typedef struct _MapItem {
+//    /** 短形マップ上の区分. */
+//    MapDataType mapDataType;
 //    
-//    /** 短形マップ横軸表示位置. */
-//    int mapPointY;
+////    /** 短形マップ縦軸表示位置. */
+////    int mapPointX;
+////    
+////    /** 短形マップ横軸表示位置. */
+////    int mapPointY;
+////    
+//    MapIndex mapIndex;
 //    
-    MapIndex mapIndex;
-    
-    /** 移動可能距離. */
-    int moveDist;
-    /** 攻撃可能距離. */
-    int attackDist;
-}MapItem;
-
-typedef struct _ActorMapItem : public MapItem {
-    /** プレイヤーを一意に識別するID. */
-    int seqNo;
-    /** 移動済みフラグ. */
-    bool moveDone;
-    /** 攻撃済みフラグ. */
-    bool attackDone;
-}ActorMapItem;
-
-#define MAP_INDEX_DIFF(mapIndexA, mapIndexB) (mapIndexA.x == mapIndexB.x && mapIndexA.y == mapIndexB.y)
+//    /** 移動可能距離. */
+//    int moveDist;
+//    /** 攻撃可能距離. */
+//    int attackDist;
+//}MapItem;
+//
+//typedef struct _ActorMapItem : public MapItem {
+//    /** プレイヤーを一意に識別するID. */
+//    int seqNo;
+//    /** 移動済みフラグ. */
+//    bool moveDone;
+//    /** 攻撃済みフラグ. */
+//    bool attackDone;
+//}ActorMapItem;
+//
+//#define MAP_INDEX_DIFF(mapIndexA, mapIndexB) (mapIndexA.x == mapIndexB.x && mapIndexA.y == mapIndexB.y)
 
 // TileMapから取得する
 //#define GRID_X 128

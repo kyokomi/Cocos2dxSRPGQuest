@@ -84,8 +84,6 @@
 		CE15C7C11854B26200B74DFE /* MapScene.ccbi in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7AC1854B26200B74DFE /* MapScene.ccbi */; };
 		CE15C7C21854B26200B74DFE /* TitleScene.ccbi in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7AD1854B26200B74DFE /* TitleScene.ccbi */; };
 		CE15C7C31854B26200B74DFE /* tmx in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7AE1854B26200B74DFE /* tmx */; };
-		CE15C7E31854B2E200B74DFE /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7CF1854B2E200B74DFE /* ActorSprite.cpp */; };
-		CE15C7E41854B2E200B74DFE /* MapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7D21854B2E200B74DFE /* MapManager.cpp */; };
 		CE15C7E51854B2E200B74DFE /* SRPGMapLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7D41854B2E200B74DFE /* SRPGMapLayer.cpp */; };
 		CE15C7E61854B2E200B74DFE /* SRPGScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7D71854B2E200B74DFE /* SRPGScene.cpp */; };
 		CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE15C7DA1854B2E200B74DFE /* TitleScene.cpp */; };
@@ -95,6 +93,9 @@
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
 		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
 		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
+		CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4341878EBFC00844C27 /* ActorSprite.cpp */; };
+		CED0A43A1878EBFC00844C27 /* MapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4371878EBFC00844C27 /* MapManager.cpp */; };
+		CED0A43E1878ECC800844C27 /* BattleLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A43C1878ECC800844C27 /* BattleLogic.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -341,13 +342,8 @@
 		CE15C7AD1854B26200B74DFE /* TitleScene.ccbi */ = {isa = PBXFileReference; lastKnownFileType = file; path = TitleScene.ccbi; sourceTree = "<group>"; };
 		CE15C7AE1854B26200B74DFE /* tmx */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tmx; sourceTree = "<group>"; };
 		CE15C7C41854B27300B74DFE /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppMacros.h; path = ../Classes/AppMacros.h; sourceTree = "<group>"; };
-		CE15C7CF1854B2E200B74DFE /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
-		CE15C7D01854B2E200B74DFE /* ActorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActorSprite.h; sourceTree = "<group>"; };
-		CE15C7D21854B2E200B74DFE /* MapManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapManager.cpp; sourceTree = "<group>"; };
-		CE15C7D31854B2E200B74DFE /* MapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
 		CE15C7D41854B2E200B74DFE /* SRPGMapLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGMapLayer.cpp; sourceTree = "<group>"; };
 		CE15C7D51854B2E200B74DFE /* SRPGMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapLayer.h; sourceTree = "<group>"; };
-		CE15C7D61854B2E200B74DFE /* SRPGMapMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGMapMacro.h; sourceTree = "<group>"; };
 		CE15C7D71854B2E200B74DFE /* SRPGScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SRPGScene.cpp; sourceTree = "<group>"; };
 		CE15C7D81854B2E200B74DFE /* SRPGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRPGScene.h; sourceTree = "<group>"; };
 		CE15C7DA1854B2E200B74DFE /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
@@ -362,6 +358,12 @@
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
 		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
 		CEBDB38C1877EDB900869E9D /* actor_901.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_901.png; sourceTree = "<group>"; };
+		CED0A4341878EBFC00844C27 /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
+		CED0A4351878EBFC00844C27 /* ActorSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActorSprite.h; sourceTree = "<group>"; };
+		CED0A4371878EBFC00844C27 /* MapManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapManager.cpp; sourceTree = "<group>"; };
+		CED0A4381878EBFC00844C27 /* MapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
+		CED0A43C1878ECC800844C27 /* BattleLogic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BattleLogic.cpp; sourceTree = "<group>"; };
+		CED0A43D1878ECC800844C27 /* BattleLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattleLogic.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -435,6 +437,9 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CED0A43B1878ECB600844C27 /* logic */,
+				CED0A4331878EBFC00844C27 /* actor */,
+				CED0A4361878EBFC00844C27 /* map */,
 				CE88A49F1875AF42001C5E99 /* rogue */,
 				CE15C7CD1854B2E200B74DFE /* quest */,
 				CE15C7D91854B2E200B74DFE /* title */,
@@ -595,34 +600,13 @@
 		CE15C7CD1854B2E200B74DFE /* quest */ = {
 			isa = PBXGroup;
 			children = (
-				CE15C7CE1854B2E200B74DFE /* actor */,
-				CE15C7D11854B2E200B74DFE /* map */,
 				CE15C7D41854B2E200B74DFE /* SRPGMapLayer.cpp */,
 				CE15C7D51854B2E200B74DFE /* SRPGMapLayer.h */,
-				CE15C7D61854B2E200B74DFE /* SRPGMapMacro.h */,
 				CE15C7D71854B2E200B74DFE /* SRPGScene.cpp */,
 				CE15C7D81854B2E200B74DFE /* SRPGScene.h */,
 			);
 			name = quest;
 			path = ../Classes/quest;
-			sourceTree = "<group>";
-		};
-		CE15C7CE1854B2E200B74DFE /* actor */ = {
-			isa = PBXGroup;
-			children = (
-				CE15C7CF1854B2E200B74DFE /* ActorSprite.cpp */,
-				CE15C7D01854B2E200B74DFE /* ActorSprite.h */,
-			);
-			path = actor;
-			sourceTree = "<group>";
-		};
-		CE15C7D11854B2E200B74DFE /* map */ = {
-			isa = PBXGroup;
-			children = (
-				CE15C7D21854B2E200B74DFE /* MapManager.cpp */,
-				CE15C7D31854B2E200B74DFE /* MapManager.h */,
-			);
-			path = map;
 			sourceTree = "<group>";
 		};
 		CE15C7D91854B2E200B74DFE /* title */ = {
@@ -657,6 +641,36 @@
 			);
 			name = rogue;
 			path = ../Classes/rogue;
+			sourceTree = "<group>";
+		};
+		CED0A4331878EBFC00844C27 /* actor */ = {
+			isa = PBXGroup;
+			children = (
+				CED0A4341878EBFC00844C27 /* ActorSprite.cpp */,
+				CED0A4351878EBFC00844C27 /* ActorSprite.h */,
+			);
+			name = actor;
+			path = ../Classes/actor;
+			sourceTree = "<group>";
+		};
+		CED0A4361878EBFC00844C27 /* map */ = {
+			isa = PBXGroup;
+			children = (
+				CED0A4371878EBFC00844C27 /* MapManager.cpp */,
+				CED0A4381878EBFC00844C27 /* MapManager.h */,
+			);
+			name = map;
+			path = ../Classes/map;
+			sourceTree = "<group>";
+		};
+		CED0A43B1878ECB600844C27 /* logic */ = {
+			isa = PBXGroup;
+			children = (
+				CED0A43C1878ECC800844C27 /* BattleLogic.cpp */,
+				CED0A43D1878ECC800844C27 /* BattleLogic.h */,
+			);
+			name = logic;
+			path = ../Classes/logic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -914,18 +928,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED0A43E1878ECC800844C27 /* BattleLogic.cpp in Sources */,
 				CE15C7E51854B2E200B74DFE /* SRPGMapLayer.cpp in Sources */,
 				CE15C7E61854B2E200B74DFE /* SRPGScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */,
+				CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */,
 				CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CE15C7E91854B2E200B74DFE /* MapScene.cpp in Sources */,
 				1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */,
+				CED0A43A1878EBFC00844C27 /* MapManager.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-				CE15C7E31854B2E200B74DFE /* ActorSprite.cpp in Sources */,
 				CE15C7EA1854B2E200B74DFE /* MapSceneLoader.cpp in Sources */,
-				CE15C7E41854B2E200B74DFE /* MapManager.cpp in Sources */,
 				CE15C7E81854B2E200B74DFE /* TitleSceneLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

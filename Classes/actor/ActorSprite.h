@@ -10,7 +10,7 @@
 #define __Cocos2dxSRPGQuest__ActorSprite__
 
 #include "cocos2d.h"
-#include "SRPGMapMacro.h"
+#include "MapManager.h"
 
 USING_NS_CC;
 

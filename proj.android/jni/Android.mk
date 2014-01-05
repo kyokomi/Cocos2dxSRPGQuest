@@ -15,16 +15,16 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/quest/SRPGScene.cpp \
                    ../../Classes/quest/SRPGMapLayer.cpp \
                    ../../Classes/rogue/RogueScene.cpp \
-                   ../../Classes/quest/actor/ActorSprite.cpp \
-                   ../../Classes/quest/map/MapManager.cpp
+                   ../../Classes/actor/ActorSprite.cpp \
+                   ../../Classes/map/MapManager.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
                    $(LOCAL_PATH)/../../Classes/title \
                    $(LOCAL_PATH)/../../Classes/world_map \
                    $(LOCAL_PATH)/../../Classes/rogue \
                    $(LOCAL_PATH)/../../Classes/quest \
-                   $(LOCAL_PATH)/../../Classes/quest/actor \
-                   $(LOCAL_PATH)/../../Classes/quest/map
+                   $(LOCAL_PATH)/../../Classes/actor \
+                   $(LOCAL_PATH)/../../Classes/map
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocosbuilder_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static

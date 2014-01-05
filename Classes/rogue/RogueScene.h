@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "MapManager.h"
+#include "ActorSprite.h"
 
 class RogueScene : public cocos2d::Layer
 {
@@ -18,9 +19,10 @@ protected:
     
     enum GameStatus {
         INIT        = 0,
-        PLAYER_TURN = 1,
-        ENEMY_TURN  = 2,
-        ENEMY_ACTION  = 3,
+        PLAYER_TURN = 10,
+        PLAYER_ACTION  = 11,
+        ENEMY_TURN  = 20,
+        ENEMY_ACTION  = 21,
     };
     // TiledMap（background, colision)
         // TiledMapFront
@@ -64,8 +66,9 @@ protected:
     };
 
 private:
-    // ゲームステート管理
+    // ゲーム管理
     GameStatus m_gameStatus;
+    int m_TurnCount;
     void changeGameStatus(GameStatus gameStatus);
     void enemyTurn();
     
@@ -83,6 +86,7 @@ private:
     MapIndex checkTouchEventIndex(MapIndex touchPointMapIndex);
     void moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapDataType, cocos2d::CallFunc* moveFinishedCallFunc);
     bool isTiledMapColisionLayer(MapIndex touchPointMapIndex);
+    bool isMapLayerOver(MapIndex touchPointMapIndex);
     
     // UI関連
     void logMessage(const char * pszFormat, ...);
@@ -97,6 +101,10 @@ private:
     MapIndex touchPointToIndex(cocos2d::Point point);
     // MapIndexからtileIndexに変換
     MapIndex mapIndexToTileIndex(MapIndex mapIndex);
+    
+    
+    ActorSprite* getPlayerActorSprite(int seqNo);
+    ActorSprite* getEnemyActorSprite(int seqNo);
     
 public:
     RogueScene();

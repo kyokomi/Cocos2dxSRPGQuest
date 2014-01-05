@@ -10,7 +10,6 @@
 #define __Cocos2dxSRPGQuest__SRPGMapLayer__
 
 #include "cocos2d.h"
-#include "SRPGMapMacro.h"
 #include "ActorSprite.h"
 #include "MapManager.h"
 
