@@ -1,4 +1,4 @@
-#include "TableViewTestScene.h"
+#include "TableViewTestLayer.h"
 #include "CustomTableViewCell.h"
 
 #include "AppMacros.h"
@@ -7,15 +7,16 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 TableViewTestLayer::TableViewTestLayer()
-:m_textArray(std::vector<std::string>())
+:m_itemList(std::list<std::string>()),
+m_callback(nullptr)
 {
 
 }
 
-TableViewTestLayer* TableViewTestLayer::createWithTextArray(std::vector<std::string> textArray, Size contentSize)
+TableViewTestLayer* TableViewTestLayer::createWithTextArray(std::list<std::string> itemList, Size contentSize)
 {
     TableViewTestLayer *pRet = new TableViewTestLayer();
-    if (pRet && pRet->init(textArray, contentSize))
+    if (pRet && pRet->init(itemList, contentSize))
     {
         pRet->autorelease();
         return pRet;
@@ -29,13 +30,13 @@ TableViewTestLayer* TableViewTestLayer::createWithTextArray(std::vector<std::str
 }
 
 // on "init" you need to initialize your instance
-bool TableViewTestLayer::init(std::vector<std::string> textArray, Size contentSize)
+bool TableViewTestLayer::init(std::list<std::string> itemList, Size contentSize)
 {
     if ( !CCLayerColor::init() )
     {
         return false;
     }
-    m_textArray = textArray;
+    m_itemList = itemList;
 
     this->setContentSize(contentSize);
     
@@ -46,7 +47,7 @@ bool TableViewTestLayer::init(std::vector<std::string> textArray, Size contentSi
     tableView->setPosition(Point(tableView->getPositionX(), contentSize.height * 0.1));
 	tableView->setDelegate(this);
 //    tableView->setBounceable(false); // スクロールオーバー
-	tableView->setVerticalFillOrder(TableView::VerticalFillOrder::BOTTOM_UP);
+	tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
     tableView->setTag(kTag_TableView);
 	this->addChild(tableView);
 	tableView->reloadData();
@@ -59,7 +60,11 @@ bool TableViewTestLayer::init(std::vector<std::string> textArray, Size contentSi
 
 void TableViewTestLayer::tableCellTouched(TableView* table, TableViewCell* cell)
 {
-//    CCLOG("cell touched at index: %i", cell->getIdx());
+    CCLOG("cell touched at index: %ld", cell->getIdx());
+    if (m_callback)
+    {
+        m_callback(this, cell->getIdx());
+    }
 }
 
 Size TableViewTestLayer::tableCellSizeForIndex(TableView *table, long idx)
@@ -71,16 +76,20 @@ Size TableViewTestLayer::tableCellSizeForIndex(TableView *table, long idx)
 
 TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
 {
-//    Size winSize = Director::getInstance()->getWinSize();
     Size contentSize = getContentSize();
-    std::string text = "hogehoge";
+    std::string text;
     
-    CCLOG("idx = %ld size = %ld", idx, m_textArray.size());
-    
-    if (m_textArray.size() > 0 && idx < m_textArray.size())
+    long listSize = m_itemList.size();
+    if (listSize > 0 && idx < listSize)
     {
-        text = m_textArray[idx];
+        auto it = m_itemList.begin();
+        std::advance(it, idx);
+        std::string itemName = *it;
+        text = itemName;
+        m_itemList.end();
     }
+    CCLOG("idx = %ld size = %ld text = %s", idx, listSize, text.c_str());
+    
     String *pTextString = String::createWithFormat("[%ld] : %s", idx, text.c_str());
     TableViewCell *cell = table->dequeueCell();
     if (!cell) {
@@ -93,7 +102,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         textLayer->setTag(kTag_TextLayer);
         
         // 本文テキスト
-        int baseFontSize = 10; // TODO: あとで
+        int baseFontSize = 10;
         
         LabelTTF* textLabel = CCLabelTTF::create(pTextString->getCString(), "Arial", baseFontSize);
         //textLabel->setAnchorPoint(Point::ZERO);
@@ -114,20 +123,29 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         pTextLabel->setString(pTextString->getCString());
     }
 
-
     return cell;
 }
 
 long TableViewTestLayer::numberOfCellsInTableView(TableView *table)
 {
-    return m_textArray.size();
+    return m_itemList.size();
 }
 
-void TableViewTestLayer::makeTextLog(std::vector<std::string> textArray)
+#pragma mark
+#pragma mark 要素設定とか
+
+void TableViewTestLayer::makeItemList(std::list<std::string> itemList)
 {
-    m_textArray = textArray;
+    m_itemList = itemList;
     static_cast<TableView*>(this->getChildByTag(kTag_TableView))->reloadData();
 }
 
+#pragma mark
+#pragma mark コールバック関連
+
+void TableViewTestLayer::setCallback(const TableCellTouchedCallback &callback)
+{
+    m_callback = callback;
+}
 
 

@@ -100,6 +100,33 @@ MoveDirectionType MapManager::checkMoveDirectionType(MapIndex fromMapIndex, MapI
 }
 
 /**
+ * カーソル情報を元に最短距離のMapItemを返します。
+ * createActorFindDist後に呼ばないと何も意味がありません.
+ */
+MapItem MapManager::searchTargetMapItem(std::list<MapIndex> searchMapIndexList)
+{
+    MapItem targetMoveDistMapItem = {
+        MapDataType::NONE,
+        {0, 0, MoveDirectionType::MOVE_NONE},
+        0,
+        0
+    };
+    
+    for (MapIndex mapIndex : searchMapIndexList)
+    {
+        auto pMapItem = getMapItem(&mapIndex);
+        if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
+        {
+            if (targetMoveDistMapItem.moveDist < pMapItem->moveDist)
+            {
+                targetMoveDistMapItem = *pMapItem;
+            }
+        }
+    }
+    return targetMoveDistMapItem;
+}
+
+/**
  * 移動範囲検索.
  */
 void MapManager::findDist(int x, int y, int dist, bool first)
@@ -315,6 +342,11 @@ ActorMapItem* MapManager::getActorMapItemById(int seqNo)
     return NULL;
 }
 
+DropMapItem* MapManager::getDropMapItem(MapIndex* pMapIndex)
+{
+    return &(m_mapDropItemDataArray[pMapIndex->x][pMapIndex->y]);
+}
+
 /**
  * 移動ルート情報を作成.
  * 移動先のカーソルから移動元のMapItemまでの最短経路を検索する。
@@ -386,7 +418,7 @@ void MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* 
 std::list<ActorMapItem> MapManager::findEnemyMapItem()
 {
     std::list<ActorMapItem> enemyMapItem;
-    enemyMapItem.clear();
+    //enemyMapItem.clear();
     
     int xCount = m_mapObjectDataArray.size();
     for (int x = 0; x < xCount; x++)

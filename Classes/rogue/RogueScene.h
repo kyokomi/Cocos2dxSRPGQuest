@@ -10,9 +10,10 @@
 #define __Cocos2dxSRPGQuest__RogueScene__
 
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
 #include "MapManager.h"
 #include "ActorSprite.h"
+#include "DropItemSprite.h"
 
 class RogueScene : public cocos2d::Layer
 {
@@ -30,17 +31,17 @@ protected:
         // TiledMapEnemy
     
     enum TiledMapTag {
-        kTiledMapDropItemBaseTag = 1000, // + seqNo
-        kTiledMapEnemyBaseTag    = 2000, // + seqNo
-        kTiledMapFrontTag        = 3000,
-        kGridLineTag             = 10000,
+        kTiledMapDropItemBaseTag = 10000, // + seqNo
+        kTiledMapEnemyBaseTag    = 20000, // + seqNo
+        kTiledMapFrontTag        = 30000,
+        kGridLineTag             = 100000,
     };
     
     enum TiledMapIndex {
-        zTiledMapDropItemBaseIndex = 1000,
-        zTiledMapEnemyBaseIndex    = 2000,
-        zTiledMapFrontIndex        = 3000,
-        zGridLineIndex             = 10000,
+        zTiledMapDropItemBaseIndex = 10000,
+        zTiledMapEnemyBaseIndex    = 20000,
+        zTiledMapFrontIndex        = 30000,
+        zGridLineIndex             = 100000,
     };
     
     enum Tag {
@@ -103,6 +104,9 @@ private:
     void showItemList(int showTextIndex);
     void hideItemList();
     
+    // tileSet関連
+    bool tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex);
+    
     // マップ座標変換
     cocos2d::Point indexToPoint(int mapIndex_x, int mapIndex_y);
     cocos2d::Point indexToPoint(MapIndex mapIndex);
@@ -117,6 +121,9 @@ private:
     
     ActorSprite* getPlayerActorSprite(int seqNo);
     ActorSprite* getEnemyActorSprite(int seqNo);
+    
+    // TODO: プレイヤー情報（あとで別の場所に持っていく）
+    std::list<DropItemSprite::DropItemDto> m_playerItemList;
     
 public:
     RogueScene();

@@ -146,8 +146,10 @@ public:
     ActorMapItem* getActorMapItem(MapIndex* pMapIndex);
     MapItem* getMapItem(MapIndex* pMapIndex);
     ActorMapItem* getActorMapItemById(int seqNo);
-
+    DropMapItem* getDropMapItem(MapIndex* pMapIndex);
+    
     MoveDirectionType checkMoveDirectionType(MapIndex fromMapIndex, MapIndex toMapIndex);
+    MapItem searchTargetMapItem(std::list<MapIndex> searchMapIndexList);
     
     std::list<ActorMapItem> findEnemyMapItem();
 };

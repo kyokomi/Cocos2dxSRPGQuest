@@ -64,7 +64,7 @@
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
 		CE0E44C5187A296000842691 /* CustomTableViewCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0E44C1187A296000842691 /* CustomTableViewCell.cpp */; };
-		CE0E44C6187A296000842691 /* TableViewTestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0E44C3187A296000842691 /* TableViewTestScene.cpp */; };
+		CE0E44C6187A296000842691 /* TableViewTestLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0E44C3187A296000842691 /* TableViewTestLayer.cpp */; };
 		CE0E44CE187A397700842691 /* actor_4_f.png in Resources */ = {isa = PBXBuildFile; fileRef = CE0E44CD187A397700842691 /* actor_4_f.png */; };
 		CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79A1854B26200B74DFE /* actor_4.plist */; };
 		CE15C7B01854B26200B74DFE /* actor_4.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C79B1854B26200B74DFE /* actor_4.png */; };
@@ -331,8 +331,8 @@
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CE0E44C1187A296000842691 /* CustomTableViewCell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CustomTableViewCell.cpp; sourceTree = "<group>"; };
 		CE0E44C2187A296000842691 /* CustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableViewCell.h; sourceTree = "<group>"; };
-		CE0E44C3187A296000842691 /* TableViewTestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableViewTestScene.cpp; sourceTree = "<group>"; };
-		CE0E44C4187A296000842691 /* TableViewTestScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTestScene.h; sourceTree = "<group>"; };
+		CE0E44C3187A296000842691 /* TableViewTestLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableViewTestLayer.cpp; sourceTree = "<group>"; };
+		CE0E44C4187A296000842691 /* TableViewTestLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTestLayer.h; sourceTree = "<group>"; };
 		CE0E44CD187A397700842691 /* actor_4_f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_4_f.png; sourceTree = "<group>"; };
 		CE15C79A1854B26200B74DFE /* actor_4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_4.plist; sourceTree = "<group>"; };
 		CE15C79B1854B26200B74DFE /* actor_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_4.png; sourceTree = "<group>"; };
@@ -632,8 +632,8 @@
 			children = (
 				CE0E44C1187A296000842691 /* CustomTableViewCell.cpp */,
 				CE0E44C2187A296000842691 /* CustomTableViewCell.h */,
-				CE0E44C3187A296000842691 /* TableViewTestScene.cpp */,
-				CE0E44C4187A296000842691 /* TableViewTestScene.h */,
+				CE0E44C3187A296000842691 /* TableViewTestLayer.cpp */,
+				CE0E44C4187A296000842691 /* TableViewTestLayer.h */,
 			);
 			path = table;
 			sourceTree = "<group>";
@@ -1011,7 +1011,7 @@
 				CE15C7E51854B2E200B74DFE /* SRPGMapLayer.cpp in Sources */,
 				CE15C7E61854B2E200B74DFE /* SRPGScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
-				CE0E44C6187A296000842691 /* TableViewTestScene.cpp in Sources */,
+				CE0E44C6187A296000842691 /* TableViewTestLayer.cpp in Sources */,
 				CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */,
 				CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */,
 				CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */,

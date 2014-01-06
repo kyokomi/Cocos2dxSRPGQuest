@@ -10,12 +10,18 @@
 #include "ActorSprite.h"
 #include "DropItemSprite.h"
 #include "BattleLogic.h"
-#include "TableViewTestScene.h"
+#include "TableViewTestLayer.h"
 //#include "MenuItemSelectLabelSprite.h"
 
 USING_NS_CC;
 
 int GetRandom(int min,int max);
+
+std::size_t f_r(const std::string& s, char c)
+{
+    std::string::size_type pos = s.find(c);
+    return (pos == std::string::npos) ? 0 : (1 + f_r(s.substr(pos+1), c));
+}
 
 RogueScene::RogueScene()
 :m_gameStatus(GameStatus::INIT),
@@ -23,7 +29,8 @@ m_TurnCount(0),
 m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
 m_baseContentSize(Size::ZERO),
-m_isShowItemList(false)
+m_isShowItemList(false),
+m_playerItemList(std::list<DropItemSprite::DropItemDto>())
 {
 }
 
@@ -133,6 +140,63 @@ bool RogueScene::init()
     // マップのフロントレイヤーに追加
     pFrontLayer->addChild(draw, RogueScene::TiledMapIndex::zGridLineIndex, RogueScene::TiledMapTag::kGridLineTag);
 
+    //-------------------------
+    // ステータスバー？
+    //-------------------------
+    auto statusLayer = LayerColor::create(Color4B::BLACK);
+    statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
+    statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
+    
+    // TODO: あとで更新する
+    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
+    sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
+    statusLayer->addChild(sampleText);
+    
+    this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
+    
+    //    // 下のステータスバー2
+    //    auto pStatusLayer2 = LayerColor::create(Color4B::BLACK);
+    //    pStatusLayer2->setContentSize(Size(m_baseTileSize.width, m_baseTileSize.height));
+    //    pStatusLayer2->setPosition(Point(0, 0));
+    //
+    //    // TODO: アイコン表示するかな（ステータスバー２？）
+    //    auto pFaceSprite = Sprite::createWithSpriteFrame(SpriteFrame::create("actor_4_f.png", Rect(0, 0, 96, 96)));
+    //    float scale = 1.0f / 3.0f;
+    //    pFaceSprite->setScale(scale, scale);
+    //    //    pFaceSprite->setContentSize(pFaceSprite->getContentSize() * scale);
+    //    //    CCLOG("getContentSize (%f, %f) ", pFaceSprite->getContentSize().width, pFaceSprite->getContentSize().height);
+    //    //    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width / 2, pFaceSprite->getContentSize().height / 2));
+    //    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width * pFaceSprite->getScaleX() / 2, pFaceSprite->getContentSize().height * pFaceSprite->getScaleY() / 2));
+    //    pStatusLayer2->addChild(pFaceSprite);
+    //
+    //    this->addChild(pStatusLayer2, RogueScene::zStatusBar2Index, RogueScene::kStatusBar2Tag);
+    
+    //-------------------------
+    // ゲームログ表示
+    //-------------------------
+    //    float startWidth = pFaceSprite->getContentSize().width * pFaceSprite->getScaleX();
+    auto pGameLogLayer = LayerColor::create(Color4B(0, 0, 0, 192));
+    pGameLogLayer->setContentSize(Size(winSize.width * 0.8, m_baseTileSize.height * 1.5));
+    pGameLogLayer->setPosition(winSize.width / 2 - pGameLogLayer->getContentSize().width / 2, 0);
+    
+    int baseFontSize = 10;
+    auto pLogTextLabel = LabelTTF::create("", "", baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
+    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 2));
+    pGameLogLayer->addChild(pLogTextLabel);
+    this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
+    
+    // ------------------------
+    // ミニマップ
+    // ------------------------
+    // 青で半透明
+    auto miniMapLayer = LayerColor::create(Color4B(0, 0, 196, 128));
+    // 1/8サイズ
+    miniMapLayer->setContentSize(Size(m_baseMapSize.width * m_baseTileSize.width / 8,
+                                      m_baseMapSize.height * m_baseTileSize.height / 8));
+    // ステータスバーの下くらい
+    miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
+    this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
+    
     // ---------------------
     // プレイヤー生成
     // ---------------------
@@ -216,7 +280,7 @@ bool RogueScene::init()
     enemySprite->setPosition(indexToPoint(enemyMapItem.mapIndex)); // 画面の中心
     enemySprite->setActorMapItem(enemyMapItem);
     enemySprite->runBottomAction();
-    pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::zTiledMapEnemyBaseIndex + enemyMapItem.seqNo));
+    pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::kTiledMapEnemyBaseTag + enemyMapItem.seqNo));
     
     // マップに追加
     m_mapManager.addActor(enemySprite->getActorMapItem());
@@ -229,76 +293,10 @@ bool RogueScene::init()
     dropItemDto.imageResId = 64;
     dropItemDto.name = "ポーション";
     
-    DropMapItem dropMapItem;
-    dropMapItem.seqNo = 1;
-    dropMapItem.itemId = dropItemDto.itemId;
-    dropMapItem.mapDataType = MapDataType::MAP_ITEM;
-    dropMapItem.moveDist = 0;
-    dropMapItem.mapIndex = {7, 5, MoveDirectionType::MOVE_NONE}; // TODO: 場所は仮
-    
-    auto pDropItemSprite = DropItemSprite::createWithDropItemDto(dropItemDto);
-    pDropItemSprite->setDropMapItem(dropMapItem);
-    pDropItemSprite->setPosition(indexToPoint(dropMapItem.mapIndex));
-    pDropItemLayer->addChild(pDropItemSprite, RogueScene::zTiledMapDropItemBaseIndex, RogueScene::kTiledMapDropItemBaseTag + dropMapItem.seqNo);
-    
-    // マップに追加
-    m_mapManager.addDropItem(pDropItemSprite->getDropMapItem());
-    
-    //-------------------------
-    // ステータスバー？
-    //-------------------------
-    auto statusLayer = LayerColor::create(Color4B::BLACK);
-    statusLayer->setContentSize(Size(winSize.width, m_baseTileSize.height * 0.8));
-    statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
-    
-    // TODO: あとで更新する
-    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
-    sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
-    statusLayer->addChild(sampleText);
-    
-    this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
+    MapIndex mapIndex = {7, 5, MoveDirectionType::MOVE_NONE};
+    tileSetDropMapItem(dropItemDto, mapIndex);
 
-//    // 下のステータスバー2
-//    auto pStatusLayer2 = LayerColor::create(Color4B::BLACK);
-//    pStatusLayer2->setContentSize(Size(m_baseTileSize.width, m_baseTileSize.height));
-//    pStatusLayer2->setPosition(Point(0, 0));
-//    
-//    // TODO: アイコン表示するかな（ステータスバー２？）
-//    auto pFaceSprite = Sprite::createWithSpriteFrame(SpriteFrame::create("actor_4_f.png", Rect(0, 0, 96, 96)));
-//    float scale = 1.0f / 3.0f;
-//    pFaceSprite->setScale(scale, scale);
-//    //    pFaceSprite->setContentSize(pFaceSprite->getContentSize() * scale);
-//    //    CCLOG("getContentSize (%f, %f) ", pFaceSprite->getContentSize().width, pFaceSprite->getContentSize().height);
-//    //    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width / 2, pFaceSprite->getContentSize().height / 2));
-//    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width * pFaceSprite->getScaleX() / 2, pFaceSprite->getContentSize().height * pFaceSprite->getScaleY() / 2));
-//    pStatusLayer2->addChild(pFaceSprite);
-//    
-//    this->addChild(pStatusLayer2, RogueScene::zStatusBar2Index, RogueScene::kStatusBar2Tag);
-    
-    //-------------------------
-    // ゲームログ表示
-    //-------------------------
-//    float startWidth = pFaceSprite->getContentSize().width * pFaceSprite->getScaleX();
-    auto pGameLogLayer = LayerColor::create(Color4B(0, 0, 0, 192));
-    pGameLogLayer->setContentSize(Size(winSize.width * 0.8, m_baseTileSize.height * 1.5));
-    pGameLogLayer->setPosition(winSize.width / 2 - pGameLogLayer->getContentSize().width / 2, 0);
-    
-    int baseFontSize = 10;
-    auto pLogTextLabel = LabelTTF::create("", "", baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
-    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 2));
-    pGameLogLayer->addChild(pLogTextLabel);
-    this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
-    
-    // ------------------------
-    // ミニマップ
-    // ------------------------
-    // 青で半透明
-    auto miniMapLayer = LayerColor::create(Color4B(0, 0, 196, 128));
-    // 1/8サイズ
-    miniMapLayer->setContentSize(Size(m_baseMapSize.width * m_baseTileSize.width / 8,
-                                      m_baseMapSize.height * m_baseTileSize.height / 8));
-    // ステータスバーの下くらい
-    miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
+    // TOOD: あとで整理する
     
     // プレイヤーの位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
     auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
@@ -323,21 +321,6 @@ bool RogueScene::init()
     miniMapEnemyLayer->setTag(enemySprite->getTag());
     // add
     miniMapLayer->addChild(miniMapEnemyLayer);
-    
-    this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
-    
-    // TODO: アイテムの数だけよばないといけないので関数化するといい
-    
-    // アイテムの位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？ 33ccff
-    auto miniMapItemLayer = LayerColor::create(Color4B(51, 204, 255, 255));
-    // タイルの1/8サイズ
-    miniMapItemLayer->setContentSize(m_baseTileSize / 8);
-    // 現在位置からPositionを取得して1/8にする
-    miniMapItemLayer->setPosition(indexToPointNotTileSize(pDropItemSprite->getDropMapItem()->mapIndex) / 8);
-    // 移動時に更新できるようにseqNoをtag管理
-    miniMapItemLayer->setTag(pDropItemSprite->getTag());
-    // add
-    miniMapLayer->addChild(miniMapItemLayer);
     
     // -------------------------------
     // メニュー
@@ -413,8 +396,8 @@ void RogueScene::enemyTurn()
 {
     // モンスターの数だけ繰り返す
     std::list<ActorMapItem> enemyList = m_mapManager.findEnemyMapItem();
-    for (ActorMapItem enemyMapItem : enemyList) {
-        
+    for (ActorMapItem enemyMapItem : enemyList)
+    {
         // TODO: 全部同時には動かないようにしないといけない（アニメーションのコールバック系どうするかな・・・）
 //        while (true)
 //        {
@@ -436,6 +419,8 @@ void RogueScene::enemyTurn()
             // プレイヤーの周辺で最もコストが低い箇所へ移動
             auto playerMapIndex = pPlayerActorSprite->getActorMapItem()->mapIndex;
             std::list<MapIndex> searchMapIndexList;
+            searchMapIndexList.clear();
+            
             // 右
             MapIndex searchMapIndex = playerMapIndex;
             searchMapIndex.x += 1;
@@ -472,7 +457,7 @@ void RogueScene::enemyTurn()
                     }
                 }
             }
-          
+            
             MapIndex moveMapIndex = enemyMapItem.mapIndex;
             if (isPlayerAttack)
             {
@@ -483,28 +468,14 @@ void RogueScene::enemyTurn()
             {
                 // 移動可能な経路情報を設定
                 m_mapManager.createActorFindDist(enemyMapItem.mapIndex, enemyMapItem.moveDist);
+                
                 // 最も移動コストがかからない場所を抽出
-                MapItem* pTargetMoveDistMapItem;
-                for (MapIndex mapIndex : searchMapIndexList)
-                {
-                    auto pMapItem = m_mapManager.getMapItem(&mapIndex);
-                    if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
-                    {
-                        if (!pTargetMoveDistMapItem)
-                        {
-                            pTargetMoveDistMapItem = pMapItem;
-                        }
-                        else if (pTargetMoveDistMapItem->moveDist < pMapItem->moveDist)
-                        {
-                            pTargetMoveDistMapItem = pMapItem;
-                        }
-                    }
-                }
+                MapItem targetMoveDistMapItem = m_mapManager.searchTargetMapItem(searchMapIndexList);
                 
                 // 移動リスト作成
-                if (pTargetMoveDistMapItem)
+                if (targetMoveDistMapItem.mapDataType == MapDataType::MOVE_DIST)
                 {
-                    std::list<MapIndex> moveList = m_mapManager.createMovePointList(&pTargetMoveDistMapItem->mapIndex,
+                    std::list<MapIndex> moveList = m_mapManager.createMovePointList(&targetMoveDistMapItem.mapIndex,
                                                                                     &enemyMapItem);
                     std::list<MapIndex>::iterator it = moveList.begin();
                     it++;
@@ -532,7 +503,14 @@ void RogueScene::enemyTurn()
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::ENEMY)
             {
-                logMessage("敵ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
+                if (MAP_INDEX_DIFF(enemyMapItem.mapIndex, moveMapIndex))
+                {
+                    //logMessage("待機 seqNo = %d (%d, %d)");
+                }
+                else
+                {
+                    logMessage("敵ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
+                }
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::PLAYER)
             {
@@ -574,7 +552,10 @@ bool RogueScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     if (m_gameStatus == GameStatus::PLAYER_TURN)
     {
-        return true;
+        if (!m_isShowItemList)
+        {
+            return true;
+        }
     }
     return false;
 }
@@ -665,6 +646,9 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
                 auto pDropItemDto = pDropItemSprite->getDropItemDto();
                 logMessage("%sを拾った。", pDropItemDto->name.c_str());
                 
+                // イベントリに追加する
+                m_playerItemList.push_back(*pDropItemDto);
+                
                 // mapManagerから消す
                 m_mapManager.removeMapItem(pDropMapItem);
                 
@@ -674,8 +658,6 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
                 
                 // Map上からremoveする
                 pDropItemLayer->removeChild(pDropItemSprite);
-                
-                // TODO: イベントリに追加する
             }
             
             // 移動処理
@@ -834,6 +816,12 @@ void RogueScene::logMessage(const char * pszFormat, ...)
     CCLOG("logMessage: %s", szBuf);
     
     auto pGameLogNode = getChildByTag(RogueScene::kGameLogTag);
+    // とりあえず子要素がないなら無理
+    if (!pGameLogNode || pGameLogNode->getChildrenCount() <= 0)
+    {
+        return;
+    }
+    
     auto pGameLogText = (LabelTTF*) pGameLogNode->getChildren()->getObjectAtIndex(0); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
     if (pGameLogText)
     {
@@ -841,12 +829,18 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         auto pMessage = String::create(szBuf);
         
         pMessage->append("\n");
+
         std::string nowString = pGameLogText->getString();
+        
+        int count = f_r(nowString, '\n');
+        
         // 3行まで表示
-        if (std::count(nowString.begin(), nowString.end(), '\n') >= 2)
+        if (count >= 2)
+//        if (std::count(nowString.begin(), nowString.end(), '\n') >= 2)
         {
-            unsigned int loc = nowString.find_last_of('\n', nowString.size());
-            CCLOG("logMessage: loc = %d size = %ld", loc, nowString.size());
+            int size = nowString.size();
+            unsigned int loc = nowString.find_last_of('\n', size);
+            CCLOG("logMessage: loc = %d size = %d", loc, size);
             if (loc != std::string::npos)
             {
                 nowString.erase(loc, nowString.size() - loc);
@@ -882,29 +876,64 @@ void RogueScene::showItemList(int showTextIndex)
     }
     m_isShowItemList = true;
     
-    std::vector<std::string> textArray;
-    textArray.push_back("ポーション");
-    textArray.push_back("ただの紙");
-//    for (int i = 0; i < showTextIndex; i++)
-//    {
-//        Json* item = Json_getItemAt(m_novelJson, i);
-//        if (Json_getItem(item, "text"))
-//        {
-//            textArray.push_back(Json_getItem(item, "text")->valuestring);
-//        }
-//    }
+    // TODO: 変更がないときのメモリ効率が良くないきがする。。。
+    std::list<std::string> itemNameList;
+    for (DropItemSprite::DropItemDto dropItem : m_playerItemList)
+    {
+        itemNameList.push_back(dropItem.name);
+    }
+    
     auto pItemListLayer = static_cast<TableViewTestLayer*>(this->getChildByTag(RogueScene::kItemListTag));
     if (pItemListLayer)
     {
-        pItemListLayer->makeTextLog(textArray);
+        pItemListLayer->makeItemList(itemNameList);
         pItemListLayer->setVisible(true);
     }
     else
     {
         auto winSize = Director::getInstance()->getWinSize();
         
-        pItemListLayer = TableViewTestLayer::createWithTextArray(textArray, Size(winSize.width / 3, winSize.height / 2));
+        pItemListLayer = TableViewTestLayer::createWithTextArray(itemNameList, Size(winSize.width / 3, winSize.height / 2));
         pItemListLayer->setPosition(Point(winSize.width - pItemListLayer->getContentSize().width, winSize.height / 2 - pItemListLayer->getContentSize().height / 2));
+        pItemListLayer->setCallback([this](Object* pObject, long touchedIdx) {
+            // 行タップ時の処理
+            CCLOG(" touched idx = %ld", touchedIdx);
+            
+            // touched DropItemDto
+            auto it = m_playerItemList.begin();
+            std::advance(it, touchedIdx);
+            auto dropItemDto = (DropItemSprite::DropItemDto) *it;
+            
+            // player
+            auto pPlayerSprite = getPlayerActorSprite(1);
+            
+            // TODO: アイテムの詳細ウィンドウ（以下のボタン操作のみ可能なモーダルウィンドウ）
+                // アイテムを捨てる
+                // アイテムを使う
+                // アイテムを装備する
+                // 閉じる
+
+            // --------------------------
+            // アイテムを捨てる
+            // --------------------------
+            // アイテムをマップのプレイヤーの足元に置く
+            if (this->tileSetDropMapItem(dropItemDto, pPlayerSprite->getActorMapItem()->mapIndex))
+            {
+                this->logMessage("%sを置いた。", dropItemDto.name.c_str());
+                // インベントリから削除
+                m_playerItemList.erase(it);
+                
+                // インベントリは閉じる
+                this->hideItemList();
+            }
+            else
+            {
+                this->logMessage("%sを置けなかった。", dropItemDto.name.c_str());
+            }
+            
+            int size = m_playerItemList.size();
+            CCLOG(" m_playerItemList size = %d", size);
+        });
         this->addChild(pItemListLayer, RogueScene::zItemListIndex, RogueScene::kItemListTag);
     }
 }
@@ -919,6 +948,53 @@ void RogueScene::hideItemList()
     m_isShowItemList = false;
 }
 
+
+bool RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex)
+{
+    // すでにアイテムが置いてある場合は置けない
+    if (m_mapManager.getDropMapItem(&mapIndex)->mapDataType != MapDataType::NONE)
+    {
+        //logMessage("%sを置けなかった。", dropItemDto.name.c_str());
+        return false;
+    }
+    
+    auto pTileMapLayer = getChildByTag(RogueScene::kTiledMapTag);
+    auto pDropItemLayer = pTileMapLayer->getChildByTag(RogueScene::kTiledMapDropItemBaseTag);
+    
+    DropMapItem dropMapItem;
+    // 一意になるようにする x * 100 + y（100マスないからいけるはず）
+    dropMapItem.seqNo = mapIndex.x * 100 + mapIndex.y;
+    dropMapItem.itemId = dropItemDto.itemId;
+    dropMapItem.mapDataType = MapDataType::MAP_ITEM;
+    dropMapItem.moveDist = 0;
+    dropMapItem.mapIndex = mapIndex;
+    
+    auto pDropItemSprite = DropItemSprite::createWithDropItemDto(dropItemDto);
+    pDropItemSprite->setDropMapItem(dropMapItem);
+    pDropItemSprite->setPosition(indexToPoint(dropMapItem.mapIndex));
+    pDropItemLayer->addChild(pDropItemSprite, RogueScene::zTiledMapDropItemBaseIndex, RogueScene::kTiledMapDropItemBaseTag + dropMapItem.seqNo);
+    
+    // マップに追加
+    m_mapManager.addDropItem(pDropItemSprite->getDropMapItem());
+    
+    //logMessage("%sを置いた。", dropItemDto.name.c_str());
+    
+    // ミニマップも更新
+    auto pMiniMapLayer = getChildByTag(kMiniMapTag);
+    // TODO: spriteBatchNodeにしないとダメかも？
+    auto pMiniMapItemLayer = LayerColor::create(Color4B(51, 204, 255, 255));
+    // タイルの1/8サイズ
+    pMiniMapItemLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
+    pMiniMapItemLayer->setPosition(indexToPointNotTileSize(pDropItemSprite->getDropMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにtag管理
+    pMiniMapItemLayer->setTag(pDropItemSprite->getTag());
+
+    // add
+    pMiniMapLayer->addChild(pMiniMapItemLayer);
+    
+    return true;
+}
 #pragma mark
 #pragma mark マップ座標変換
 
