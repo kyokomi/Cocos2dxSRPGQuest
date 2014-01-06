@@ -10,6 +10,8 @@
 #include "ActorSprite.h"
 #include "DropItemSprite.h"
 #include "BattleLogic.h"
+#include "TableViewTestScene.h"
+//#include "MenuItemSelectLabelSprite.h"
 
 USING_NS_CC;
 
@@ -20,7 +22,8 @@ RogueScene::RogueScene()
 m_TurnCount(0),
 m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
-m_baseContentSize(Size::ZERO)
+m_baseContentSize(Size::ZERO),
+m_isShowItemList(false)
 {
 }
 
@@ -255,15 +258,34 @@ bool RogueScene::init()
     
     this->addChild(statusLayer, RogueScene::zStatusBarIndex, RogueScene::kStatusBarTag);
 
+//    // 下のステータスバー2
+//    auto pStatusLayer2 = LayerColor::create(Color4B::BLACK);
+//    pStatusLayer2->setContentSize(Size(m_baseTileSize.width, m_baseTileSize.height));
+//    pStatusLayer2->setPosition(Point(0, 0));
+//    
+//    // TODO: アイコン表示するかな（ステータスバー２？）
+//    auto pFaceSprite = Sprite::createWithSpriteFrame(SpriteFrame::create("actor_4_f.png", Rect(0, 0, 96, 96)));
+//    float scale = 1.0f / 3.0f;
+//    pFaceSprite->setScale(scale, scale);
+//    //    pFaceSprite->setContentSize(pFaceSprite->getContentSize() * scale);
+//    //    CCLOG("getContentSize (%f, %f) ", pFaceSprite->getContentSize().width, pFaceSprite->getContentSize().height);
+//    //    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width / 2, pFaceSprite->getContentSize().height / 2));
+//    pFaceSprite->setPosition(Point(pFaceSprite->getContentSize().width * pFaceSprite->getScaleX() / 2, pFaceSprite->getContentSize().height * pFaceSprite->getScaleY() / 2));
+//    pStatusLayer2->addChild(pFaceSprite);
+//    
+//    this->addChild(pStatusLayer2, RogueScene::zStatusBar2Index, RogueScene::kStatusBar2Tag);
+    
     //-------------------------
     // ゲームログ表示
     //-------------------------
+//    float startWidth = pFaceSprite->getContentSize().width * pFaceSprite->getScaleX();
     auto pGameLogLayer = LayerColor::create(Color4B(0, 0, 0, 192));
-    pGameLogLayer->setContentSize(Size(winSize.width / 2, winSize.height / 4));
-    pGameLogLayer->setPosition(winSize.width - pGameLogLayer->getContentSize().width, 0);
+    pGameLogLayer->setContentSize(Size(winSize.width * 0.8, m_baseTileSize.height * 1.5));
+    pGameLogLayer->setPosition(winSize.width / 2 - pGameLogLayer->getContentSize().width / 2, 0);
     
-    auto pLogTextLabel = LabelTTF::create("start", "", 10, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::BOTTOM);
-    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2));
+    int baseFontSize = 10;
+    auto pLogTextLabel = LabelTTF::create("", "", baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
+    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 2));
     pGameLogLayer->addChild(pLogTextLabel);
     this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
     
@@ -317,6 +339,40 @@ bool RogueScene::init()
     // add
     miniMapLayer->addChild(miniMapItemLayer);
     
+    // -------------------------------
+    // メニュー
+    // -------------------------------
+    
+    //const char *pszFileName, const char *string, const char *fontName, float fontSize, Color3B normalColor, Color3B selectedColor, Color3B disabledColor, ccMenuCallback& callback
+    auto pMenuButtonLabel = LabelTTF::create("持ち物", "", 10);
+    pMenuButtonLabel->setColor(Color3B::BLACK);
+    auto rect = Rect(0, 0, 300, 30);
+    auto capRect = Rect(0, 0, 300, 30);
+    auto pScale9Sprite = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
+    auto pMenuControlBtn = extension::ControlButton::create(pMenuButtonLabel, pScale9Sprite);
+    pMenuControlBtn->setPreferredSize(Size(40, 20));
+    pMenuControlBtn->setColor(Color3B::ORANGE);
+    pMenuControlBtn->setOpacity(192);
+    pMenuControlBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RogueScene::onMenuSelectItemListCallback), cocos2d::extension::Control::EventType::TOUCH_DOWN);
+    pMenuControlBtn->setPosition(Point(winSize.width - pMenuControlBtn->getContentSize().width / 2, pMenuControlBtn->getContentSize().height / 2));
+//    auto* menuItem1 = MenuItemLabel::create(pMenuButtonLabel, [this](Object *pSender) {
+//        CCLOG("menuItem1が押された！");
+//        if (m_isShowItemList)
+//        {
+//            hideItemList();
+//        }
+//        else
+//        {
+//            showItemList(1);
+//        }
+//    });
+//    menuItem1->setColor(Color3B::GREEN);
+//    menuItem1->setPosition(Point(winSize.width - menuItem1->getContentSize().width / 2, menuItem1->getContentSize().height / 2));
+//    auto* menu = Menu::create(menuItem1, NULL);
+//    menu->setPosition(Point::ZERO);
+//    this->addChild(menu, RogueScene::zMenuIndex, RogueScene::kMenuTag);
+
+    this->addChild(pMenuControlBtn, RogueScene::zMenuIndex, RogueScene::kMenuTag);
     // ---------------------------------
     
     // プレイヤーの先行
@@ -778,16 +834,16 @@ void RogueScene::logMessage(const char * pszFormat, ...)
     CCLOG("logMessage: %s", szBuf);
     
     auto pGameLogNode = getChildByTag(RogueScene::kGameLogTag);
-    auto pGameLogText = (LabelTTF*) pGameLogNode->getChildren()->getObjectAtIndex(0);
+    auto pGameLogText = (LabelTTF*) pGameLogNode->getChildren()->getObjectAtIndex(0); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
     if (pGameLogText)
     {
-        
+        // TODO: 別クラスにしてログをlistで保持する。デフォルトの表示は1件だけで、center寄せ表示でいいかと
         auto pMessage = String::create(szBuf);
         
         pMessage->append("\n");
         std::string nowString = pGameLogText->getString();
-        // 5行まで
-        if (std::count(nowString.begin(), nowString.end(), '\n') >= 4)
+        // 3行まで表示
+        if (std::count(nowString.begin(), nowString.end(), '\n') >= 2)
         {
             unsigned int loc = nowString.find_last_of('\n', nowString.size());
             CCLOG("logMessage: loc = %d size = %ld", loc, nowString.size());
@@ -798,8 +854,69 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         }
         pMessage->append(nowString);
         pGameLogText->setString(pMessage->getCString());
-        pGameLogText->setPosition(Point(pGameLogText->getContentSize().width / 2, pGameLogNode->getContentSize().height - pGameLogText->getContentSize().height / 2));
+        pGameLogText->setVerticalAlignment(cocos2d::TextVAlignment::TOP);
+        pGameLogText->setHorizontalAlignment(cocos2d::TextHAlignment::LEFT);
+        pGameLogText->setPosition(Point(pGameLogText->getFontSize() / 2 + pGameLogText->getContentSize().width / 2, pGameLogNode->getContentSize().height - pGameLogText->getContentSize().height / 2 - pGameLogText->getFontSize() / 2));
     }
+}
+
+void RogueScene::onMenuSelectItemListCallback(cocos2d::Object *pSender, extension::Control::EventType eventType)
+{
+//    AudioUtil::playBtnSE();
+    
+    if (m_isShowItemList)
+    {
+        hideItemList();
+    }
+    else
+    {
+        showItemList(1);
+    }
+}
+
+void RogueScene::showItemList(int showTextIndex)
+{
+    if (showTextIndex <= 0)
+    {
+        return;
+    }
+    m_isShowItemList = true;
+    
+    std::vector<std::string> textArray;
+    textArray.push_back("ポーション");
+    textArray.push_back("ただの紙");
+//    for (int i = 0; i < showTextIndex; i++)
+//    {
+//        Json* item = Json_getItemAt(m_novelJson, i);
+//        if (Json_getItem(item, "text"))
+//        {
+//            textArray.push_back(Json_getItem(item, "text")->valuestring);
+//        }
+//    }
+    auto pItemListLayer = static_cast<TableViewTestLayer*>(this->getChildByTag(RogueScene::kItemListTag));
+    if (pItemListLayer)
+    {
+        pItemListLayer->makeTextLog(textArray);
+        pItemListLayer->setVisible(true);
+    }
+    else
+    {
+        auto winSize = Director::getInstance()->getWinSize();
+        
+        pItemListLayer = TableViewTestLayer::createWithTextArray(textArray, Size(winSize.width / 3, winSize.height / 2));
+        pItemListLayer->setPosition(Point(winSize.width - pItemListLayer->getContentSize().width, winSize.height / 2 - pItemListLayer->getContentSize().height / 2));
+        this->addChild(pItemListLayer, RogueScene::zItemListIndex, RogueScene::kItemListTag);
+    }
+}
+
+void RogueScene::hideItemList()
+{
+    auto pItemListLayer = static_cast<TableViewTestLayer*>(this->getChildByTag(RogueScene::kItemListTag));
+    if (pItemListLayer)
+    {
+        pItemListLayer->setVisible(false);
+    }
+    m_isShowItemList = false;
 }
 
 #pragma mark

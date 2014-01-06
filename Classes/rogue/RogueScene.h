@@ -10,6 +10,7 @@
 #define __Cocos2dxSRPGQuest__RogueScene__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "MapManager.h"
 #include "ActorSprite.h"
 
@@ -51,7 +52,10 @@ protected:
         kActorBaseTag         = 100000,
         kMiniMapTag           = 150000,
         kStatusBarTag         = 200000,
+        kStatusBar2Tag        = 200001,
         kGameLogTag           = 210000,
+        kItemListTag          = 220000,
+        kMenuTag              = 300000,
     };
     enum Index {
         zTiledMapIndex   = 1,
@@ -62,7 +66,10 @@ protected:
         zActorBaseIndex  = 100000,
         zMiniMapIndex    = 150000,
         zStatusBarIndex  = 200000,
+        zStatusBar2Index = 200001,
         zGameLogIndex    = 210000,
+        zItemListIndex   = 220000,
+        zMenuIndex       = 300000,
     };
 
 private:
@@ -90,6 +97,11 @@ private:
     
     // UI関連
     void logMessage(const char * pszFormat, ...);
+    // アイテムリスト表示中フラグ
+    bool m_isShowItemList;
+    void onMenuSelectItemListCallback(cocos2d::Object *pSender, cocos2d::extension::Control::EventType eventType);
+    void showItemList(int showTextIndex);
+    void hideItemList();
     
     // マップ座標変換
     cocos2d::Point indexToPoint(int mapIndex_x, int mapIndex_y);
