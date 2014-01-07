@@ -95,6 +95,8 @@
 		CEA87A17187BE69D00A2AA80 /* ItemWindowLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */; };
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
 		CEAE9154187C35EC008C5B75 /* PixelMplus10-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEAE9152187C35EC008C5B75 /* PixelMplus10-Regular.ttf */; };
+		CEAE915E187C3B8A008C5B75 /* ItemLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEAE915C187C3B8A008C5B75 /* ItemLogic.cpp */; };
+		CEAE9161187C487E008C5B75 /* item_168.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAE9160187C487E008C5B75 /* item_168.png */; };
 		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
 		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
 		CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4341878EBFC00844C27 /* ActorSprite.cpp */; };
@@ -375,6 +377,9 @@
 		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
 		CEAE9152187C35EC008C5B75 /* PixelMplus10-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PixelMplus10-Regular.ttf"; sourceTree = "<group>"; };
+		CEAE915C187C3B8A008C5B75 /* ItemLogic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ItemLogic.cpp; sourceTree = "<group>"; };
+		CEAE915D187C3B8A008C5B75 /* ItemLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemLogic.h; sourceTree = "<group>"; };
+		CEAE9160187C487E008C5B75 /* item_168.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = item_168.png; sourceTree = "<group>"; };
 		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
 		CEBDB38C1877EDB900869E9D /* actor_901.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_901.png; sourceTree = "<group>"; };
 		CED0A4341878EBFC00844C27 /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
@@ -593,6 +598,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEAE9160187C487E008C5B75 /* item_168.png */,
 				CEA4E1C9187B895800BAA255 /* fonts */,
 				CE38FB91187A96E70023DD14 /* menu_button.png */,
 				CE0E44CD187A397700842691 /* actor_4_f.png */,
@@ -715,6 +721,8 @@
 			children = (
 				CED0A43C1878ECC800844C27 /* BattleLogic.cpp */,
 				CED0A43D1878ECC800844C27 /* BattleLogic.h */,
+				CEAE915C187C3B8A008C5B75 /* ItemLogic.cpp */,
+				CEAE915D187C3B8A008C5B75 /* ItemLogic.h */,
 			);
 			name = logic;
 			path = ../Classes/logic;
@@ -957,6 +965,7 @@
 				CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */,
 				CE15C7C11854B26200B74DFE /* MapScene.ccbi in Resources */,
 				CEAE9154187C35EC008C5B75 /* PixelMplus10-Regular.ttf in Resources */,
+				CEAE9161187C487E008C5B75 /* item_168.png in Resources */,
 				CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */,
 				CE15C7B61854B26200B74DFE /* btn-b-1.png in Resources */,
 				CE0E44CE187A397700842691 /* actor_4_f.png in Resources */,
@@ -1013,6 +1022,7 @@
 			files = (
 				CE38FB89187A8EF80023DD14 /* LabelSprite.cpp in Sources */,
 				CE38FB8A187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp in Sources */,
+				CEAE915E187C3B8A008C5B75 /* ItemLogic.cpp in Sources */,
 				CED0A43E1878ECC800844C27 /* BattleLogic.cpp in Sources */,
 				CE15C7E51854B2E200B74DFE /* SRPGMapLayer.cpp in Sources */,
 				CEA87A17187BE69D00A2AA80 /* ItemWindowLayer.cpp in Sources */,

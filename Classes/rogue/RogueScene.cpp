@@ -6,13 +6,18 @@
 //
 //
 #include "AppMacros.h"
+
 #include "RogueScene.h"
+// ------------------------------
 #include "ActorSprite.h"
 #include "DropItemSprite.h"
-#include "BattleLogic.h"
+
 #include "TableViewTestLayer.h"
 #include "ModalLayer.h"
 #include "ItemWindowLayer.h"
+
+#include "ItemLogic.h"
+#include "BattleLogic.h"
 
 //#include "MenuItemSelectLabelSprite.h"
 
@@ -254,6 +259,17 @@ bool RogueScene::init()
     
     refreshStatus();
     
+    // プレイヤーの位置表示用（同じく1/8サイズ）
+    auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
+    // タイルの1/8サイズ
+    miniMapActorLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
+    miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにplayerIdをtag管理
+    miniMapActorLayer->setTag(actorSprite->getTag());
+    // add
+    miniMapLayer->addChild(miniMapActorLayer);
+    
     // ---------------------
     // 敵キャラ生成
     // ---------------------
@@ -279,68 +295,39 @@ bool RogueScene::init()
     enemyDto.magicPoint = 100;
     enemyDto.magicPointLimit = 100;
     
-    ActorMapItem enemyMapItem;
-    enemyMapItem.mapDataType = MapDataType::ENEMY;
-    enemyMapItem.mapIndex = {4, 4, MoveDirectionType::MOVE_DOWN}; // TODO: 場所は仮
-    enemyMapItem.seqNo = 2;
-    enemyMapItem.moveDist = enemyDto.movePoint;
-    enemyMapItem.attackDist = enemyDto.attackRange;
-    enemyMapItem.moveDone = false;
-    enemyMapItem.attackDone = false;
+    MapIndex enemyMapIndex1 = {4, 4, MoveDirectionType::MOVE_DOWN};
+    tileSetEnemyActorMapItem(enemyDto, enemyMapIndex1);
     
-    auto enemySprite = ActorSprite::createWithActorDto(enemyDto);
-    enemySprite->setPosition(indexToPoint(enemyMapItem.mapIndex)); // 画面の中心
-    enemySprite->setActorMapItem(enemyMapItem);
-    enemySprite->runBottomAction();
-    pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::kTiledMapEnemyBaseTag + enemyMapItem.seqNo));
+    ActorSprite::ActorDto enemyDto2 = enemyDto;
+    MapIndex enemyMapIndex2 = {14,12, MoveDirectionType::MOVE_DOWN};
+    tileSetEnemyActorMapItem(enemyDto2, enemyMapIndex2);
     
-    // マップに追加
-    m_mapManager.addActor(enemySprite->getActorMapItem());
+    ActorSprite::ActorDto enemyDto3 = enemyDto;
+    MapIndex enemyMapIndex3 = {20,4, MoveDirectionType::MOVE_DOWN};
+    tileSetEnemyActorMapItem(enemyDto3, enemyMapIndex3);
     
     //-------------------------
     // アイテム配置
     //-------------------------
     DropItemSprite::DropItemDto dropItemDto;
-    dropItemDto.itemId = 10064;
-    dropItemDto.imageResId = 64;
+    dropItemDto.itemId = 1;
+    dropItemDto.imageResId = 64; // imageId 10064
     dropItemDto.name = "ポーション";
     
     MapIndex mapIndex = {7, 5, MoveDirectionType::MOVE_NONE};
     tileSetDropMapItem(dropItemDto, mapIndex);
 
-    // TOOD: あとで整理する
+    DropItemSprite::DropItemDto dropItemDto2;
+    dropItemDto2.itemId = 2;
+    dropItemDto2.imageResId = 168; // imageId 10168
+    dropItemDto2.name = "ぶどう";
     
-    // プレイヤーの位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
-    auto miniMapActorLayer = LayerColor::create(Color4B::YELLOW);
-    // タイルの1/8サイズ
-    miniMapActorLayer->setContentSize(m_baseTileSize / 8);
-    // 現在位置からPositionを取得して1/8にする
-    miniMapActorLayer->setPosition(indexToPointNotTileSize(actorSprite->getActorMapItem()->mapIndex) / 8);
-    // 移動時に更新できるようにplayerIdをtag管理
-    miniMapActorLayer->setTag(actorSprite->getTag());
-    // add
-    miniMapLayer->addChild(miniMapActorLayer);
-    
-    // TODO: 敵の数だけよばないといけないので関数化するといい
-    
-    // 敵の位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
-    auto miniMapEnemyLayer = LayerColor::create(Color4B::RED);
-    // タイルの1/8サイズ
-    miniMapEnemyLayer->setContentSize(m_baseTileSize / 8);
-    // 現在位置からPositionを取得して1/8にする
-    miniMapEnemyLayer->setPosition(indexToPointNotTileSize(enemySprite->getActorMapItem()->mapIndex) / 8);
-    // 移動時に更新できるようにplayerIdをtag管理
-    miniMapEnemyLayer->setTag(enemySprite->getTag());
-    // add
-    miniMapLayer->addChild(miniMapEnemyLayer);
+    MapIndex mapIndex2 = {10, 9, MoveDirectionType::MOVE_NONE};
+    tileSetDropMapItem(dropItemDto2, mapIndex2);
     
     // -------------------------------
     // メニュー
     // -------------------------------
-    
-    //const char *pszFileName, const char *string, const char *fontName, float fontSize, Color3B normalColor, Color3B selectedColor, Color3B disabledColor, ccMenuCallback& callback
-//    auto pMenuButtonLabel = LabelTTF::create("持ち物", GAME_FONT(8), 8);
-//    pMenuButtonLabel->setColor(Color3B::BLACK);
     auto rect = Rect(0, 0, 300, 30);
     auto capRect = Rect(0, 0, 300, 30);
     auto pScale9Sprite1 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
@@ -389,6 +376,17 @@ void RogueScene::changeGameStatus(GameStatus gameStatus)
         m_mapManager.clearCursor();
         // ターン数を進める
         m_TurnCount++;
+        
+        // TODO: とりあえずここで・・・
+        auto pPlayer = getPlayerActorSprite(1);
+        auto pPlayerDto = pPlayer->getActorDto();
+        
+        // １ターンに1空腹度が減るという
+        if (pPlayerDto->magicPoint > 0)
+        {
+            pPlayerDto->magicPoint--;
+        }
+        refreshStatus();
     }
 }
 
@@ -401,16 +399,13 @@ void RogueScene::enemyTurn()
     std::list<ActorMapItem> enemyList = m_mapManager.findEnemyMapItem();
     for (ActorMapItem enemyMapItem : enemyList)
     {
-        // TODO: 全部同時には動かないようにしないといけない（アニメーションのコールバック系どうするかな・・・）
-//        while (true)
-//        {
-//            
-//        }
-        
         // ランダムでとどまるか移動するかきめる
         int rand = GetRandom(2, 2);
         if (rand == 1)
         {
+            auto pEnemySprite = getEnemyActorSprite(enemyMapItem.seqNo);
+            pEnemySprite->getActorMapItem()->moveDone = true;
+            
             // とどまる
             logMessage("様子を見ている seqNo = %d", enemyMapItem.seqNo);
         }
@@ -495,14 +490,19 @@ void RogueScene::enemyTurn()
                 m_mapManager.checkMoveDirectionType(moveMapIndex, pEnemySprite->getActorMapItem()->mapIndex)
             };
             pEnemySprite->runMoveAction(addMoveIndex);
+            // 行動前にする
+            pEnemySprite->getActorMapItem()->moveDone = false;
+            pEnemySprite->getActorMapItem()->attackDone = false;
             
             if (isMapLayerOver(moveMapIndex))
             {
                 CCLOG("移動不可 seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
+                pEnemySprite->getActorMapItem()->moveDone = true;
             }
             else if (isTiledMapColisionLayer(moveMapIndex))
             {
                 logMessage("壁ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
+                pEnemySprite->getActorMapItem()->moveDone = true;
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::ENEMY)
             {
@@ -514,6 +514,7 @@ void RogueScene::enemyTurn()
                 {
                     logMessage("敵ドーン seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
                 }
+                pEnemySprite->getActorMapItem()->moveDone = true;
             }
             else if (m_mapManager.getActorMapItem(&moveMapIndex)->mapDataType == MapDataType::PLAYER)
             {
@@ -521,27 +522,45 @@ void RogueScene::enemyTurn()
                 auto pEnemyDto = pEnemySprite->getActorDto();
                 
                 int damage = BattleLogic::exec(pEnemyDto, pPlayerDto);
-                if (damage > 0)
-                {
-                    refreshStatus();
-                }
                 
                 // 攻撃イベント
                 logMessage("%sの攻撃: %sに%dダメージ", pEnemyDto->name.c_str(), pPlayerDto->name.c_str(), damage);
+                
+                pEnemySprite->getActorMapItem()->attackDone = true;
             }
             else
             {
                 // 移動中のステータスへ
                 changeGameStatus(GameStatus::ENEMY_ACTION);
                 // 移動開始
-                moveMap(addMoveIndex, enemyMapItem.seqNo, enemyMapItem.mapDataType, CallFunc::create([this](void) {
+                moveMap(addMoveIndex, enemyMapItem.seqNo, enemyMapItem.mapDataType, CallFuncN::create([this, pEnemySprite](Object* pObj) {
 
                     // 移動終わり次のモンスターへいきたいところ
                     // listをメンバ変数で持っちゃえばいけるか？
-//                    changeGameStatus(GameStatus::ENEMY_TURN);
-                    changeGameStatus(GameStatus::PLAYER_TURN);
+                    auto pEnemySprite = static_cast<ActorSprite*>(pObj);
+                    pEnemySprite->getActorMapItem()->moveDone = true;
+                    
+                    bool isTurnEnd = true;
+                    std::list<ActorMapItem> enemyList = m_mapManager.findEnemyMapItem();
+                    for (ActorMapItem enemyMapItem : enemyList)
+                    {
+                        auto pEnemySprite = getEnemyActorSprite(enemyMapItem.seqNo);
+                        auto pEnemyMapItem = pEnemySprite->getActorMapItem();
+                        if (!pEnemyMapItem->moveDone && !pEnemyMapItem->attackDone)
+                        {
+                            isTurnEnd = false;
+                            break;
+                        }
+                    }
+                    if (isTurnEnd)
+                    {
+                        changeGameStatus(GameStatus::PLAYER_TURN);
+                    }
+                    else
+                    {
+                        changeGameStatus(GameStatus::ENEMY_TURN);
+                    }
                 }));
-                //logMessage("移動した seqNo = %d (%d, %d)", enemyMapItem.seqNo, moveMapIndex.x, moveMapIndex.y);
             }
         }
     }
@@ -549,6 +568,17 @@ void RogueScene::enemyTurn()
     if (m_gameStatus != GameStatus::ENEMY_ACTION)
     {
         changeGameStatus(GameStatus::PLAYER_TURN);
+    }
+    bool isTurnEnd = true;
+    for (ActorMapItem enemyMapItem : enemyList)
+    {
+        auto pEnemySprite = getEnemyActorSprite(enemyMapItem.seqNo);
+        auto pEnemyMapItem = pEnemySprite->getActorMapItem();
+        if (!pEnemyMapItem->moveDone && !pEnemyMapItem->attackDone)
+        {
+            isTurnEnd = false;
+            break;
+        }
     }
 }
 
@@ -907,6 +937,9 @@ void RogueScene::showItemList(int showTextIndex)
             if (this->tileSetDropMapItem(dropItemDto, pPlayerSprite->getActorMapItem()->mapIndex))
             {
                 this->logMessage("%sを床においた。", dropItemDto.name.c_str());
+                
+                // ターン消費
+                this->changeGameStatus(RogueScene::ENEMY_TURN);
             }
             else
             {
@@ -918,12 +951,20 @@ void RogueScene::showItemList(int showTextIndex)
         pItemWindowLayer->setItemUseMenuCallback([this](Object* pSender, DropItemSprite::DropItemDto dropItemDto) {
             CCLOG("RogueScene::itemUseMenuCallback");
             
-            this->logMessage("%sをつかった。", dropItemDto.name.c_str());
+            auto pPlayerSprite = getPlayerActorSprite(1);
             
-            // TODO: itemIdで処理してくれるlogicへ
+            // itemIdで処理してくれるlogicへ
+            std::string useMessage = ItemLogic::use(dropItemDto.itemId, pPlayerSprite->getActorDto());
+            
+            this->logMessage(useMessage.c_str());
+//            
+//            this->refreshStatus();
             
             // インベントリは閉じる
             this->hideItemList();
+            
+            // ターン消費
+            this->changeGameStatus(RogueScene::ENEMY_TURN);
         });
         pModalLayer->addChild(pItemWindowLayer, RogueScene::zItemListIndex, RogueScene::kItemListTag);
     }
@@ -963,12 +1004,58 @@ void RogueScene::hideItemList()
 }
 
 
+bool RogueScene::tileSetEnemyActorMapItem(ActorSprite::ActorDto enemyActorDto, MapIndex mapIndex)
+{
+    // すでにプレイヤーが置いてある場合は置けない
+    if (m_mapManager.getActorMapItem(&mapIndex)->mapDataType != MapDataType::NONE)
+    {
+        return false;
+    }
+    auto pTileMapLayer = getChildByTag(RogueScene::kTiledMapTag);
+    auto pEnemyLayer = pTileMapLayer->getChildByTag(RogueScene::kTiledMapEnemyBaseTag);
+    // TODO: 倒したときのことも考えないといけない 出現数のカウントでOK?
+    long enemyCount = pEnemyLayer->getChildrenCount();
+    
+    ActorMapItem enemyMapItem;
+    enemyMapItem.mapDataType = MapDataType::ENEMY;
+    enemyMapItem.mapIndex = mapIndex;
+    enemyMapItem.seqNo = enemyCount;
+    enemyMapItem.moveDist = enemyActorDto.movePoint;
+    enemyMapItem.attackDist = enemyActorDto.attackRange;
+    enemyMapItem.moveDone = false;
+    enemyMapItem.attackDone = false;
+    
+    auto enemySprite = ActorSprite::createWithActorDto(enemyActorDto);
+    enemySprite->setPosition(indexToPoint(enemyMapItem.mapIndex));
+    enemySprite->setActorMapItem(enemyMapItem);
+    enemySprite->runBottomAction();
+    pEnemyLayer->addChild(enemySprite, RogueScene::zTiledMapEnemyBaseIndex, (RogueScene::kTiledMapEnemyBaseTag + enemyMapItem.seqNo));
+    
+    // マップに追加
+    m_mapManager.addActor(enemySprite->getActorMapItem());
+    
+    // ミニマップも更新
+    auto pMiniMapLayer = getChildByTag(kMiniMapTag);
+    
+    // 敵の位置表示用（同じく1/8サイズ）TODO: 数が多くなるならBatchNodeとかにしないと？
+    auto miniMapEnemyLayer = LayerColor::create(Color4B::RED);
+    // タイルの1/8サイズ
+    miniMapEnemyLayer->setContentSize(m_baseTileSize / 8);
+    // 現在位置からPositionを取得して1/8にする
+    miniMapEnemyLayer->setPosition(indexToPointNotTileSize(enemySprite->getActorMapItem()->mapIndex) / 8);
+    // 移動時に更新できるようにplayerIdをtag管理
+    miniMapEnemyLayer->setTag(enemySprite->getTag());
+    // add
+    pMiniMapLayer->addChild(miniMapEnemyLayer);
+    
+    return true;
+}
+
 bool RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex)
 {
     // すでにアイテムが置いてある場合は置けない
     if (m_mapManager.getDropMapItem(&mapIndex)->mapDataType != MapDataType::NONE)
     {
-        //logMessage("%sを置けなかった。", dropItemDto.name.c_str());
         return false;
     }
     
@@ -990,8 +1077,6 @@ bool RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, Map
     
     // マップに追加
     m_mapManager.addDropItem(pDropItemSprite->getDropMapItem());
-    
-    //logMessage("%sを置いた。", dropItemDto.name.c_str());
     
     // ミニマップも更新
     auto pMiniMapLayer = getChildByTag(kMiniMapTag);
@@ -1027,6 +1112,16 @@ void RogueScene::refreshStatus()
         auto pLabelText = static_cast<LabelTTF*>(pStatusText);
         pLabelText->setString(pStr->getCString());
         pLabelText->setPositionX(pLabelText->getContentSize().width / 2);
+        
+        // TODO: 死亡判定ここで？
+        if (pPlayerDto->hitPoint == 0)
+        {
+            logMessage("%sは死亡した。", pPlayerDto->name.c_str());
+        }
+        if (pPlayerDto->magicPoint == 0)
+        {
+            logMessage("%sは空腹で倒れた。", pPlayerDto->name.c_str());
+        }
     }
 }
 

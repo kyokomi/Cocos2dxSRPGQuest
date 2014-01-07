@@ -110,6 +110,7 @@ private:
     void refreshStatus();
     
     // tileSet関連
+    bool tileSetEnemyActorMapItem(ActorSprite::ActorDto enemyActorDto, MapIndex mapIndex);
     bool tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex);
     
     // マップ座標変換

@@ -261,7 +261,12 @@ void ItemWindowLayer::setItemDetail(DropItemSprite::DropItemDto* pDropItemDto)
             }
             else
             {
-                pItemDetailLabel->setString("HPが少し回復します。");
+                // TODO: とりあえず
+                if (pDropItemDto->itemId == 1)
+                    pItemDetailLabel->setString("HPが少し回復します。");
+                else if (pDropItemDto->itemId == 2)
+                    pItemDetailLabel->setString("満腹度が少し回復します。");
+                
             }
         }
     }

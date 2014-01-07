@@ -22,6 +22,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/quest/SRPGScene.cpp \
                    ../../Classes/quest/SRPGMapLayer.cpp \
                    ../../Classes/logic/BattleLogic.cpp \
+                   ../../Classes/logic/ItemLogic.cpp \
                    ../../Classes/rogue/RogueScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
