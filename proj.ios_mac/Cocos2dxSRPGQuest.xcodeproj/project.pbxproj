@@ -96,6 +96,9 @@
 		CE38FB89187A8EF80023DD14 /* LabelSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE38FB85187A8EF80023DD14 /* LabelSprite.cpp */; };
 		CE38FB8A187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE38FB87187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp */; };
 		CE38FB92187A96E70023DD14 /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = CE38FB91187A96E70023DD14 /* menu_button.png */; };
+		CEA4E1D3187B895800BAA255 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */; };
+		CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */; };
+		CEA4E1DD187B8BDD00BAA255 /* misaki_mincho.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */; };
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
 		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
 		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
@@ -373,6 +376,9 @@
 		CE38FB87187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MenuItemSelectLabelSprite.cpp; sourceTree = "<group>"; };
 		CE38FB88187A8EF80023DD14 /* MenuItemSelectLabelSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemSelectLabelSprite.h; sourceTree = "<group>"; };
 		CE38FB91187A96E70023DD14 /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
+		CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Marker Felt.ttf"; sourceTree = "<group>"; };
+		CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_gothic.ttf; sourceTree = "<group>"; };
+		CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_mincho.ttf; sourceTree = "<group>"; };
 		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
 		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
@@ -593,6 +599,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEA4E1C9187B895800BAA255 /* fonts */,
 				CE38FB91187A96E70023DD14 /* menu_button.png */,
 				CE0E44CD187A397700842691 /* actor_4_f.png */,
 				CED0A44A18795FE800844C27 /* item_64.png */,
@@ -682,6 +689,16 @@
 			);
 			name = rogue;
 			path = ../Classes/rogue;
+			sourceTree = "<group>";
+		};
+		CEA4E1C9187B895800BAA255 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */,
+				CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */,
+				CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 		CED0A4331878EBFC00844C27 /* actor */ = {
@@ -944,8 +961,10 @@
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				CE15C7C31854B26200B74DFE /* tmx in Resources */,
+				CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */,
 				CE15C7C11854B26200B74DFE /* MapScene.ccbi in Resources */,
 				CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */,
+				CEA4E1DD187B8BDD00BAA255 /* misaki_mincho.ttf in Resources */,
 				CE15C7B81854B26200B74DFE /* btn-back-0.png in Resources */,
 				CE15C7B61854B26200B74DFE /* btn-b-1.png in Resources */,
 				CE0E44CE187A397700842691 /* actor_4_f.png in Resources */,
@@ -981,6 +1000,7 @@
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				CE15C7B31854B26200B74DFE /* btn-a-1.png in Resources */,
+				CEA4E1D3187B895800BAA255 /* Marker Felt.ttf in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
 				CE15C7B91854B26200B74DFE /* btn-back-1.png in Resources */,
 				CE15C7BF1854B26200B74DFE /* japan_map001.png in Resources */,

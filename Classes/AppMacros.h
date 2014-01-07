@@ -9,6 +9,7 @@
 #ifndef nyandash_AppMacros_h
 #define nyandash_AppMacros_h
 
+#include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 
 typedef struct tagResource
@@ -22,6 +23,13 @@ static Resource largeResource = { cocos2d::Size(1024, 768), "resources-large" };
 static Resource xlargeResource = { cocos2d::Size(2048, 1536), "resources-xlarge" };
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 577);
+
+// 美咲フォント（MISAKI_FONT）
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define MISAKI_FONT "fonts/misaki_gothic.ttf"
+#else
+#define MISAKI_FONT "MisakiGothic"
+#endif
 
 // マルチレゾリューション対応
 #define HOGE() Director::getInstance()->setOpenGLView(eglView); \

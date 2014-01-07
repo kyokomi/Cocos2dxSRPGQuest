@@ -103,6 +103,7 @@ private:
     void onMenuSelectItemListCallback(cocos2d::Object *pSender, cocos2d::extension::Control::EventType eventType);
     void showItemList(int showTextIndex);
     void hideItemList();
+    void refreshStatus();
     
     // tileSet関連
     bool tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex);

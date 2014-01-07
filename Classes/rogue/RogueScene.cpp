@@ -5,7 +5,7 @@
 //  Created by kyokomi on 2014/01/02.
 //
 //
-
+#include "AppMacros.h"
 #include "RogueScene.h"
 #include "ActorSprite.h"
 #include "DropItemSprite.h"
@@ -148,7 +148,8 @@ bool RogueScene::init()
     statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
     
     // TODO: あとで更新する
-    auto sampleText = LabelTTF::create(" 1F Lv1 HP 15/15 満腹度 100/100        0 Gold", "", 12);
+    auto sampleText = LabelTTF::create(" --F Lv-- HP ---/--- 満腹度 ---/---          - G", MISAKI_FONT, 16);
+    
     sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
     statusLayer->addChild(sampleText);
     
@@ -179,8 +180,8 @@ bool RogueScene::init()
     pGameLogLayer->setContentSize(Size(winSize.width * 0.8, m_baseTileSize.height * 1.5));
     pGameLogLayer->setPosition(winSize.width / 2 - pGameLogLayer->getContentSize().width / 2, 0);
     
-    int baseFontSize = 10;
-    auto pLogTextLabel = LabelTTF::create("", "", baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
+    int baseFontSize = 8;
+    auto pLogTextLabel = LabelTTF::create("", MISAKI_FONT, baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
     pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 2));
     pGameLogLayer->addChild(pLogTextLabel);
     this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
@@ -241,6 +242,8 @@ bool RogueScene::init()
     
     // マップに追加
     m_mapManager.addActor(actorSprite->getActorMapItem());
+    
+    refreshStatus();
     
     // ---------------------
     // 敵キャラ生成
@@ -327,7 +330,7 @@ bool RogueScene::init()
     // -------------------------------
     
     //const char *pszFileName, const char *string, const char *fontName, float fontSize, Color3B normalColor, Color3B selectedColor, Color3B disabledColor, ccMenuCallback& callback
-    auto pMenuButtonLabel = LabelTTF::create("持ち物", "", 10);
+    auto pMenuButtonLabel = LabelTTF::create("持ち物", MISAKI_FONT, 8);
     pMenuButtonLabel->setColor(Color3B::BLACK);
     auto rect = Rect(0, 0, 300, 30);
     auto capRect = Rect(0, 0, 300, 30);
@@ -518,6 +521,10 @@ void RogueScene::enemyTurn()
                 auto pEnemyDto = pEnemySprite->getActorDto();
                 
                 int damage = BattleLogic::exec(pEnemyDto, pPlayerDto);
+                if (damage > 0)
+                {
+                    refreshStatus();
+                }
                 
                 // 攻撃イベント
                 logMessage("%sの攻撃: %sに%dダメージ", pEnemyDto->name.c_str(), pPlayerDto->name.c_str(), damage);
@@ -822,7 +829,7 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         return;
     }
     
-    auto pGameLogText = (LabelTTF*) pGameLogNode->getChildren()->getObjectAtIndex(0); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
+    auto pGameLogText = static_cast<LabelTTF*>(pGameLogNode->getChildren()->getObjectAtIndex(0)); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
     if (pGameLogText)
     {
         // TODO: 別クラスにしてログをlistで保持する。デフォルトの表示は1件だけで、center寄せ表示でいいかと
@@ -835,7 +842,7 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         int count = f_r(nowString, '\n');
         
         // 3行まで表示
-        if (count >= 2)
+        if (count >= 4)
 //        if (std::count(nowString.begin(), nowString.end(), '\n') >= 2)
         {
             int size = nowString.size();
@@ -995,6 +1002,27 @@ bool RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, Map
     
     return true;
 }
+
+void RogueScene::refreshStatus()
+{
+    auto pStatusBarLayer = getChildByTag(RogueScene::kStatusBarTag);
+    auto pStatusText = pStatusBarLayer->getChildren()->getObjectAtIndex(0); // TODO: とりあえず1要素なので。。。
+    if (pStatusText)
+    {
+        // プレイヤー取得
+        auto pPlayerSprite = getPlayerActorSprite(1);
+        auto pPlayerDto = pPlayerSprite->getActorDto();
+        int floor = 1; // TODO: フロア情報
+        int gold = 0; // TODO: player情報
+        // 作成
+        auto pStr = String::createWithFormat(" %2dF Lv%3d HP %3d/%3d 満腹度 %d/%d %10d G", floor, pPlayerDto->lv, pPlayerDto->hitPoint, pPlayerDto->hitPointLimit, pPlayerDto->magicPoint, pPlayerDto->magicPointLimit, gold);
+        
+        auto pLabelText = static_cast<LabelTTF*>(pStatusText);
+        pLabelText->setString(pStr->getCString());
+        pLabelText->setPositionX(pLabelText->getContentSize().width / 2);
+    }
+}
+
 #pragma mark
 #pragma mark マップ座標変換
 

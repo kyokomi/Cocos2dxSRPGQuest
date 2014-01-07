@@ -17,6 +17,7 @@ USING_NS_CC;
 class ActorSprite  : public cocos2d::Sprite
 {
 public:
+    // TODO: classにして値変更のデリゲートメソッド作るべき？
     typedef struct _ActorDto {
         /** プレイヤーを一意に識別するID. */
         int playerId;
