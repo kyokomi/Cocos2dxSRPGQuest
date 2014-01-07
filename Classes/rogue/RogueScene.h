@@ -14,6 +14,7 @@
 #include "MapManager.h"
 #include "ActorSprite.h"
 #include "DropItemSprite.h"
+#include "ItemWindowLayer.h"
 
 class RogueScene : public cocos2d::Layer
 {
@@ -31,17 +32,17 @@ protected:
         // TiledMapEnemy
     
     enum TiledMapTag {
+        kGridLineTag             = 1000,
         kTiledMapDropItemBaseTag = 10000, // + seqNo
         kTiledMapEnemyBaseTag    = 20000, // + seqNo
         kTiledMapFrontTag        = 30000,
-        kGridLineTag             = 100000,
     };
     
     enum TiledMapIndex {
+        zGridLineIndex             = 1000,
         zTiledMapDropItemBaseIndex = 10000,
         zTiledMapEnemyBaseIndex    = 20000,
         zTiledMapFrontIndex        = 30000,
-        zGridLineIndex             = 100000,
     };
     
     enum Tag {
@@ -56,7 +57,9 @@ protected:
         kStatusBar2Tag        = 200001,
         kGameLogTag           = 210000,
         kItemListTag          = 220000,
+        kItemDetailTag        = 221000,
         kMenuTag              = 300000,
+        kModalTag             = 900000,
     };
     enum Index {
         zTiledMapIndex   = 1,
@@ -70,7 +73,9 @@ protected:
         zStatusBar2Index = 200001,
         zGameLogIndex    = 210000,
         zItemListIndex   = 220000,
+        zItemDetailIndex = 221000,
         zMenuIndex       = 300000,
+        zModalIndex      = 900000,
     };
 
 private:
@@ -98,9 +103,8 @@ private:
     
     // UI関連
     void logMessage(const char * pszFormat, ...);
-    // アイテムリスト表示中フラグ
-    bool m_isShowItemList;
-    void onMenuSelectItemListCallback(cocos2d::Object *pSender, cocos2d::extension::Control::EventType eventType);
+    
+    // アイテムリスト
     void showItemList(int showTextIndex);
     void hideItemList();
     void refreshStatus();
@@ -123,8 +127,9 @@ private:
     ActorSprite* getPlayerActorSprite(int seqNo);
     ActorSprite* getEnemyActorSprite(int seqNo);
     
-    // TODO: プレイヤー情報（あとで別の場所に持っていく）
-    std::list<DropItemSprite::DropItemDto> m_playerItemList;
+    ItemWindowLayer* getItemWindowLayer();
+//    // TODO: プレイヤー情報（あとで別の場所に持っていく）
+//    std::list<DropItemSprite::DropItemDto> m_playerItemList;
     
 public:
     RogueScene();

@@ -99,6 +99,8 @@
 		CEA4E1D3187B895800BAA255 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */; };
 		CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */; };
 		CEA4E1DD187B8BDD00BAA255 /* misaki_mincho.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */; };
+		CEA87A0D187BC49700A2AA80 /* ModalLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA87A0B187BC49700A2AA80 /* ModalLayer.cpp */; };
+		CEA87A17187BE69D00A2AA80 /* ItemWindowLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */; };
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
 		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
 		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
@@ -379,6 +381,10 @@
 		CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Marker Felt.ttf"; sourceTree = "<group>"; };
 		CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_gothic.ttf; sourceTree = "<group>"; };
 		CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_mincho.ttf; sourceTree = "<group>"; };
+		CEA87A0B187BC49700A2AA80 /* ModalLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModalLayer.cpp; sourceTree = "<group>"; };
+		CEA87A0C187BC49700A2AA80 /* ModalLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalLayer.h; sourceTree = "<group>"; };
+		CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ItemWindowLayer.cpp; sourceTree = "<group>"; };
+		CEA87A16187BE69D00A2AA80 /* ItemWindowLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemWindowLayer.h; sourceTree = "<group>"; };
 		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
 		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
@@ -759,6 +765,10 @@
 				CE38FB87187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp */,
 				CE38FB88187A8EF80023DD14 /* MenuItemSelectLabelSprite.h */,
 				CE0E44C0187A296000842691 /* table */,
+				CEA87A0B187BC49700A2AA80 /* ModalLayer.cpp */,
+				CEA87A0C187BC49700A2AA80 /* ModalLayer.h */,
+				CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */,
+				CEA87A16187BE69D00A2AA80 /* ItemWindowLayer.h */,
 			);
 			name = ui;
 			path = ../Classes/ui;
@@ -1029,11 +1039,13 @@
 				CE38FB8A187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp in Sources */,
 				CED0A43E1878ECC800844C27 /* BattleLogic.cpp in Sources */,
 				CE15C7E51854B2E200B74DFE /* SRPGMapLayer.cpp in Sources */,
+				CEA87A17187BE69D00A2AA80 /* ItemWindowLayer.cpp in Sources */,
 				CE15C7E61854B2E200B74DFE /* SRPGScene.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				CE0E44C6187A296000842691 /* TableViewTestLayer.cpp in Sources */,
 				CE15C7E71854B2E200B74DFE /* TitleScene.cpp in Sources */,
 				CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */,
+				CEA87A0D187BC49700A2AA80 /* ModalLayer.cpp in Sources */,
 				CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */,
 				CED0A44F18797B2200844C27 /* AccountData.cpp in Sources */,
 				CED0A449187953DB00844C27 /* DropItemSprite.cpp in Sources */,

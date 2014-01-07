@@ -32,7 +32,7 @@ TableViewTestLayer* TableViewTestLayer::createWithTextArray(std::list<std::strin
 // on "init" you need to initialize your instance
 bool TableViewTestLayer::init(std::list<std::string> itemList, Size contentSize)
 {
-    if ( !CCLayerColor::init() )
+    if ( !LayerColor::init() )
     {
         return false;
     }
@@ -96,7 +96,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         cell = new CustomTableViewCell();
         cell->autorelease();
         
-        LayerColor * textLayer = CCLayerColor::create(Color4B(0, 0, 0, 255 * 0.7),
+        LayerColor * textLayer = LayerColor::create(Color4B(0, 0, 0, 255 * 0.7),
                                                         contentSize.width * 0.9, contentSize.height / 5 * 0.9);
         textLayer->setPosition(contentSize.width * 0.05, contentSize.height / 5 * 0.05);
         textLayer->setTag(kTag_TextLayer);
@@ -104,7 +104,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         // 本文テキスト
         int baseFontSize = 10;
         
-        LabelTTF* textLabel = CCLabelTTF::create(pTextString->getCString(), "Arial", baseFontSize);
+        LabelTTF* textLabel = LabelTTF::create(pTextString->getCString(), MISAKI_FONT, baseFontSize);
         //textLabel->setAnchorPoint(Point::ZERO);
         textLabel->setColor(Color3B::WHITE);
         textLabel->setPosition(Point(baseFontSize + textLabel->getContentSize().width / 2, textLayer->getContentSize().height / 2));

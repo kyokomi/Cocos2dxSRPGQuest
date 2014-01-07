@@ -11,6 +11,9 @@
 #include "DropItemSprite.h"
 #include "BattleLogic.h"
 #include "TableViewTestLayer.h"
+#include "ModalLayer.h"
+#include "ItemWindowLayer.h"
+
 //#include "MenuItemSelectLabelSprite.h"
 
 USING_NS_CC;
@@ -28,9 +31,7 @@ RogueScene::RogueScene()
 m_TurnCount(0),
 m_baseMapSize(Size::ZERO),
 m_baseTileSize(Size::ZERO),
-m_baseContentSize(Size::ZERO),
-m_isShowItemList(false),
-m_playerItemList(std::list<DropItemSprite::DropItemDto>())
+m_baseContentSize(Size::ZERO)
 {
 }
 
@@ -59,12 +60,13 @@ bool RogueScene::init()
     
     // TouchEvent settings
     auto listener = EventListenerTouchOneByOne::create();
-    //listener->setSwallowTouches(true);
+    listener->setSwallowTouches(true);
     
     listener->onTouchBegan = CC_CALLBACK_2(RogueScene::onTouchBegan, this);
     listener->onTouchMoved = CC_CALLBACK_2(RogueScene::onTouchMoved, this);
     listener->onTouchEnded = CC_CALLBACK_2(RogueScene::onTouchEnded, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+//    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+    this->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 1);
     
     auto winSize = Director::getInstance()->getWinSize();
     
@@ -80,12 +82,13 @@ bool RogueScene::init()
     m_baseContentSize = pTiledMap->getContentSize();
     
     m_mapManager.init(0, (int)m_baseMapSize.height, 0, (int)m_baseMapSize.width);
-    
-    // フロントレイヤー
-    auto pFrontLayer = Layer::create();
-    pTiledMap->addChild(pFrontLayer,
-                        RogueScene::TiledMapIndex::zTiledMapFrontIndex,
-                        RogueScene::TiledMapTag::kTiledMapFrontTag);
+
+    // 使ってなかった
+//    // フロントレイヤー
+//    auto pFrontLayer = Layer::create();
+//    pTiledMap->addChild(pFrontLayer,
+//                        RogueScene::TiledMapIndex::zTiledMapFrontIndex,
+//                        RogueScene::TiledMapTag::kTiledMapFrontTag);
     
     // エネミーレイヤー
     auto pEnemyLayer = Layer::create();
@@ -137,8 +140,8 @@ bool RogueScene::init()
         draw->drawSegment(Point(0, yPoint), Point(m_baseContentSize.width, yPoint), lineSize, color);
     }
     
-    // マップのフロントレイヤーに追加
-    pFrontLayer->addChild(draw, RogueScene::TiledMapIndex::zGridLineIndex, RogueScene::TiledMapTag::kGridLineTag);
+    // マップに追加
+    pTiledMap->addChild(draw, RogueScene::TiledMapIndex::zGridLineIndex, RogueScene::TiledMapTag::kGridLineTag);
 
     //-------------------------
     // ステータスバー？
@@ -197,6 +200,12 @@ bool RogueScene::init()
     // ステータスバーの下くらい
     miniMapLayer->setPosition(0, miniMapLayer->getPositionY() + winSize.height - miniMapLayer->getContentSize().height - statusLayer->getContentSize().height);
     this->addChild(miniMapLayer, RogueScene::zMiniMapIndex, RogueScene::kMiniMapTag);
+    
+    // ------------------------
+    // イベントリ作成
+    // ------------------------
+    showItemList(1);
+    hideItemList();
     
     // ---------------------
     // プレイヤー生成
@@ -334,33 +343,24 @@ bool RogueScene::init()
     pMenuButtonLabel->setColor(Color3B::BLACK);
     auto rect = Rect(0, 0, 300, 30);
     auto capRect = Rect(0, 0, 300, 30);
-    auto pScale9Sprite = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
-    auto pMenuControlBtn = extension::ControlButton::create(pMenuButtonLabel, pScale9Sprite);
-    pMenuControlBtn->setPreferredSize(Size(40, 20));
-    pMenuControlBtn->setColor(Color3B::ORANGE);
-    pMenuControlBtn->setOpacity(192);
-    pMenuControlBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RogueScene::onMenuSelectItemListCallback), cocos2d::extension::Control::EventType::TOUCH_DOWN);
-    pMenuControlBtn->setPosition(Point(winSize.width - pMenuControlBtn->getContentSize().width / 2, pMenuControlBtn->getContentSize().height / 2));
-//    auto* menuItem1 = MenuItemLabel::create(pMenuButtonLabel, [this](Object *pSender) {
-//        CCLOG("menuItem1が押された！");
-//        if (m_isShowItemList)
-//        {
-//            hideItemList();
-//        }
-//        else
-//        {
-//            showItemList(1);
-//        }
-//    });
-//    menuItem1->setColor(Color3B::GREEN);
-//    menuItem1->setPosition(Point(winSize.width - menuItem1->getContentSize().width / 2, menuItem1->getContentSize().height / 2));
-//    auto* menu = Menu::create(menuItem1, NULL);
-//    menu->setPosition(Point::ZERO);
-//    this->addChild(menu, RogueScene::zMenuIndex, RogueScene::kMenuTag);
-
-    this->addChild(pMenuControlBtn, RogueScene::zMenuIndex, RogueScene::kMenuTag);
-    // ---------------------------------
+    auto pScale9Sprite1 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
+    pScale9Sprite1->setContentSize(Size(40, 20));
+    pScale9Sprite1->setOpacity(192);
+    auto pScale9Sprite2 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
+    pScale9Sprite2->setContentSize(Size(40, 20));
+    pScale9Sprite2->setOpacity(128);
     
+    auto* menuItem1 = MenuItemSprite::create(pScale9Sprite1, pScale9Sprite2, [this](Object *pSender) {
+        CCLOG("menuItem1が押された！");
+            showItemList(1);
+    });
+    menuItem1->setColor(Color3B::GREEN);
+    menuItem1->setPosition(Point(winSize.width - menuItem1->getContentSize().width / 2, menuItem1->getContentSize().height / 2));
+    auto* menu = Menu::create(menuItem1, NULL);
+    menu->setPosition(Point::ZERO);
+    this->addChild(menu, RogueScene::zMenuIndex, RogueScene::kMenuTag);
+
+    // ---------------------------------
     // プレイヤーの先行
     changeGameStatus(GameStatus::PLAYER_TURN);
     
@@ -557,12 +557,10 @@ void RogueScene::enemyTurn()
 
 bool RogueScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
+    CCLOG("RogueScene onTouchBegan");
     if (m_gameStatus == GameStatus::PLAYER_TURN)
     {
-        if (!m_isShowItemList)
-        {
-            return true;
-        }
+        return true;
     }
     return false;
 }
@@ -574,10 +572,13 @@ void RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void RogueScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
+    if (m_gameStatus == GameStatus::PLAYER_TURN)
+    {
+        auto touchPoint = this->convertToWorldSpace(this->convertTouchToNodeSpace(touch));
 
-    // 行動判定
-    touchEventExec(touchPoint);
+        // 行動判定
+        touchEventExec(touchPoint);
+    }
 }
 
 void RogueScene::onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -615,7 +616,6 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
     auto pEnemyMapItem = m_mapManager.getActorMapItem(&touchPointMapIndex);
     if (pEnemyMapItem->mapDataType == MapDataType::ENEMY)
     {
-//        auto pEnemyMapItem = (ActorMapItem*) pTouchPointMapItem;
         auto pPlayerDto = pActorSprite->getActorDto();
         auto pEnemyDto = getEnemyActorSprite(pEnemyMapItem->seqNo)->getActorDto();
         
@@ -654,7 +654,7 @@ void RogueScene::touchEventExec(cocos2d::Point touchPoint)
                 logMessage("%sを拾った。", pDropItemDto->name.c_str());
                 
                 // イベントリに追加する
-                m_playerItemList.push_back(*pDropItemDto);
+                getItemWindowLayer()->addItemList(pDropItemDto);
                 
                 // mapManagerから消す
                 m_mapManager.removeMapItem(pDropMapItem);
@@ -861,98 +861,106 @@ void RogueScene::logMessage(const char * pszFormat, ...)
     }
 }
 
-void RogueScene::onMenuSelectItemListCallback(cocos2d::Object *pSender, extension::Control::EventType eventType)
-{
-//    AudioUtil::playBtnSE();
-    
-    if (m_isShowItemList)
-    {
-        hideItemList();
-    }
-    else
-    {
-        showItemList(1);
-    }
-}
-
 void RogueScene::showItemList(int showTextIndex)
 {
+    // いまのところ使用してないindex
     if (showTextIndex <= 0)
     {
         return;
     }
-    m_isShowItemList = true;
     
-    // TODO: 変更がないときのメモリ効率が良くないきがする。。。
-    std::list<std::string> itemNameList;
-    for (DropItemSprite::DropItemDto dropItem : m_playerItemList)
-    {
-        itemNameList.push_back(dropItem.name);
-    }
+    auto winSize = Director::getInstance()->getWinSize();
     
-    auto pItemListLayer = static_cast<TableViewTestLayer*>(this->getChildByTag(RogueScene::kItemListTag));
-    if (pItemListLayer)
+    // モーダルレイヤー作成
+    auto pModalLayer = static_cast<ModalLayer*>(this->getChildByTag(RogueScene::kModalTag));
+    if (pModalLayer)
     {
-        pItemListLayer->makeItemList(itemNameList);
-        pItemListLayer->setVisible(true);
+        pModalLayer->setVisible(true);
     }
     else
     {
-        auto winSize = Director::getInstance()->getWinSize();
-        
-        pItemListLayer = TableViewTestLayer::createWithTextArray(itemNameList, Size(winSize.width / 3, winSize.height / 2));
-        pItemListLayer->setPosition(Point(winSize.width - pItemListLayer->getContentSize().width, winSize.height / 2 - pItemListLayer->getContentSize().height / 2));
-        pItemListLayer->setCallback([this](Object* pObject, long touchedIdx) {
-            // 行タップ時の処理
-            CCLOG(" touched idx = %ld", touchedIdx);
+        pModalLayer = ModalLayer::create();
+        this->addChild(pModalLayer, RogueScene::zModalIndex, RogueScene::kModalTag);
+    }
+    
+    auto pItemWindowLayer = static_cast<ItemWindowLayer*>(pModalLayer->getChildByTag(RogueScene::kItemListTag));
+    if (pItemWindowLayer)
+    {
+        pItemWindowLayer->reloadItemList();
+        pItemWindowLayer->setVisible(true);
+    }
+    else
+    {
+        // TODO: アイテムの詳細ウィンドウ（以下のボタン操作のみ可能なモーダルウィンドウ）
+            // アイテムを捨てる
+            // アイテムを使う
+            // アイテムを装備する
+            // 閉じる
+        pItemWindowLayer = ItemWindowLayer::createWithContentSize(winSize * 0.8);
+        pItemWindowLayer->setPosition(Point(winSize.width / 2 - pItemWindowLayer->getContentSize().width / 2,
+                                            winSize.height /2 - pItemWindowLayer->getContentSize().height / 2));
+        pItemWindowLayer->setItemDropMenuCallback([this](Object* pSender, DropItemSprite::DropItemDto dropItemDto) {
+            CCLOG("RogueScene::itemDropMenuCallback");
             
-            // touched DropItemDto
-            auto it = m_playerItemList.begin();
-            std::advance(it, touchedIdx);
-            auto dropItemDto = (DropItemSprite::DropItemDto) *it;
-            
-            // player
             auto pPlayerSprite = getPlayerActorSprite(1);
             
-            // TODO: アイテムの詳細ウィンドウ（以下のボタン操作のみ可能なモーダルウィンドウ）
-                // アイテムを捨てる
-                // アイテムを使う
-                // アイテムを装備する
-                // 閉じる
-
-            // --------------------------
-            // アイテムを捨てる
-            // --------------------------
             // アイテムをマップのプレイヤーの足元に置く
             if (this->tileSetDropMapItem(dropItemDto, pPlayerSprite->getActorMapItem()->mapIndex))
             {
-                this->logMessage("%sを置いた。", dropItemDto.name.c_str());
-                // インベントリから削除
-                m_playerItemList.erase(it);
-                
-                // インベントリは閉じる
-                this->hideItemList();
+                this->logMessage("%sを床においた。", dropItemDto.name.c_str());
             }
             else
             {
-                this->logMessage("%sを置けなかった。", dropItemDto.name.c_str());
+                this->logMessage("%sを床におけなかった。", dropItemDto.name.c_str());
             }
-            
-            int size = m_playerItemList.size();
-            CCLOG(" m_playerItemList size = %d", size);
+            // インベントリは閉じる
+            this->hideItemList();
         });
-        this->addChild(pItemListLayer, RogueScene::zItemListIndex, RogueScene::kItemListTag);
+        pItemWindowLayer->setItemUseMenuCallback([this](Object* pSender, DropItemSprite::DropItemDto dropItemDto) {
+            CCLOG("RogueScene::itemUseMenuCallback");
+            
+            this->logMessage("%sをつかった。", dropItemDto.name.c_str());
+            
+            // TODO: itemIdで処理してくれるlogicへ
+            
+            // インベントリは閉じる
+            this->hideItemList();
+        });
+        pModalLayer->addChild(pItemWindowLayer, RogueScene::zItemListIndex, RogueScene::kItemListTag);
     }
+    
+    auto rect = Rect(0, 0, 300, 30);
+    auto capRect = Rect(0, 0, 300, 30);
+    auto pScale9Sprite1 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
+    pScale9Sprite1->setColor(Color3B::RED);
+    pScale9Sprite1->setOpacity(192);
+    pScale9Sprite1->setContentSize(Size(40, 20));
+    auto pScale9Sprite2 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
+    pScale9Sprite2->setColor(Color3B::RED);
+    pScale9Sprite2->setOpacity(128);
+    pScale9Sprite2->setContentSize(Size(40, 20));
+    
+    auto pMenuItemSprite = MenuItemSprite::create(pScale9Sprite1, pScale9Sprite2, [this](Object* pSeneder) {
+        // hoge
+//        pModalLayer->removeFromParentAndCleanup(true);
+        this->hideItemList();
+    });
+    pMenuItemSprite->setPosition(Point(winSize.width - pMenuItemSprite->getContentSize().width / 2, pMenuItemSprite->getContentSize().height / 2));
+    
+    auto pMenu = Menu::create(pMenuItemSprite, NULL);
+    pMenu->setPosition(Point::ZERO);
+    
+    pModalLayer->addChild(pMenu);
 }
 
 void RogueScene::hideItemList()
 {
-    auto pItemListLayer = static_cast<TableViewTestLayer*>(this->getChildByTag(RogueScene::kItemListTag));
-    if (pItemListLayer)
+    // モーダルレイヤー非表示にする
+    auto pModalLayer = static_cast<ModalLayer*>(this->getChildByTag(RogueScene::kModalTag));
+    if (pModalLayer)
     {
-        pItemListLayer->setVisible(false);
+        pModalLayer->setVisible(false);
     }
-    m_isShowItemList = false;
 }
 
 
@@ -1085,6 +1093,11 @@ ActorSprite* RogueScene::getEnemyActorSprite(int seqNo)
     return (ActorSprite*)pEnemyMapLayer->getChildByTag(RogueScene::TiledMapTag::kTiledMapEnemyBaseTag + seqNo);
 }
 
+ItemWindowLayer* RogueScene::getItemWindowLayer()
+{
+    auto pModalLayer = getChildByTag(RogueScene::kModalTag);
+    return static_cast<ItemWindowLayer*>(pModalLayer->getChildByTag(RogueScene::kItemListTag));
+}
 
 #pragma mark
 #pragma mark その他
