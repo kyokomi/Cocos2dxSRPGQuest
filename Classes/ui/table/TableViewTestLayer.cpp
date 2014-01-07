@@ -104,8 +104,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         // 本文テキスト
         int baseFontSize = 10;
         
-        LabelTTF* textLabel = LabelTTF::create(pTextString->getCString(), MISAKI_FONT, baseFontSize);
-        //textLabel->setAnchorPoint(Point::ZERO);
+        LabelTTF* textLabel = LabelTTF::create(pTextString->getCString(), GAME_FONT(baseFontSize), baseFontSize);
         textLabel->setColor(Color3B::WHITE);
         textLabel->setPosition(Point(baseFontSize + textLabel->getContentSize().width / 2, textLayer->getContentSize().height / 2));
         textLabel->setTag(kTag_TextLabel);

@@ -18,8 +18,6 @@
 		1AC6FB31180E99EB004C840B /* libcocos2dx-extensions iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB09180E9839004C840B /* libcocos2dx-extensions iOS.a */; };
 		1AC6FB32180E99EB004C840B /* libCocosDenshion iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB0F180E9839004C840B /* libCocosDenshion iOS.a */; };
 		1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */; };
-		1AFAF8BC16D35E4900DB1158 /* CloseNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B916D35E4900DB1158 /* CloseNormal.png */; };
-		1AFAF8BD16D35E4900DB1158 /* CloseSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */; };
 		1AFAF8BE16D35E4900DB1158 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -31,8 +29,6 @@
 		503AE10517EB98FF00D1A890 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503AE10317EB98FF00D1A890 /* main.cpp */; };
 		503AE11217EB99EE00D1A890 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 503AE11117EB99EE00D1A890 /* libcurl.dylib */; };
 		503AE11B17EB9C5A00D1A890 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 503AE11A17EB9C5A00D1A890 /* IOKit.framework */; };
-		5087E75317EB910900C73F5D /* CloseNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B916D35E4900DB1158 /* CloseNormal.png */; };
-		5087E75417EB910900C73F5D /* CloseSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */; };
 		5087E75517EB910900C73F5D /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */; };
 		5087E75717EB910900C73F5D /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */; };
 		5087E76317EB910900C73F5D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -75,8 +71,6 @@
 		CE15C7B51854B26200B74DFE /* btn-b-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A01854B26200B74DFE /* btn-b-0.png */; };
 		CE15C7B61854B26200B74DFE /* btn-b-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A11854B26200B74DFE /* btn-b-1.png */; };
 		CE15C7B71854B26200B74DFE /* btn-b-2.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A21854B26200B74DFE /* btn-b-2.png */; };
-		CE15C7B81854B26200B74DFE /* btn-back-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A31854B26200B74DFE /* btn-back-0.png */; };
-		CE15C7B91854B26200B74DFE /* btn-back-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A41854B26200B74DFE /* btn-back-1.png */; };
 		CE15C7BA1854B26200B74DFE /* btn-test-0.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A51854B26200B74DFE /* btn-test-0.png */; };
 		CE15C7BB1854B26200B74DFE /* btn-test-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A61854B26200B74DFE /* btn-test-1.png */; };
 		CE15C7BC1854B26200B74DFE /* btn-test-2.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15C7A71854B26200B74DFE /* btn-test-2.png */; };
@@ -96,12 +90,11 @@
 		CE38FB89187A8EF80023DD14 /* LabelSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE38FB85187A8EF80023DD14 /* LabelSprite.cpp */; };
 		CE38FB8A187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE38FB87187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp */; };
 		CE38FB92187A96E70023DD14 /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = CE38FB91187A96E70023DD14 /* menu_button.png */; };
-		CEA4E1D3187B895800BAA255 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */; };
 		CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */; };
-		CEA4E1DD187B8BDD00BAA255 /* misaki_mincho.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */; };
 		CEA87A0D187BC49700A2AA80 /* ModalLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA87A0B187BC49700A2AA80 /* ModalLayer.cpp */; };
 		CEA87A17187BE69D00A2AA80 /* ItemWindowLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */; };
 		CEA8AC321874C5DC00E67E3C /* RogueScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */; };
+		CEAE9154187C35EC008C5B75 /* PixelMplus10-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEAE9152187C35EC008C5B75 /* PixelMplus10-Regular.ttf */; };
 		CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38B1877EDB900869E9D /* actor_901.plist */; };
 		CEBDB38E1877EDB900869E9D /* actor_901.png in Resources */ = {isa = PBXBuildFile; fileRef = CEBDB38C1877EDB900869E9D /* actor_901.png */; };
 		CED0A4391878EBFC00844C27 /* ActorSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0A4341878EBFC00844C27 /* ActorSprite.cpp */; };
@@ -292,8 +285,6 @@
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../Classes/AppDelegate.cpp; sourceTree = "<group>"; };
 		1AFAF8B416D35DE700DB1158 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../Classes/AppDelegate.h; sourceTree = "<group>"; };
-		1AFAF8B916D35E4900DB1158 /* CloseNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseNormal.png; sourceTree = "<group>"; };
-		1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseSelected.png; sourceTree = "<group>"; };
 		1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HelloWorld.png; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Cocos2dxSRPGQuest iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cocos2dxSRPGQuest iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -348,8 +339,6 @@
 		CE15C7A01854B26200B74DFE /* btn-b-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-b-0.png"; sourceTree = "<group>"; };
 		CE15C7A11854B26200B74DFE /* btn-b-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-b-1.png"; sourceTree = "<group>"; };
 		CE15C7A21854B26200B74DFE /* btn-b-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-b-2.png"; sourceTree = "<group>"; };
-		CE15C7A31854B26200B74DFE /* btn-back-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back-0.png"; sourceTree = "<group>"; };
-		CE15C7A41854B26200B74DFE /* btn-back-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back-1.png"; sourceTree = "<group>"; };
 		CE15C7A51854B26200B74DFE /* btn-test-0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-test-0.png"; sourceTree = "<group>"; };
 		CE15C7A61854B26200B74DFE /* btn-test-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-test-1.png"; sourceTree = "<group>"; };
 		CE15C7A71854B26200B74DFE /* btn-test-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-test-2.png"; sourceTree = "<group>"; };
@@ -378,15 +367,14 @@
 		CE38FB87187A8EF80023DD14 /* MenuItemSelectLabelSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MenuItemSelectLabelSprite.cpp; sourceTree = "<group>"; };
 		CE38FB88187A8EF80023DD14 /* MenuItemSelectLabelSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemSelectLabelSprite.h; sourceTree = "<group>"; };
 		CE38FB91187A96E70023DD14 /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
-		CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Marker Felt.ttf"; sourceTree = "<group>"; };
 		CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_gothic.ttf; sourceTree = "<group>"; };
-		CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = misaki_mincho.ttf; sourceTree = "<group>"; };
 		CEA87A0B187BC49700A2AA80 /* ModalLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModalLayer.cpp; sourceTree = "<group>"; };
 		CEA87A0C187BC49700A2AA80 /* ModalLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalLayer.h; sourceTree = "<group>"; };
 		CEA87A15187BE69D00A2AA80 /* ItemWindowLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ItemWindowLayer.cpp; sourceTree = "<group>"; };
 		CEA87A16187BE69D00A2AA80 /* ItemWindowLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemWindowLayer.h; sourceTree = "<group>"; };
 		CEA8AC301874C5DC00E67E3C /* RogueScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RogueScene.cpp; sourceTree = "<group>"; };
 		CEA8AC311874C5DC00E67E3C /* RogueScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RogueScene.h; sourceTree = "<group>"; };
+		CEAE9152187C35EC008C5B75 /* PixelMplus10-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PixelMplus10-Regular.ttf"; sourceTree = "<group>"; };
 		CEBDB38B1877EDB900869E9D /* actor_901.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = actor_901.plist; sourceTree = "<group>"; };
 		CEBDB38C1877EDB900869E9D /* actor_901.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actor_901.png; sourceTree = "<group>"; };
 		CED0A4341878EBFC00844C27 /* ActorSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorSprite.cpp; sourceTree = "<group>"; };
@@ -620,8 +608,6 @@
 				CE15C7A01854B26200B74DFE /* btn-b-0.png */,
 				CE15C7A11854B26200B74DFE /* btn-b-1.png */,
 				CE15C7A21854B26200B74DFE /* btn-b-2.png */,
-				CE15C7A31854B26200B74DFE /* btn-back-0.png */,
-				CE15C7A41854B26200B74DFE /* btn-back-1.png */,
 				CE15C7A51854B26200B74DFE /* btn-test-0.png */,
 				CE15C7A61854B26200B74DFE /* btn-test-1.png */,
 				CE15C7A71854B26200B74DFE /* btn-test-2.png */,
@@ -632,8 +618,6 @@
 				CE15C7AC1854B26200B74DFE /* MapScene.ccbi */,
 				CE15C7AD1854B26200B74DFE /* TitleScene.ccbi */,
 				CE15C7AE1854B26200B74DFE /* tmx */,
-				1AFAF8B916D35E4900DB1158 /* CloseNormal.png */,
-				1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */,
 				1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */,
 			);
 			name = Resources;
@@ -700,9 +684,8 @@
 		CEA4E1C9187B895800BAA255 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				CEAE9152187C35EC008C5B75 /* PixelMplus10-Regular.ttf */,
 				CEA4E1DA187B8BDD00BAA255 /* misaki_gothic.ttf */,
-				CEA4E1DB187B8BDD00BAA255 /* misaki_mincho.ttf */,
-				CEA4E1CA187B895800BAA255 /* Marker Felt.ttf */,
 			);
 			path = fonts;
 			sourceTree = "<group>";
@@ -973,14 +956,12 @@
 				CE15C7C31854B26200B74DFE /* tmx in Resources */,
 				CEA4E1DC187B8BDD00BAA255 /* misaki_gothic.ttf in Resources */,
 				CE15C7C11854B26200B74DFE /* MapScene.ccbi in Resources */,
+				CEAE9154187C35EC008C5B75 /* PixelMplus10-Regular.ttf in Resources */,
 				CE15C7AF1854B26200B74DFE /* actor_4.plist in Resources */,
-				CEA4E1DD187B8BDD00BAA255 /* misaki_mincho.ttf in Resources */,
-				CE15C7B81854B26200B74DFE /* btn-back-0.png in Resources */,
 				CE15C7B61854B26200B74DFE /* btn-b-1.png in Resources */,
 				CE0E44CE187A397700842691 /* actor_4_f.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				CE15C7B41854B26200B74DFE /* btn-a-2.png in Resources */,
-				1AFAF8BC16D35E4900DB1158 /* CloseNormal.png in Resources */,
 				CE15C7B21854B26200B74DFE /* btn-a-0.png in Resources */,
 				CE15C7B11854B26200B74DFE /* bg_jan.jpg in Resources */,
 				CEBDB38D1877EDB900869E9D /* actor_901.plist in Resources */,
@@ -992,7 +973,6 @@
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				CED0A44B18795FE800844C27 /* item_64.png in Resources */,
 				CE15C7BE1854B26200B74DFE /* japan_map.tmx in Resources */,
-				1AFAF8BD16D35E4900DB1158 /* CloseSelected.png in Resources */,
 				CE15C7BB1854B26200B74DFE /* btn-test-1.png in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
 				5087E78017EB970100C73F5D /* Icon-114.png in Resources */,
@@ -1010,9 +990,7 @@
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				CE15C7B31854B26200B74DFE /* btn-a-1.png in Resources */,
-				CEA4E1D3187B895800BAA255 /* Marker Felt.ttf in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
-				CE15C7B91854B26200B74DFE /* btn-back-1.png in Resources */,
 				CE15C7BF1854B26200B74DFE /* japan_map001.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1021,9 +999,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5087E75317EB910900C73F5D /* CloseNormal.png in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
-				5087E75417EB910900C73F5D /* CloseSelected.png in Resources */,
 				5087E75517EB910900C73F5D /* HelloWorld.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

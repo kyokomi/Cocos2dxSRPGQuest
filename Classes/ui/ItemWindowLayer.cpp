@@ -92,7 +92,8 @@ bool ItemWindowLayer::initWithContentSize(Size contentSize)
     pItemDetailLayer->setPosition(Point(contentSize.width / 2 + padding, 0));
     pItemDetailLayer->setTag(ItemDetailLayerTag);
     // アイテム名
-    auto pItemNameTitleLabel = LabelTTF::create("なまえ", MISAKI_FONT, 12);
+    auto pItemNameTitleLabel = LabelTTF::create("なまえ", GAME_FONT(16), 16);
+    pItemNameTitleLabel->setColor(Color3B::WHITE);
     pItemNameTitleLabel->setVerticalAlignment(cocos2d::TextVAlignment::TOP);
     pItemNameTitleLabel->setHorizontalAlignment(cocos2d::TextHAlignment::LEFT);
     pItemNameTitleLabel->setPosition(Point(
@@ -100,7 +101,8 @@ bool ItemWindowLayer::initWithContentSize(Size contentSize)
                                            pItemDetailLayer->getContentSize().height - pItemNameTitleLabel->getContentSize().height / 2 - pItemNameTitleLabel->getFontSize() / 2));
     pItemDetailLayer->addChild(pItemNameTitleLabel);
     
-    auto pItemNameLabel = LabelTTF::create(ITEM_LAYER_NAME_DEFAULT, MISAKI_FONT, 12);
+    auto pItemNameLabel = LabelTTF::create(ITEM_LAYER_NAME_DEFAULT, GAME_FONT(10), 10);
+    pItemNameLabel->setColor(Color3B::WHITE);
     pItemNameLabel->setPosition(Point(
                                       pItemDetailLayer->getContentSize().width * 0.5,
                                       pItemDetailLayer->getContentSize().height * 0.75));
@@ -108,7 +110,8 @@ bool ItemWindowLayer::initWithContentSize(Size contentSize)
     pItemDetailLayer->addChild(pItemNameLabel);
     
     // アイテム説明
-    auto pItemDetailTitleLabel = LabelTTF::create("せつめい", MISAKI_FONT, 12);
+    auto pItemDetailTitleLabel = LabelTTF::create("せつめい", GAME_FONT(16), 16);
+    pItemDetailTitleLabel->setColor(Color3B::WHITE);
     pItemDetailTitleLabel->setVerticalAlignment(cocos2d::TextVAlignment::TOP);
     pItemDetailTitleLabel->setHorizontalAlignment(cocos2d::TextHAlignment::LEFT);
     pItemDetailTitleLabel->setPosition(Point(
@@ -116,7 +119,8 @@ bool ItemWindowLayer::initWithContentSize(Size contentSize)
                                              pItemDetailLayer->getContentSize().height / 2 - pItemDetailTitleLabel->getContentSize().height / 2 - pItemDetailTitleLabel->getFontSize() / 2));
     pItemDetailLayer->addChild(pItemDetailTitleLabel);
     
-    auto pItemDetailLabel = LabelTTF::create(ITEM_LAYER_DETAIL_DEFAULT, MISAKI_FONT, 12);
+    auto pItemDetailLabel = LabelTTF::create(ITEM_LAYER_DETAIL_DEFAULT, GAME_FONT(10), 10);
+    pItemDetailLabel->setColor(Color3B::WHITE);
     pItemDetailLabel->setPosition(Point(
                                         pItemDetailLayer->getContentSize().width * 0.5,
                                         pItemDetailLayer->getContentSize().height * 0.25));

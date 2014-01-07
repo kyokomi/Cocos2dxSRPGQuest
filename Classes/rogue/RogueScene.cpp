@@ -151,7 +151,7 @@ bool RogueScene::init()
     statusLayer->setPosition(Point(0, winSize.height - statusLayer->getContentSize().height));
     
     // TODO: あとで更新する
-    auto sampleText = LabelTTF::create(" --F Lv-- HP ---/--- 満腹度 ---/---          - G", MISAKI_FONT, 16);
+    auto sampleText = LabelTTF::create(" --F Lv-- HP ---/--- 満腹度 ---/---          - G", GAME_FONT(16), 16);
     
     sampleText->setPosition(Point(sampleText->getContentSize().width / 2, statusLayer->getContentSize().height / 2));
     statusLayer->addChild(sampleText);
@@ -183,9 +183,9 @@ bool RogueScene::init()
     pGameLogLayer->setContentSize(Size(winSize.width * 0.8, m_baseTileSize.height * 1.5));
     pGameLogLayer->setPosition(winSize.width / 2 - pGameLogLayer->getContentSize().width / 2, 0);
     
-    int baseFontSize = 8;
-    auto pLogTextLabel = LabelTTF::create("", MISAKI_FONT, baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
-    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 2, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 2));
+    int baseFontSize = 10;
+    auto pLogTextLabel = LabelTTF::create("", GAME_FONT(baseFontSize), baseFontSize, Size::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
+    pLogTextLabel->setPosition(Point(pLogTextLabel->getContentSize().width / 2 + pLogTextLabel->getFontSize() / 4, pGameLogLayer->getContentSize().height - pLogTextLabel->getContentSize().height / 2 - pLogTextLabel->getFontSize() / 4));
     pGameLogLayer->addChild(pLogTextLabel);
     this->addChild(pGameLogLayer, RogueScene::zGameLogIndex, RogueScene::kGameLogTag);
     
@@ -339,8 +339,8 @@ bool RogueScene::init()
     // -------------------------------
     
     //const char *pszFileName, const char *string, const char *fontName, float fontSize, Color3B normalColor, Color3B selectedColor, Color3B disabledColor, ccMenuCallback& callback
-    auto pMenuButtonLabel = LabelTTF::create("持ち物", MISAKI_FONT, 8);
-    pMenuButtonLabel->setColor(Color3B::BLACK);
+//    auto pMenuButtonLabel = LabelTTF::create("持ち物", GAME_FONT(8), 8);
+//    pMenuButtonLabel->setColor(Color3B::BLACK);
     auto rect = Rect(0, 0, 300, 30);
     auto capRect = Rect(0, 0, 300, 30);
     auto pScale9Sprite1 = extension::Scale9Sprite::create("menu_button.png", rect, capRect);
@@ -842,8 +842,7 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         int count = f_r(nowString, '\n');
         
         // 3行まで表示
-        if (count >= 4)
-//        if (std::count(nowString.begin(), nowString.end(), '\n') >= 2)
+        if (count >= 3)
         {
             int size = nowString.size();
             unsigned int loc = nowString.find_last_of('\n', size);
@@ -857,7 +856,7 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         pGameLogText->setString(pMessage->getCString());
         pGameLogText->setVerticalAlignment(cocos2d::TextVAlignment::TOP);
         pGameLogText->setHorizontalAlignment(cocos2d::TextHAlignment::LEFT);
-        pGameLogText->setPosition(Point(pGameLogText->getFontSize() / 2 + pGameLogText->getContentSize().width / 2, pGameLogNode->getContentSize().height - pGameLogText->getContentSize().height / 2 - pGameLogText->getFontSize() / 2));
+        pGameLogText->setPosition(Point(pGameLogText->getFontSize() / 4 + pGameLogText->getContentSize().width / 2, pGameLogNode->getContentSize().height - pGameLogText->getContentSize().height / 2 - pGameLogText->getFontSize() / 4));
     }
 }
 

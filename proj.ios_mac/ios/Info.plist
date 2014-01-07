@@ -59,6 +59,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>PixelMplus10-Regular.ttf</string>
 		<string>misaki_gothic.ttf</string>
 		<string>misaki_mincho.ttf</string>
 	</array>

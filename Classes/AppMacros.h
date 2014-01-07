@@ -12,6 +12,25 @@
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define MISAKI_FONT "fonts/misaki_gothic.ttf"
+#else
+#define MISAKI_FONT "MisakiGothic"
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define PIXEL_MPLUS_10_FONT "fonts/PixelMplus10-Regular.ttf"
+#else
+#define PIXEL_MPLUS_10_FONT "PixelMplus10-Regular"
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define PIXEL_MPLUS_12_FONT "fonts/PixelMplus12-Regular.ttf"
+#else
+#define PIXEL_MPLUS_12_FONT "PixelMplus12-Regular"
+#endif
+
+
 typedef struct tagResource
 {
     cocos2d::Size size;
@@ -24,12 +43,14 @@ static Resource xlargeResource = { cocos2d::Size(2048, 1536), "resources-xlarge"
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 577);
 
-// 美咲フォント（MISAKI_FONT）
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#define MISAKI_FONT "fonts/misaki_gothic.ttf"
-#else
-#define MISAKI_FONT "MisakiGothic"
-#endif
+// 最適なフォント取得
+static std::string GAME_FONT(int fontSize)
+{
+    if (fontSize % 8 == 0) return MISAKI_FONT;
+    else if (fontSize % 10 == 0) return PIXEL_MPLUS_10_FONT;
+    else if (fontSize % 12 == 0) return PIXEL_MPLUS_12_FONT;
+    else return "";
+}
 
 // マルチレゾリューション対応
 #define HOGE() Director::getInstance()->setOpenGLView(eglView); \

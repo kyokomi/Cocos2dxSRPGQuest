@@ -76,7 +76,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "569"
-            endingLineNumber = "569">
+            endingLineNumber = "569"
+            landmarkName = "RogueScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event)"
+            landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -272,11 +274,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/rogue/RogueScene.cpp"
-            timestampString = "410781912.78152"
+            timestampString = "410794300.010481"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "847"
-            endingLineNumber = "847"
+            startingLineNumber = "846"
+            endingLineNumber = "846"
             landmarkName = "RogueScene::logMessage(const char * pszFormat, ...)"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,9 +492,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "567"
-            endingLineNumber = "567"
-            landmarkName = "RogueScene::enemyTurn()"
-            landmarkType = "5">
+            endingLineNumber = "567">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -568,7 +568,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
-            endingLineNumber = "385">
+            endingLineNumber = "385"
+            landmarkName = "RogueScene::changeGameStatus(GameStatus gameStatus)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -582,7 +584,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "383"
-            endingLineNumber = "383">
+            endingLineNumber = "383"
+            landmarkName = "RogueScene::changeGameStatus(GameStatus gameStatus)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -592,11 +596,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/rogue/RogueScene.cpp"
-            timestampString = "410782933.24472"
+            timestampString = "410794300.010481"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1177"
-            endingLineNumber = "1177">
+            startingLineNumber = "1176"
+            endingLineNumber = "1176">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -652,12 +656,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/rogue/RogueScene.cpp"
-            timestampString = "410782933.24472"
+            timestampString = "410794300.010481"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "978"
-            endingLineNumber = "978"
-            landmarkName = "RogueScene::hideItemList()"
+            startingLineNumber = "977"
+            endingLineNumber = "977"
+            landmarkName = "RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, MapIndex mapIndex)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -673,7 +677,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "734"
             endingLineNumber = "734"
-            landmarkName = "RogueScene::checkTouchEventIndex(MapIndex touchPointMapIndex)"
+            landmarkName = "RogueScene::moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapDataType, CallFunc* moveFinishedCallFunc)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -776,11 +780,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/rogue/RogueScene.cpp"
-            timestampString = "410781912.78152"
+            timestampString = "410794300.010481"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "901"
-            endingLineNumber = "901"
+            startingLineNumber = "900"
+            endingLineNumber = "900"
             landmarkName = "RogueScene::showItemList(int showTextIndex)"
             landmarkType = "5">
          </BreakpointContent>
@@ -797,6 +801,22 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "44"
             endingLineNumber = "44"
+            landmarkName = "ItemWindowLayer::initWithContentSize(Size contentSize)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/ui/ItemWindowLayer.cpp"
+            timestampString = "410793156.466793"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
             landmarkName = "ItemWindowLayer::initWithContentSize(Size contentSize)"
             landmarkType = "5">
          </BreakpointContent>

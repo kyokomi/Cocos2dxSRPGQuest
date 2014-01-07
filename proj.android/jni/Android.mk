@@ -17,6 +17,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/game_object/DropItemSprite.cpp \
                    ../../Classes/ui/table/CustomTableViewCell.cpp \
                    ../../Classes/ui/table/TableViewTestLayer.cpp \
+                   ../../Classes/ui/ModalLayer.cpp \
+                   ../../Classes/ui/ItemWindowLayer.cpp \
                    ../../Classes/quest/SRPGScene.cpp \
                    ../../Classes/quest/SRPGMapLayer.cpp \
                    ../../Classes/logic/BattleLogic.cpp \
@@ -29,6 +31,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
                    $(LOCAL_PATH)/../../Classes/actor \
                    $(LOCAL_PATH)/../../Classes/logic \
                    $(LOCAL_PATH)/../../Classes/game_object \
+                   $(LOCAL_PATH)/../../Classes/ui \
                    $(LOCAL_PATH)/../../Classes/ui/table \
                    $(LOCAL_PATH)/../../Classes/map \
                    $(LOCAL_PATH)/../../Classes/rogue 
