@@ -165,8 +165,7 @@ bool SRPGMapLayer::isMapCursor(MapDataType mapDataType)
     auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (pBatchNode)
     {
-        Object* object = NULL;
-        CCARRAY_FOREACH(pBatchNode->getChildren(), object)
+        for (Object* object : pBatchNode->getChildren())
         {
             if ((mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
             || (mapDataType == MapDataType::MOVE_STEP_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveStepIndex))
@@ -195,8 +194,7 @@ void SRPGMapLayer::visibleMapCursor(MapDataType mapDataType, bool visible)
     auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (pBatchNode)
     {
-        Object* object = NULL;
-        CCARRAY_FOREACH(pBatchNode->getChildren(), object)
+        for (Object* object : pBatchNode->getChildren())
         {
             if (mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
             {
@@ -349,11 +347,11 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
                 m_moveAnimation = false;
             });
             int movePointSize = list.size();
-            auto* moveArray = Array::create();
+            auto moveArray = Vector<FiniteTimeAction*>();
             for (MapIndex mapIndex : list)
             {
                 auto* pMoveTo = MoveTo::create(1.0 / movePointSize, indexToPoint(mapIndex));
-                moveArray->addObject(pMoveTo);
+                moveArray.pushBack(pMoveTo);
             }
             auto* pMoveSeq = Sequence::create(moveArray);
             auto* pAnimation = Sequence::create(pMoveSeq, pCallFunc, NULL);

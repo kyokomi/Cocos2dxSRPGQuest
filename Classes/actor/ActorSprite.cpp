@@ -25,12 +25,12 @@ bool ActorSprite::initWithActorDto(ActorDto pActorDto)
     m_actorDto = pActorDto;
     
     // ActorのSpriteFrameのplistをキャッシュ
-    String* spriteFramePlistName = String::createWithFormat("actor_%d.plist", m_actorDto.playerId);
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(spriteFramePlistName->getCString());
+    auto spriteFramePlistName = StringUtils::format("actor_%d.plist", m_actorDto.playerId);
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(spriteFramePlistName);
     
     // Spriteを生成
-    String* spriteFrameName = String::createWithFormat("actor_%d_%s_%d.jpg", m_actorDto.playerId, "bottom", 1);
-    if ( !Sprite::initWithSpriteFrameName(spriteFrameName->getCString()) )
+    auto spriteFrameName = StringUtils::format("actor_%d_%s_%d.jpg", m_actorDto.playerId, "bottom", 1);
+    if ( !Sprite::initWithSpriteFrameName(spriteFrameName) )
     {
         return false;
     }
@@ -162,18 +162,18 @@ FiniteTimeAction* ActorSprite::createTopActorAnimate()
 
 FiniteTimeAction* ActorSprite::createActorAnimate(int actorId, std::string frameName)
 {
-    cocos2d::Animation* animation = cocos2d::Animation::create();
-    String* pszStartSpriteFrameName = String::createWithFormat("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), 2);
-    SpriteFrame *pStartFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszStartSpriteFrameName->getCString());
-    animation->addSpriteFrame(pStartFrame);
+    auto pAnimation = Animation::create();
+    auto startSpriteFrameName = StringUtils::format("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), 2);
+    auto pStartFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(startSpriteFrameName);
+    pAnimation->addSpriteFrame(pStartFrame);
     for (int i = 0; i < 3; i++)
     {
-        String* pszSpriteFrameName = String::createWithFormat("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), (i + 1));
-        SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pszSpriteFrameName->getCString());
-        animation->addSpriteFrame(pFrame);
+        auto spriteFrameName = StringUtils::format("actor_%d_%s_%d.jpg", actorId, frameName.c_str(), (i + 1));
+        auto pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
+        pAnimation->addSpriteFrame(pFrame);
     }
-    animation->setDelayPerUnit(0.3);
-    animation->setLoops(-1);
+    pAnimation->setDelayPerUnit(0.3);
+    pAnimation->setLoops(-1);
     
-    return Animate::create(animation);
+    return Animate::create(pAnimation);
 }

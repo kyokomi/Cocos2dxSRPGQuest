@@ -35,8 +35,8 @@ bool DropItemSprite::initWithDropItemDto(DropItemDto pDropItemDto)
 //        return false;
 //    }
     // TODO: とりあえずSpriteFrameCacheはまだやらない。そんなにアイテム多くないので
-    String* pSpriteFileName = String::createWithFormat("item_%d.png", m_dropItemDto.imageResId);
-    if (!Sprite::initWithFile(pSpriteFileName->getCString()))
+    auto spriteFileName = StringUtils::format("item_%d.png", m_dropItemDto.imageResId);
+    if (!Sprite::initWithFile(spriteFileName))
     {
         return false;
     }

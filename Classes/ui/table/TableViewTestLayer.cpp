@@ -90,7 +90,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
     }
     CCLOG("idx = %ld size = %ld text = %s", idx, listSize, text.c_str());
     
-    String *pTextString = String::createWithFormat("[%ld] : %s", idx, text.c_str());
+    auto textString = StringUtils::format("[%ld] : %s", idx, text.c_str());
     TableViewCell *cell = table->dequeueCell();
     if (!cell) {
         cell = new CustomTableViewCell();
@@ -104,7 +104,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
         // 本文テキスト
         int baseFontSize = 10;
         
-        LabelTTF* textLabel = LabelTTF::create(pTextString->getCString(), GAME_FONT(baseFontSize), baseFontSize);
+        LabelTTF* textLabel = LabelTTF::create(textString, GAME_FONT(baseFontSize), baseFontSize);
         textLabel->setColor(Color3B::WHITE);
         textLabel->setPosition(Point(baseFontSize + textLabel->getContentSize().width / 2, textLayer->getContentSize().height / 2));
         textLabel->setTag(kTag_TextLabel);
@@ -119,7 +119,7 @@ TableViewCell* TableViewTestLayer::tableCellAtIndex(TableView *table, long idx)
     {
         LayerColor* pTextLayer = static_cast<LayerColor*>(cell->getChildByTag(kTag_TextLayer));
         LabelTTF* pTextLabel = static_cast<LabelTTF*>(pTextLayer->getChildByTag(kTag_TextLabel));
-        pTextLabel->setString(pTextString->getCString());
+        pTextLabel->setString(textString);
     }
 
     return cell;

@@ -859,7 +859,7 @@ void RogueScene::logMessage(const char * pszFormat, ...)
         return;
     }
     
-    auto pGameLogText = static_cast<LabelTTF*>(pGameLogNode->getChildren()->getObjectAtIndex(0)); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
+    auto pGameLogText = static_cast<LabelTTF*>(pGameLogNode->getChildren().at(0)); // TODO: 1子しかaddしてないから動く。ちゃんとしないと・・・
     if (pGameLogText)
     {
         // TODO: 別クラスにしてログをlistで保持する。デフォルトの表示は1件だけで、center寄せ表示でいいかと
@@ -1098,7 +1098,7 @@ bool RogueScene::tileSetDropMapItem(DropItemSprite::DropItemDto dropItemDto, Map
 void RogueScene::refreshStatus()
 {
     auto pStatusBarLayer = getChildByTag(RogueScene::kStatusBarTag);
-    auto pStatusText = pStatusBarLayer->getChildren()->getObjectAtIndex(0); // TODO: とりあえず1要素なので。。。
+    auto pStatusText = pStatusBarLayer->getChildren().at(0); // TODO: とりあえず1要素なので。。。
     if (pStatusText)
     {
         // プレイヤー取得
