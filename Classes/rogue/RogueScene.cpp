@@ -337,15 +337,15 @@ bool RogueScene::init()
     pScale9Sprite2->setContentSize(Size(40, 20));
     pScale9Sprite2->setOpacity(128);
     
-    auto* menuItem1 = MenuItemSprite::create(pScale9Sprite1, pScale9Sprite2, [this](Object *pSender) {
+    auto pMenuItem1 = MenuItemSprite::create(pScale9Sprite1, pScale9Sprite2, [this](Object *pSender) {
         CCLOG("menuItem1が押された！");
             showItemList(1);
     });
-    menuItem1->setColor(Color3B::GREEN);
-    menuItem1->setPosition(Point(winSize.width - menuItem1->getContentSize().width / 2, menuItem1->getContentSize().height / 2));
-    auto* menu = Menu::create(menuItem1, NULL);
-    menu->setPosition(Point::ZERO);
-    this->addChild(menu, RogueScene::zMenuIndex, RogueScene::kMenuTag);
+    pMenuItem1->setColor(Color3B::GREEN);
+    pMenuItem1->setPosition(Point(winSize.width - pMenuItem1->getContentSize().width / 2, pMenuItem1->getContentSize().height / 2));
+    auto pMenu = Menu::create(pMenuItem1, NULL);
+    pMenu->setPosition(Point::ZERO);
+    this->addChild(pMenu, RogueScene::zMenuIndex, RogueScene::kMenuTag);
 
     // ---------------------------------
     // プレイヤーの先行
@@ -779,13 +779,13 @@ void RogueScene::moveMap(MapIndex addMoveIndex, int actorSeqNo, MapDataType mapD
     if (pActorSprite->getActorMapItem()->mapDataType == MapDataType::PLAYER)
     {
         // プレイヤーならマップが移動
-        pMoveRunAction = MoveTo::create(0.3, pMapLayer->getPosition() - addMovePoint);
+        pMoveRunAction = MoveTo::create(0.2, pMapLayer->getPosition() - addMovePoint);
         pActionTargetNode = pMapLayer;
     }
     else
     {
         // モンスターは普通にモンスターが移動
-        pMoveRunAction = MoveTo::create(0.3, pActorSprite->getPosition() + addMovePoint);
+        pMoveRunAction = MoveTo::create(0.2, pActorSprite->getPosition() + addMovePoint);
         pActionTargetNode = pActorSprite;
     }
 

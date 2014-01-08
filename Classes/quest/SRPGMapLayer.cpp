@@ -95,7 +95,7 @@ bool SRPGMapLayer::init()
 void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> moveMapPointList)
 {
     // バッチノードを登録しレイヤに追加
-    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    auto pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (!pBatchNode)
     {
         // 白い32x32の四角い画像を使う
@@ -106,34 +106,34 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
     for (MapIndex mapIndex : moveMapPointList)
     {
         // 緑半透明50%
-        auto* sprite = Sprite::createWithTexture(pBatchNode->getTexture());
-        sprite->setPosition(indexToPoint(mapIndex.x, mapIndex.y));
-        sprite->setOpacity(128);
+        auto pSprite = Sprite::createWithTexture(pBatchNode->getTexture());
+        pSprite->setPosition(indexToPoint(mapIndex.x, mapIndex.y));
+        pSprite->setOpacity(128);
         
         if (pMapDataType == MapDataType::MOVE_DIST)
         {
-            sprite->setColor(Color3B::GREEN);
-            sprite->setZOrder(SRPGMapLayer::zCursorMoveFindIndex);
+            pSprite->setColor(Color3B::GREEN);
+            pSprite->setZOrder(SRPGMapLayer::zCursorMoveFindIndex);
         }
         else if (pMapDataType == MapDataType::MOVE_STEP_DIST)
         {
-            sprite->setColor(Color3B::ORANGE);
-            sprite->setZOrder(SRPGMapLayer::zCursorMoveStepIndex);
+            pSprite->setColor(Color3B::ORANGE);
+            pSprite->setZOrder(SRPGMapLayer::zCursorMoveStepIndex);
         }
         else if (pMapDataType == MapDataType::SELECTED_DIST)
         {
-            sprite->setColor(Color3B::BLUE);
-            sprite->setZOrder(SRPGMapLayer::zCursorSelectedIndex);
+            pSprite->setColor(Color3B::BLUE);
+            pSprite->setZOrder(SRPGMapLayer::zCursorSelectedIndex);
         }
         // バッチノードに登録
-        pBatchNode->addChild(sprite);
+        pBatchNode->addChild(pSprite);
         
         // 1.0秒でフェードイン、フェードアウトを繰り返すように設定
         FadeTo* fadeIn = FadeTo::create(0.5f, 128);
         FadeTo* fadeOut = FadeTo::create(0.5f, 0);
         Sequence* sequence = Sequence::create(fadeOut, fadeIn, NULL);
         RepeatForever* repeat = RepeatForever::create(sequence);
-        sprite->runAction(repeat);
+        pSprite->runAction(repeat);
     }
     
 //    MapItem mapItem;
@@ -150,7 +150,7 @@ void SRPGMapLayer::addMapCursor(MapDataType pMapDataType, std::list<MapIndex> mo
 void SRPGMapLayer::clearAllMapCursor()
 {
     // バッチノード取得
-    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    auto pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (pBatchNode)
     {
         pBatchNode->removeAllChildren();
@@ -162,15 +162,19 @@ bool SRPGMapLayer::isMapCursor(MapDataType mapDataType)
     bool isShow = false;
     
     // バッチノード取得
-    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    auto pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (pBatchNode)
     {
-        for (Object* object : pBatchNode->getChildren())
+        for (auto pObject : pBatchNode->getChildren())
         {
-            if ((mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
-            || (mapDataType == MapDataType::MOVE_STEP_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveStepIndex))
+            auto pSprite = static_cast<Sprite*>(pObject);
+            if ((mapDataType == MapDataType::MOVE_DIST && pSprite->getZOrder() == zCursorMoveFindIndex)
+            || (mapDataType == MapDataType::MOVE_STEP_DIST && pSprite->getZOrder() == zCursorMoveStepIndex))
             {
-                if(((Sprite*)object)->isVisible()) isShow = true;
+                if(pSprite->isVisible())
+                {
+                    isShow = true;
+                }
                 break;
             }
         }
@@ -191,18 +195,19 @@ void SRPGMapLayer::hideMapCursor(MapDataType mapDataType)
 void SRPGMapLayer::visibleMapCursor(MapDataType mapDataType, bool visible)
 {
     // バッチノード取得
-    auto* pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
+    auto pBatchNode = (SpriteBatchNode*) this->getChildByTag(SRPGMapLayer::kCursorBaseTag);
     if (pBatchNode)
     {
-        for (Object* object : pBatchNode->getChildren())
+        for (auto pObject : pBatchNode->getChildren())
         {
-            if (mapDataType == MapDataType::MOVE_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveFindIndex)
+            auto pSprite = static_cast<Sprite*>(pObject);
+            if (mapDataType == MapDataType::MOVE_DIST && pSprite->getZOrder() == zCursorMoveFindIndex)
             {
-                ((Sprite*)object)->setVisible(visible);
+                pSprite->setVisible(visible);
             }
-            else if (mapDataType == MapDataType::MOVE_STEP_DIST && ((Sprite*)object)->getZOrder() == zCursorMoveStepIndex)
+            else if (mapDataType == MapDataType::MOVE_STEP_DIST && pSprite->getZOrder() == zCursorMoveStepIndex)
             {
-                ((Sprite*)object)->setVisible(visible);
+                pSprite->setVisible(visible);
             }
         }
     }
@@ -246,10 +251,10 @@ ActorMapItem* SRPGMapLayer::addActor(MapDataType pMapDataType, int pSeqNo, int p
 
 ActorSprite* SRPGMapLayer::findActorSprite(int seqNo)
 {
-    auto* actorSprite = this->getChildByTag((SRPGMapLayer::kActorBaseTag + seqNo));
-    if (actorSprite && typeid(*actorSprite) == typeid(ActorSprite))
+    auto pActorSprite = this->getChildByTag((SRPGMapLayer::kActorBaseTag + seqNo));
+    if (pActorSprite && typeid(*pActorSprite) == typeid(ActorSprite))
     {
-        return (ActorSprite*)actorSprite;
+        return static_cast<ActorSprite*>(pActorSprite);
     }
     return NULL;
 }
@@ -310,37 +315,37 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
 {
     // グリッド選択
     CCLOG("onTouchEnded mapIdx x = %d y = %d grid selected", mapIndex->x, mapIndex->y);
-    auto* mapItem = m_mapManager.getMapItem(mapIndex);
-    CCLOG("mapDataType = %d", mapItem->mapDataType);
-    if (mapItem->mapDataType == MapDataType::PLAYER)
+    auto pMapItem = m_mapManager.getMapItem(mapIndex);
+    CCLOG("mapDataType = %d", pMapItem->mapDataType);
+    if (pMapItem->mapDataType == MapDataType::PLAYER)
     {
-        auto* actorMapItem = m_mapManager.getActorMapItem(mapIndex);
+        auto pActorMapItem = m_mapManager.getActorMapItem(mapIndex);
         // 移動可能範囲のリストを作成
-        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
+        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(pActorMapItem->mapIndex, pActorMapItem->moveDist);
         // 移動可能範囲を表示
         addMapCursor(MapDataType::MOVE_DIST, moveList);
         
-        CCLOG("touched player seqNo = %d", actorMapItem->seqNo);
+        CCLOG("touched player seqNo = %d", pActorMapItem->seqNo);
         m_moveAnimation = false;
     }
-    else if (mapItem->mapDataType == MapDataType::MOVE_DIST)
+    else if (pMapItem->mapDataType == MapDataType::MOVE_DIST)
     {
         // 移動対象を取得
-        auto* actorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず1固定
+        auto pActorMapItem = m_mapManager.getActorMapItemById(1); // TODO: とりあえず1固定
         // 移動可能範囲のリストを作成
-        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(actorMapItem->mapIndex, actorMapItem->moveDist);
+        std::list<MapIndex> moveList = m_mapManager.createActorFindDist(pActorMapItem->mapIndex, pActorMapItem->moveDist);
         // 移動可能範囲を表示
         addMapCursor(MapDataType::MOVE_DIST, moveList);
         // 移動経路の作成と表示
-        std::list<MapIndex> list = m_mapManager.createMovePointList(&mapItem->mapIndex, actorMapItem);
+        std::list<MapIndex> list = m_mapManager.createMovePointList(&pMapItem->mapIndex, pActorMapItem);
         addMapCursor(MapDataType::MOVE_STEP_DIST, list);
         
         // 移動
-        auto* pActorSprite = findActorSprite(actorMapItem->seqNo);
+        auto pActorSprite = findActorSprite(pActorMapItem->seqNo);
         if (pActorSprite)
         {
             // 移動アニメーション作成。移動後にマップカーソルを初期化
-            auto* pCallFunc = CallFunc::create([this](void) {
+            auto pCallFunc = CallFunc::create([this](void) {
                 CCLOG("call func!!！");
                 clearAllMapCursor();
                 m_mapManager.clearCursor();
@@ -348,17 +353,17 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
             });
             int movePointSize = list.size();
             auto moveArray = Vector<FiniteTimeAction*>();
-            for (MapIndex mapIndex : list)
+            for (auto mapIndex : list)
             {
-                auto* pMoveTo = MoveTo::create(1.0 / movePointSize, indexToPoint(mapIndex));
+                auto pMoveTo = MoveTo::create(1.0 / movePointSize, indexToPoint(mapIndex));
                 moveArray.pushBack(pMoveTo);
             }
-            auto* pMoveSeq = Sequence::create(moveArray);
-            auto* pAnimation = Sequence::create(pMoveSeq, pCallFunc, NULL);
+            auto pMoveSeq = Sequence::create(moveArray);
+            auto pAnimation = Sequence::create(pMoveSeq, pCallFunc, NULL);
             pActorSprite->runAction(pAnimation);
             
             // マップ情報も更新する
-            m_mapManager.moveActor(actorMapItem, &(mapItem->mapIndex));
+            m_mapManager.moveActor(pActorMapItem, &(pMapItem->mapIndex));
         }
     }
     else
@@ -375,10 +380,10 @@ void SRPGMapLayer::executeMapIndex(MapIndex* mapIndex)
  */
 bool SRPGMapLayer::isShowGrid()
 {
-    auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
-    if (node)
+    auto pNode = this->getChildByTag(SRPGMapLayer::kGridLineTag);
+    if (pNode)
     {
-        return node->isVisible();
+        return pNode->isVisible();
     }
     return false;
 }
@@ -388,10 +393,10 @@ bool SRPGMapLayer::isShowGrid()
  */
 void SRPGMapLayer::showGrid()
 {
-    auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
-    if (node)
+    auto pNode = this->getChildByTag(SRPGMapLayer::kGridLineTag);
+    if (pNode)
     {
-        node->setVisible(true);
+        pNode->setVisible(true);
     }
 }
 
@@ -400,10 +405,10 @@ void SRPGMapLayer::showGrid()
  */
 void SRPGMapLayer::hideGrid()
 {
-    auto* node = this->getChildByTag(SRPGMapLayer::kGridLineTag);
-    if (node)
+    auto pNode = this->getChildByTag(SRPGMapLayer::kGridLineTag);
+    if (pNode)
     {
-        node->setVisible(false);
+        pNode->setVisible(false);
     }
 }
 

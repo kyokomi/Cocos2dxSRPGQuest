@@ -46,17 +46,17 @@ bool SRPGScene::init()
     listener->onTouchEnded = CC_CALLBACK_2(SRPGScene::onTouchEnded, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
-    auto* srpgMapLayer = SRPGMapLayer::create();
-    srpgMapLayer->setTag(SRPGScene::kSRPGMapLayerTag);
-    this->addChild(srpgMapLayer);
+    auto pSrpgMapLayer = SRPGMapLayer::create();
+    pSrpgMapLayer->setTag(SRPGScene::kSRPGMapLayerTag);
+    this->addChild(pSrpgMapLayer);
     
     // ----------------------------------------
     Point baseMenuPoint = Point(0, 24);
     
     // グリッド表示/非表示
-    auto* menuItem1 = MenuItemLabel::create(LabelTTF::create("A", "", 24), [this](Object *pSender) {
+    auto pMenuItem1 = MenuItemLabel::create(LabelTTF::create("A", "", 24), [this](Object *pSender) {
         //ログ出力
-        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
         if (pMapLayer)
         {
             if (pMapLayer->isShowGrid())
@@ -65,22 +65,22 @@ bool SRPGScene::init()
             	pMapLayer->showGrid();
         }
     });
-    menuItem1->setColor(Color3B::RED);
-    menuItem1->setPosition(menuItem1->getContentSize().width * 0.5, menuItem1->getContentSize().height * 0.5);
+    pMenuItem1->setColor(Color3B::RED);
+    pMenuItem1->setPosition(pMenuItem1->getContentSize().width * 0.5, pMenuItem1->getContentSize().height * 0.5);
 
-    auto* menuItem2 = MenuItemLabel::create(LabelTTF::create("B", "", 24), [this](Object *pSender) {
+    auto pMenuItem2 = MenuItemLabel::create(LabelTTF::create("B", "", 24), [this](Object *pSender) {
         //ログ出力
         CCLOG("menuItem2が押された！");
-        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
         if (pMapLayer) pMapLayer->clearAllMapCursor();
     });
-    menuItem2->setColor(Color3B::RED);
-    menuItem2->setPosition(menuItem2->getContentSize().width * 0.5, menuItem1->getContentSize().height * 0.5 + menuItem1->getPositionY() + menuItem2->getContentSize().height * 0.5);
+    pMenuItem2->setColor(Color3B::RED);
+    pMenuItem2->setPosition(pMenuItem2->getContentSize().width * 0.5, pMenuItem1->getContentSize().height * 0.5 + pMenuItem1->getPositionY() + pMenuItem2->getContentSize().height * 0.5);
 
-    auto* menuItem3 = MenuItemLabel::create(LabelTTF::create("C", "", 24), [this](Object *pSender) {
+    auto pMenuItem3 = MenuItemLabel::create(LabelTTF::create("C", "", 24), [this](Object *pSender) {
         //ログ出力
         CCLOG("menuItem3が押された！");
-        auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+        auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
         if (pMapLayer)
         {
             if (pMapLayer->isMapCursor(MapDataType::MOVE_DIST))
@@ -89,10 +89,10 @@ bool SRPGScene::init()
             	pMapLayer->showMapCursor(MapDataType::MOVE_DIST);
         }
     });
-    menuItem3->setColor(Color3B::RED);
-    menuItem3->setPosition(menuItem3->getContentSize().width * 0.5, menuItem2->getContentSize().height * 0.5 + menuItem2->getPositionY() + menuItem3->getContentSize().height * 0.5);
+    pMenuItem3->setColor(Color3B::RED);
+    pMenuItem3->setPosition(pMenuItem3->getContentSize().width * 0.5, pMenuItem2->getContentSize().height * 0.5 + pMenuItem2->getPositionY() + pMenuItem3->getContentSize().height * 0.5);
     
-    auto* menu = Menu::create(menuItem1, menuItem2, menuItem3, NULL);
+    auto* menu = Menu::create(pMenuItem1, pMenuItem2, pMenuItem3, NULL);
     menu->setPosition(baseMenuPoint);
     this->addChild(menu);
     // ----------------------------------------
@@ -116,7 +116,7 @@ bool SRPGScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 	this->unscheduleUpdate();
     this->scheduleUpdate();
     
-    auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+    auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
     if (pMapLayer)
     {
         pMapLayer->onTouchBegan(touch, event);
@@ -149,7 +149,7 @@ void SRPGScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     // フリック対象に場合はグリッドのイベントは処理しない
     if (checkFlick()) return;
     
-    auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+    auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
     if (pMapLayer)
     {
         pMapLayer->onTouchEnded(touch, event);
@@ -171,7 +171,7 @@ void SRPGScene::update(float delta)
     // フリック対象でない場合はマップ移動を行わない
     if (!checkFlick()) return;
     
-    auto* pMapLayer = (SRPGMapLayer*) this->getChildByTag(SRPGScene::kSRPGMapLayerTag);
+    auto pMapLayer = static_cast<SRPGMapLayer*>(this->getChildByTag(SRPGScene::kSRPGMapLayerTag));
     if (pMapLayer)
     {
         Point movePoint = pMapLayer->createTouchMoveMapPoint(pMapLayer->getPosition(), delta, m_pDelta);

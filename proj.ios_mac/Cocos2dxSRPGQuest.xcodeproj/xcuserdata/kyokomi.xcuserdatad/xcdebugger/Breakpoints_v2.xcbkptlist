@@ -137,7 +137,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "335"
             endingLineNumber = "335"
-            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
+            landmarkName = "MapManager::getActorMapItemById(int seqNo)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -153,7 +153,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "156"
             endingLineNumber = "156"
-            landmarkName = "MapManager::chkMovePoint(int mapPointX, int mapPointY, int dist, MapDataType ignoreMapDataType)"
+            landmarkName = "MapManager::findDist(int x, int y, int dist, bool first)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -168,9 +168,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "357"
-            endingLineNumber = "357"
-            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
-            landmarkType = "5">
+            endingLineNumber = "357">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -184,9 +182,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "359"
-            endingLineNumber = "359"
-            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
-            landmarkType = "5">
+            endingLineNumber = "359">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -200,9 +196,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "358"
-            endingLineNumber = "358"
-            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
-            landmarkType = "5">
+            endingLineNumber = "358">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -217,7 +211,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "211"
             endingLineNumber = "211"
-            landmarkName = "MapManager::moveActor(ActorMapItem* pActorMapItem, MapIndex* pMoveMapIndex)"
+            landmarkName = "MapManager::addDistCursor(int mapPointX, int mapPointY, int dist)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -293,7 +287,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "393"
             endingLineNumber = "393"
-            landmarkName = "MapManager::findEnemyMapItem()"
+            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -309,7 +303,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "408"
             endingLineNumber = "408"
-            landmarkName = "MapManager::findEnemyMapItem()"
+            landmarkName = "MapManager::findMovePointList(int moveX, int moveY, int moveDist, MapItem* moveToMapItem)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
